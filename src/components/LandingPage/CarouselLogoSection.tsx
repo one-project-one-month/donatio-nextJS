@@ -2,7 +2,7 @@
 import logo from '@/assets/image/logo.svg'
 import Image from 'next/image'
 
-export default function LogosCarousel() {
+export default function CarouselLogoSection() {
     return (
         <div className="w-full overflow-hidden">
             <div className="flex gap-40 animate-scroll px-2 py-4 w-max">

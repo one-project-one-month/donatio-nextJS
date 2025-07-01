@@ -21,7 +21,7 @@ const partners = [
     { name: 'Yin Khwin Aid', src: yinkhwinLogo },
 ]
 
-export default function MeetTheChangeMakers() {
+export default function ChangeMakersSection() {
     return (
         <section className="bg-primary/5 py-16 w-full">
             <div className="max-w-screen-xl mx-auto px-4 text-center">

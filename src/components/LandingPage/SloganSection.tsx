@@ -3,7 +3,7 @@ import React from 'react'
 
 import logo from '@/assets/image/logo.svg'
 
-export default function Slogan() {
+export default function SloganSection() {
   return (
      <div className="w-full max-w-screen-xl bg-primary/5 rounded-2xl shadow-md px-6 py-16 sm:px-10 sm:py-20 flex flex-col items-center gap-16">
         <p className="text-primary text-2xl sm:text-4xl md:text-5xl font-bold text-center tracking-wide sm:tracking-wider leading-tight">

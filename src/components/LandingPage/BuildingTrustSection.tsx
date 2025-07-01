@@ -6,7 +6,7 @@ import donateImg2 from '@/assets/image/donateImg2.jpg'
 import donateImg3 from '@/assets/image/donateImg3.jpg'
 import donateImg4 from '@/assets/image/donateImg4.jpg'
 
-export default function DonateNow() {
+export default function BuildingTrustSection() {
   return (
     <div className="w-full max-w-screen-xl mx-auto px-4 py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         {/* Image Grid */}
