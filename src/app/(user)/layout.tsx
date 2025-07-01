@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 
 function UserLayout({children}:{children: ReactNode}) {
   return (
-    <div className="w-dvw px-8 py-5">
+    <div className="w-dvw max-w-7xl mx-auto md:px-8 py-5">
         <UserNavbar />
         {children}
         <Footer />

@@ -5,7 +5,7 @@ import LogoName from "@/components/common/logo-name";
 
 function UserNavbar() {
   return (
-    <nav className="w-full flex justify-between md:px-12">
+    <nav className="w-full flex justify-between px-5 md:px-12">
       <LogoName />
       <AvatarDropdown />
     </nav>

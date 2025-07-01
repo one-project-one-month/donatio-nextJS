@@ -7,7 +7,7 @@ import LogoName from "@/components/common/logo-name";
 
 function Navbar() {
   return (
-    <nav className="w-full flex justify-between md:px-8">
+    <nav className="w-full flex justify-between px-5 md:px-8">
       <LogoName />
       <div className="flex space-x-5 items-center text-neutral-700">
         <Link href="/">About Us</Link>
