@@ -1,20 +1,14 @@
-<<<<<<< HEAD
 import LandingPage from "@/components/common/LandingPage"
-
-function page() {
-  return (
-    <div>
-   <LandingPage/>
-=======
+import Footer from "@/components/core/Footer"
 import Navbar from "@/components/core/navbar"
-
-
 
 function page() {
   return (
     <div className="w-full">
       <Navbar />
->>>>>>> origin/dev
+      <LandingPage />
+      <Footer />
+
     </div>
   )
 }
