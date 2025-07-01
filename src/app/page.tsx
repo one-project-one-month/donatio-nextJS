@@ -1,9 +1,11 @@
+import Navbar from "@/components/core/navbar"
 
 
 
 function page() {
   return (
-    <div>
+    <div className="w-full">
+      <Navbar />
     </div>
   )
 }
