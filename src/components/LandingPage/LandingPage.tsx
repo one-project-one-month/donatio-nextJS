@@ -4,6 +4,8 @@ import DonateNow from './DonateNow'
 import Slogan from './Slogan'
 import LogosCarousel from './LogosCarousel'
 import HeroSection from './HeroSection'
+import EventsSection from './EventSection'
+import DonationSection from './DonationSection'
 
 export default function LandingPage() {
   return (
@@ -23,6 +25,9 @@ export default function LandingPage() {
       {/* Change-Makers */}
       <MeetTheChangeMakers />
 
+      <EventsSection />
+
+      <DonationSection/>
 
 
     </div>

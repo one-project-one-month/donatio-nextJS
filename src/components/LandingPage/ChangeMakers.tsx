@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import Autoplay from 'embla-carousel-autoplay'
 
 import ahluLogo from '@/assets/image/ahlu.webp'
