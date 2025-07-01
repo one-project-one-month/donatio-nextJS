@@ -1,4 +1,4 @@
-import LandingPage from "@/components/common/LandingPage"
+import LandingPage from "@/components/LandingPage/LandingPage"
 import Footer from "@/components/core/Footer"
 import Navbar from "@/components/core/navbar"
 
