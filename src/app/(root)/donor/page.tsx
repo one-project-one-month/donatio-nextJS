@@ -3,8 +3,6 @@ import SearchSection from "@/features/user/components/search/search-section";
 
 
 function UserProfilePage() {
-
-
   return (
     <div className="w-full">
       <SearchSection />
