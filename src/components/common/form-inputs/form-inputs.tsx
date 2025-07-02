@@ -22,6 +22,7 @@ export type FormInputProps<T extends FieldValues> = Omit<
   type?: HTMLInputTypeAttribute;
   wrapperClass?: string;
   labelClass?: string;
+  registerOptions?: any;
 };
 
 function FormInput<T extends FieldValues>({
@@ -31,9 +32,12 @@ function FormInput<T extends FieldValues>({
   type,
   wrapperClass,
   labelClass,
+  registerOptions,
   ...props
 }: FormInputProps<T>) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const { register } = form;
 
   const handleViewPasswordToggle = () => {
     setShowPassword((prev) => (prev ? false : true));
@@ -44,7 +48,7 @@ function FormInput<T extends FieldValues>({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={cn( wrapperClass)}>
           <FormLabel className={cn("text-neutral-800", labelClass)}>
             {label}
             {props.required && <span className="text-red-500">*</span>}
@@ -59,6 +63,7 @@ function FormInput<T extends FieldValues>({
                   "border-gray-300 rounded-lg transition-all pr-10",
                   props.className
                 )}
+                {...register(name, registerOptions)}
               />
               {type === "password" && (
                 <span
