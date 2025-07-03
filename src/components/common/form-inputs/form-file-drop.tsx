@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ComponentProps, HTMLInputTypeAttribute } from "react";
+import { ComponentProps, HTMLInputTypeAttribute, ReactNode } from "react";
 import { useState } from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
@@ -21,7 +21,7 @@ export type FormFileDropZoneProps<T extends FieldValues> = Omit<
 > & {
   form: UseFormReturn<T>;
   name: Path<T>;
-  label: string;
+  label: string | ReactNode;
   type?: HTMLInputTypeAttribute;
   wrapperClass?: string;
   labelClass?: string;

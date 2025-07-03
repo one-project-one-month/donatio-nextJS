@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import DonateForm1 from "./donate-form-1";
-import DonateForm2 from "./donate-form-2";
-import DonateForm3 from "./donate-form-3";
+import DonateForm1 from "@/features/user/components/form/donate-form-1";
+import DonateForm2 from "@/features/user/components/form/donate-form-2";
+import DonateForm3 from "@/features/user/components/form/donate-form-3";
 import FormStepper from "@/components/common/form-stepper";
 
 export type DonateFormData = {
