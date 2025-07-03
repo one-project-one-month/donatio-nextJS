@@ -9,7 +9,7 @@ import { useState } from "react";
 
 function UserProfilePage() {
 
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true); 
 
   return (
     <div className="w-full">

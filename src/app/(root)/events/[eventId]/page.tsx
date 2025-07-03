@@ -1,8 +1,12 @@
+"use client"
 import Image from "next/image";
 import { CalendarDays } from "lucide-react";
 import donationImg from "@/assets/image/eventDetails1.png";
 import ahluImg from "@/assets/image/ahlu.webp";
 import BreadCrumbUI from "@/components/common/breadcrumb-ui";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import DonateFormPopUp from "@/features/user/components/donate-form/donate-form-popup";
 
 // ✅ Updated to match database schema
 const mockEventData = {
@@ -37,6 +41,8 @@ export default function EventDetails() {
     visit_count,
     organization,
   } = mockEventData;
+
+  const [isVisible, setIsVisible] = useState(false);
 
   const dateRange = `${new Date(start_date).toLocaleDateString()} - ${new Date(
     end_date
@@ -115,9 +121,20 @@ export default function EventDetails() {
         <button className="px-5 py-2 text-primary border border-primary font-medium rounded-full hover:bg-primary/90 hover:text-white transition">
           See activities
         </button>
-        <button className="px-5 py-2 bg-primary text-white font-medium rounded-full hover:bg-primary/80 transition">
+        <Button
+          className="px-5 py-2 bg-primary text-white font-medium rounded-full hover:bg-primary/80 transition"
+          onClick={() => setIsVisible(true)}
+        >
           Donate Now
-        </button>
+        </Button>
+
+        <DonateFormPopUp data={{
+          organization: "Alu Myanmar",
+          event: "Water Festival",
+          amount: 0,
+          phoneNumber: "",
+          screenShot: undefined,
+        }} isVisible={isVisible} setIsVisible={setIsVisible} />
       </div>
 
       {/* Description Section */}
