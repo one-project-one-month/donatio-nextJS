@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${lexend.className} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${lexend.className} antialiased py-5`}
       >
         <QueryProvider>
           {children}
