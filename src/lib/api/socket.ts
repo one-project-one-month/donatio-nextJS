@@ -9,6 +9,4 @@ const createSocket = () => {
     return new WebSocket(WEBSOCKET_URL);
 }
 
-const socket = createSocket();
-
-export default socket;
+export default createSocket;
