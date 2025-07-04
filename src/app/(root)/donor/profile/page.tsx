@@ -10,8 +10,8 @@ function UserProfilePage() {
   return (
     <div className="w-full">
       <SearchSection />
-      {/* Events , Org  and Activitites*/}
-      <TabSplitter tab1Label={"Events"} tab2Label={"Activities"} tab3Label={"Orgnizations"} tab1Content={<EventLists />} tab2Content={<ActivityLists />} tab3Content={<OrgnizationLists />} />
+      {/* Events and Org */}
+      <TabSplitter tab1Label={"Events"} tab2Label={"Orgnizations"} tab3Label={"Activities"} tab1Content={<EventLists/>} tab2Content={<OrgnizationLists/>} tab3Content={<ActivityLists/>}/>
       <DonationBanner />
     </div>
   )

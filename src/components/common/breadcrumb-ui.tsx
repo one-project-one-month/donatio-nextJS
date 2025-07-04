@@ -9,28 +9,39 @@ import {
 import Link from "next/link";
 import { Fragment } from "react";
 
-type BreadcrumbUIProps = {
-  currentPageTitle: string;
-  links: { name: string; path: string }[];
-};
+interface BreadcrumbLinkItem {
+  name: string;
+  path: string;
+}
 
-function BreadCrumbUI({ currentPageTitle, links }: Partial<BreadcrumbUIProps>) {
+interface BreadcrumbUIProps {
+  currentPageTitle: string;
+  links: BreadcrumbLinkItem[];
+}
+
+// aung pyae fixed Hydration Error
+
+function BreadCrumbUI({ currentPageTitle, links = [] }: Partial<BreadcrumbUIProps>) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {links?.map((item, index) => (
+        {links.map((item, index) => (
           <Fragment key={index}>
             <BreadcrumbItem>
-              <BreadcrumbLink>
+              <BreadcrumbLink asChild>
                 <Link href={item.path}>{item.name}</Link>
               </BreadcrumbLink>
-              <BreadcrumbSeparator />
             </BreadcrumbItem>
+            <BreadcrumbSeparator />
           </Fragment>
         ))}
-        <BreadcrumbItem>
-          <BreadcrumbPage className="text-primary font-semibold">{currentPageTitle}</BreadcrumbPage>
-        </BreadcrumbItem>
+        {currentPageTitle && (
+          <BreadcrumbItem>
+            <BreadcrumbPage className="text-primary font-semibold">
+              {currentPageTitle}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   );

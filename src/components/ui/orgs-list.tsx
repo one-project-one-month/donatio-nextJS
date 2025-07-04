@@ -1,8 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 
-import SearchBox from "@/features/user/components/search/search-box"
-
 export interface OrgnizationData {
     id: number,
     title: string,
@@ -58,9 +56,6 @@ const orglist = [
 
 export default function OrgnizationLists() {
     return (<div>
-        <div className="flex w-full my-12 justify-center">
-       <SearchBox/>
-     </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 flex justify-center p-3 md:p-0 grid-cols-1 my-3 flex justify-between gap-12 ">
             {orglist.map((org) => (
                 <OrgCard key={org.id} data={org} />
