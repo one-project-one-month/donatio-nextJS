@@ -8,6 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import SearchBox from "@/features/user/components/search/search-box";
 import { useState } from "react";
 
 // sample data to test
@@ -74,6 +75,10 @@ export default function EventLists() {
   console.log("Pagination :",page)
   return (
     <div>
+    {/* Search Box with dropdown */}
+     <div className="flex w-full my-12 justify-center">
+       <SearchBox/>
+     </div>
       <div className=" flex grid lg:grid-cols-3 md:grid-cols-2 my-3 sm:gap-18 gap-2 w-full flex justify-center sm:p-0 p-3">
         {events.map((event) => (
           <EventCard key={event.id} data={event} />
