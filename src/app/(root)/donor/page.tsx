@@ -1,9 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import DonationBanner from "@/features/user/components/banner/donation-banner";
 import DonateFormPopUp from "@/features/user/components/donate-form/donate-form-popup";
-import SearchSection from "@/features/user/components/search/search-section";
 import { useState } from "react";
 
 
