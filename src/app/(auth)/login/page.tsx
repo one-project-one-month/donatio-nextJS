@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { useState, FormEvent } from "react";
 import { Eye, EyeClosed, User } from "lucide-react";
 import API from "@/lib/api/axios";
+import { useRouter } from "next/navigation";
+
+import image from "@/assets/image/authImage.png";
 
 interface FormState {
   username: string;
@@ -29,6 +32,8 @@ const Page: React.FC = () => {
     password: "",
   });
 
+  const router = useRouter();
+
   const handleForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -37,8 +42,14 @@ const Page: React.FC = () => {
 
       const response = await API.post("/auth/login/", form);
 
+      const { access, refresh } = response.data;
+
+      localStorage.setItem("accessToken", access);
+      localStorage.setItem("refreshToken", refresh);
+
+      console.log("Login success:", response.data);
       setIsSubmitting(false);
-      console.log(response);
+      router.push("/");
     } catch (error: any) {
       const errorData = error.response?.data;
       setIsError(errorData);
@@ -48,7 +59,12 @@ const Page: React.FC = () => {
   };
 
   return (
-    <section className="h-screen w-screen flex items-center justify-center">
+    <section className="h-screen w-screen flex items-center justify-center relative">
+      <img
+        src={image.src}
+        alt="authImage"
+        className="absolute top-0 left-0 w-full h-full object-cover"
+      />
       <div className="bg-blue-100 p-16 rounded-xl">
         <div className="text-center space-y-4 mb-8">
           <h1 className="text-xl font-bold">Login to your account</h1>
