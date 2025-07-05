@@ -27,10 +27,10 @@ const TabSplitter: React.FC<TabSplitterProps> = ({
 }) => {
   return (
       <Tabs defaultValue="tab1" className={"w-full"}>
-      <TabsList className="bg-transparent">
-        <TabsTrigger value="tab1" className="p-4">{tab1Label}</TabsTrigger>
-        <TabsTrigger value="tab2" className="p-4">{tab2Label}</TabsTrigger>
-        <TabsTrigger value="tab3" className="p-4">{tab3Label}</TabsTrigger>
+      <TabsList className="bg-transparent my-3 w-full ">
+        <TabsTrigger value="tab1" className="p-4 max-w-30">{tab1Label}</TabsTrigger>
+        <TabsTrigger value="tab2" className="p-4 max-w-30">{tab2Label}</TabsTrigger>
+        <TabsTrigger value="tab3" className="p-4 max-w-30">{tab3Label}</TabsTrigger>
       </TabsList>
       <TabsContent value="tab1" className="w-full">{tab1Content}</TabsContent>
       <TabsContent value="tab2" className="w-full">{tab2Content}</TabsContent>

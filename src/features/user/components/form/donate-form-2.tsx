@@ -6,6 +6,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { DonateFormData } from "./donate-form-popup";
+import { FilePlus2 } from "lucide-react";
 
 const formTwoSchema = z.object({
   screenShot: z
@@ -20,9 +21,9 @@ type formTwoValue = z.infer<typeof formTwoSchema>;
 type DonateForm2Props = {
   setFormIndex: React.Dispatch<React.SetStateAction<number>>;
   setFormData: React.Dispatch<React.SetStateAction<DonateFormData>>;
-}
+};
 
-function DonateForm2({ setFormIndex, setFormData}: DonateForm2Props) {
+function DonateForm2({ setFormIndex, setFormData }: DonateForm2Props) {
   const form = useForm<formTwoValue>({
     resolver: zodResolver(formTwoSchema),
     defaultValues: {
@@ -36,7 +37,7 @@ function DonateForm2({ setFormIndex, setFormData}: DonateForm2Props) {
       ...prev,
       ...data,
     }));
-  }
+  };
 
   return (
     <div>
@@ -64,9 +65,15 @@ function DonateForm2({ setFormIndex, setFormData}: DonateForm2Props) {
             name="screenShot"
             type="file"
             form={form}
-            label="Upload Receipt Screenshot"
+            label={
+              <span className="flex items-center gap-2">
+                <FilePlus2 className="w-5 h-5 text-primary" />
+                Upload Receipt Screenshot
+              </span>
+            }
             labelClass="mb-1 font-semibold text-base"
             wrapperClass="mb-3"
+            required
           />
           <Button className="w-full rounded-full py-6 md:py-8 md:mt-5">
             Continue
