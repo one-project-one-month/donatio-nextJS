@@ -17,17 +17,17 @@ export type DonateFormData = {
 type DonateFormPopUpProps = {
     data: DonateFormData;
     setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    setData: React.Dispatch<React.SetStateAction<DonateFormData>>;
     isVisible: boolean;
 }
 
-function DonateFormPopUp({ data, setIsVisible, isVisible}:DonateFormPopUpProps) {
-  const [formData, setFormData] = useState<DonateFormData>(data);
+function DonateFormPopUp({ data, setData, setIsVisible, isVisible}:DonateFormPopUpProps) {
   const [formIndex, setFormIndex] = useState<number>(1);
 
   return (
     <>
     {
-      isVisible && <div onClick={() => setIsVisible(false)} className="absolute bg-black/40 top-0 left-0 w-full h-full flex items-center justify-center">
+      isVisible && <div onClick={() => setIsVisible(false)} className="fixed bg-black/40 top-0 left-0 w-full h-dvh flex items-center justify-center">
       {/* donate form tabs */}
       <div onClick={(e) => {
         e.stopPropagation()
@@ -35,15 +35,15 @@ function DonateFormPopUp({ data, setIsVisible, isVisible}:DonateFormPopUpProps) 
         <FormStepper totalStep={3} captions={["Donation detail", "Upload Recipte", "Comfirmation"]} formIndex={formIndex} />
         {formIndex === 1 && (
           <DonateForm1
-            formData={formData}
-            setFormData={setFormData}
+            formData={data}
+            setFormData={setData}
             setFormIndex={setFormIndex}
           />
         )}
         {formIndex === 2 && (
-          <DonateForm2 setFormData={setFormData} setFormIndex={setFormIndex} />
+          <DonateForm2 setFormData={setData} setFormIndex={setFormIndex} />
         )}
-        {formIndex === 3 && <DonateForm3 formData={formData} />}
+        {formIndex === 3 && <DonateForm3 formData={data} />}
       </div>
     </div>
     }

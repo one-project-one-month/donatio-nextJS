@@ -4,7 +4,7 @@ import Navbar from "@/components/core/navbar"
 
 function page() {
   return (
-    <div className="w-full">
+    <div className="w-full py-5">
       <Navbar />
       <LandingPage />
       <Footer />

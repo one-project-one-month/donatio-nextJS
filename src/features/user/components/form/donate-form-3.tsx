@@ -7,8 +7,7 @@ import FormInput from "@/components/common/form-inputs/form-inputs";
 import { Button } from "@/components/ui/button";
 import { DonateFormData } from "./donate-form-popup";
 import FormFileDropZone from "@/components/common/form-inputs/form-file-drop";
-import { useState } from "react";
-import { FilePlus2, Image, Trash2 } from "lucide-react";
+import { FilePlus2 } from "lucide-react";
 
 const formOneSchema = z.object({
   organization: z
@@ -71,6 +70,7 @@ function DonateForm3({ formData }: DonateForm3Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
+            value={formData.organization}
             disabled
           />
           <FormInput
@@ -80,6 +80,7 @@ function DonateForm3({ formData }: DonateForm3Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
+            value={formData.event}
             disabled
           />
           <FormInput

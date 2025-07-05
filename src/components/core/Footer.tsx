@@ -4,8 +4,9 @@ import { Facebook, Instagram, Linkedin } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="w-full grid grid-cols-1 md:grid-cols-4 gap-8 px-5 md:px-12 py-8 text-sm bg-white">
-      <div className="flex flex-col space-y-5 items-start">
+    <footer className="py-8 text-sm bg-dodget-blue-25 border-t">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-5 md:px-20 py-8">
+        <div className="flex flex-col space-y-5 items-start">
         <LogoName />
         <div className="text-neutral-700">
           <p className="mb-5">
@@ -39,6 +40,7 @@ function Footer() {
         <Link href="/" className="rounded-full bg-primary text-white h-10 w-10 flex justify-center items-center">
           <Instagram size={20} />
         </Link>
+      </div>
       </div>
     </footer>
   );

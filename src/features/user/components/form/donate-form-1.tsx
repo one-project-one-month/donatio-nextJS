@@ -75,6 +75,7 @@ function DonateForm1({ formData, setFormIndex, setFormData}: DonateForm1Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
+            value={formData.organization}
             disabled
           />
           <FormInput
@@ -84,6 +85,7 @@ function DonateForm1({ formData, setFormIndex, setFormData}: DonateForm1Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
+            value={formData.event}
             disabled
           />
           <FormInput
