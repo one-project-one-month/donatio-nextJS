@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Lexend } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/provider/query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const lexend = Lexend({
+  variable: "--font-lexend",
   subsets: ["latin"],
 });
 
@@ -26,11 +31,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${lexend.className} antialiased py-5`}
       >
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
