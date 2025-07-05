@@ -3,162 +3,203 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState, FormEvent } from "react";
-import { Eye, EyeClosed, Mail, User } from "lucide-react";
+import { Eye, EyeClosed } from "lucide-react";
 import API from "@/lib/api/axios";
+import { useRouter } from "next/navigation";
+
+import image from "@/assets/image/authImage.png";
+import googleLog from "@/assets/icons/google icon.svg";
+import LogoName from "@/components/common/logo-name";
+import { Label } from "@/components/ui/label";
 
 interface FormState {
-  username: string;
+  name: string;
   email: string;
-  password: string;
-  confirmPassword: string;
+  password1: string;
+  // confirmPassword: string;
 }
 
 interface ErrorState {
-  username: string;
+  name: string;
   email: string;
-  password: string;
-  confirmPassword: string;
+  password1: string;
+  // confirmPassword: string;
 }
 
 const Page: React.FC = () => {
   const [form, setForm] = useState<FormState>({
-    username: "",
+    name: "",
     email: "",
-    password: "",
-    confirmPassword: "",
+    password1: "",
+    // confirmPassword: "",
   });
 
-  const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
-  const [isShowConfirmPassword, setIsShowConfirmPassword] =
-    useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState<ErrorState>({
-    username: "",
+    name: "",
     email: "",
-    password: "",
-    confirmPassword: "",
+    password1: "",
+    // confirmPassword: "",
   });
+
+  const router = useRouter();
 
   const handleForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // if (form.password !== form.confirmPassword) {
+    //   setIsError((prev) => ({
+    //     ...prev,
+    //     confirmPassword: "Passwords do not match",
+    //   }));
+    //   return;
+    // }
 
     try {
       setIsSubmitting(true);
-      if (form.password !== form.confirmPassword) {
-        setIsError({
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "Passwords do not match",
-        });
-        return;
-      }
+      const response = await API.post("/auth/registration/", {
+        name: form.name,
+        email: form.email,
+        password1: form.password1,
+      });
 
-      const response = await API.post("/auth/registration/", form);
-
+      console.log("Register success:", response.data);
       setIsSubmitting(false);
-      console.log(response);
+      router.push("/login");
     } catch (error: any) {
-      const errorData = error.response?.data;
+      const errorData = error.response?.data || {};
       setIsError(errorData);
-      console.log(errorData);
+      console.error(errorData);
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section className="h-screen w-screen flex items-center justify-center">
-      <div className="bg-blue-100 p-16 rounded-xl">
-        <div className="text-center space-y-4 mb-8">
-          <h1 className="text-xl font-bold">Create an account</h1>
-          <p>Enter your email below to create your account</p>
+    <section className="h-screen w-screen flex items-center justify-center relative">
+      <img
+        src={image.src}
+        alt="authImage"
+        className="absolute top-0 left-0 w-full h-full object-cover"
+      />
+
+      <div className="bg-white p-10 rounded-xl z-10 max-w-lg md:w-md xl:w-lg">
+        <div className="flex">
+          <LogoName />
         </div>
+
+        <h1 className="text-2xl font-semibold my-6">Create your account</h1>
+
         <form className="space-y-4" onSubmit={handleForm}>
+          {/* Name */}
+          <Label className="text-base font-medium mb-2">Full Name</Label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
             <Input
               type="text"
-              placeholder="Name"
-              value={form.username}
-              onChange={(e) => setForm({ ...form, username: e.target.value })}
-              className="pl-10 border-black"
+              placeholder="Enter your full name"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
             />
-            {isError?.username && (
-              <p className="text-red-500 text-sm">{isError.username}</p>
+            {isError.name && (
+              <p className="text-red-500 text-sm">* {isError.name}</p>
             )}
           </div>
+
+          {/* Email */}
+          <Label className="text-base font-medium mb-2">Email Address</Label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
             <Input
               type="email"
-              placeholder="Email"
+              placeholder="Enter your email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="pl-10 border-black"
+              className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
             />
-            {isError?.email && (
-              <p className="text-red-500 text-sm">{isError.email}</p>
+            {isError.email && (
+              <p className="text-red-500 text-sm">* {isError.email}</p>
             )}
           </div>
-          <div className="relative">
-            {isShowPassword ? (
-              <Eye
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black select-none cursor-pointer"
-                onClick={() => setIsShowPassword(!isShowPassword)}
-              />
-            ) : (
-              <EyeClosed
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black select-none cursor-pointer"
-                onClick={() => setIsShowPassword(!isShowPassword)}
-              />
-            )}
 
+          {/* Password */}
+          <Label className="text-base font-medium mb-2">Password</Label>
+          <div className="relative">
             <Input
               type={isShowPassword ? "text" : "password"}
-              placeholder="Password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="pl-10 border-black"
+              placeholder="Create a password"
+              value={form.password1}
+              onChange={(e) => setForm({ ...form, password1: e.target.value })}
+              className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
             />
-            {isError?.password && (
-              <p className="text-red-500 text-sm">{isError.password}</p>
-            )}
-          </div>
-          <div className="relative">
-            {isShowConfirmPassword ? (
+            {isShowPassword ? (
               <Eye
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black select-none cursor-pointer"
-                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black cursor-pointer"
+                onClick={() => setIsShowPassword(!isShowPassword)}
               />
             ) : (
               <EyeClosed
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black select-none cursor-pointer"
-                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black cursor-pointer"
+                onClick={() => setIsShowPassword(!isShowPassword)}
               />
             )}
+            {isError.password1 && (
+              <p className="text-red-500 text-sm">{isError.password1}</p>
+            )}
+          </div>
 
+          {/* Confirm Password */}
+          {/* <Label className="text-base font-medium mb-2">Confirm Password</Label>
+          <div className="relative">
             <Input
               type={isShowConfirmPassword ? "text" : "password"}
-              placeholder="Confirm Password"
+              placeholder="Confirm your password"
               value={form.confirmPassword}
               onChange={(e) =>
                 setForm({ ...form, confirmPassword: e.target.value })
               }
-              className="pl-10 border-black"
+              className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
             />
-            {isError?.confirmPassword && (
+            {isShowConfirmPassword ? (
+              <Eye
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black cursor-pointer"
+                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+              />
+            ) : (
+              <EyeClosed
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black cursor-pointer"
+                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+              />
+            )}
+            {isError.confirmPassword && (
               <p className="text-red-500 text-sm">{isError.confirmPassword}</p>
             )}
+          </div> */}
+
+          {/* Buttons */}
+          <div className="h-36 flex flex-col justify-between relative mt-8">
+            <Button
+              type="submit"
+              className="w-full cursor-pointer rounded-full py-6 bg-primary hover:bg-[#1797FF] active:bg-[#078CF9]"
+            >
+              {isSubmitting ? "Creating..." : "Sign Up"}
+            </Button>
+
+            <div className="bg-white w-fit absolute px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-gray-400">
+              or
+            </div>
+
+            <hr />
+            <button className="w-full flex items-center justify-center gap-2 cursor-pointer rounded-full py-3 text-primary border border-primary text-base hover:bg-[#F2F2F2] active:bg-[#F1F1F1]">
+              <img src={googleLog.src} alt="Google Icon" className="h-5 w-5" />
+              Continue With Google
+            </button>
           </div>
-          <Button type="submit" className="w-full cursor-pointer">
-            {isSubmitting ? "Wait Bro" : "Register"}
-          </Button>
         </form>
 
         <div className="text-center mt-6">
-          already have an account?{" "}
-          <a href="/login" className="underline">
-            login
+          <span className="font-light">Already have an account?</span>
+          <a href="/login" className="text-primary ms-2 cursor-pointer">
+            Login
           </a>
         </div>
       </div>
