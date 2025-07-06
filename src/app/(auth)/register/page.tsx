@@ -12,57 +12,58 @@ import googleLog from "@/assets/icons/google icon.svg";
 import LogoName from "@/components/common/logo-name";
 import { Label } from "@/components/ui/label";
 
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+
 interface FormState {
-  name: string;
+  username: string;
   email: string;
   password1: string;
-  // confirmPassword: string;
+  password2: string;
 }
 
 interface ErrorState {
-  name: string;
+  username: string;
   email: string;
   password1: string;
-  // confirmPassword: string;
+  password2: string;
+  non_field_errors: string;
 }
 
 const Page: React.FC = () => {
   const [form, setForm] = useState<FormState>({
-    name: "",
+    username: "",
     email: "",
     password1: "",
-    // confirmPassword: "",
+    password2: "",
   });
 
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState<ErrorState>({
-    name: "",
+    username: "",
     email: "",
     password1: "",
-    // confirmPassword: "",
+    password2: "",
+    non_field_errors: "",
   });
 
   const router = useRouter();
 
   const handleForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (form.password !== form.confirmPassword) {
-    //   setIsError((prev) => ({
-    //     ...prev,
-    //     confirmPassword: "Passwords do not match",
-    //   }));
-    //   return;
-    // }
+    if (form.password1 !== form.password2) {
+      setIsError((prev) => ({
+        ...prev,
+        confirmPassword: "Passwords do not match",
+      }));
+      return;
+    }
 
     try {
       setIsSubmitting(true);
-      const response = await API.post("/auth/registration/", {
-        name: form.name,
-        email: form.email,
-        password1: form.password1,
-      });
+      const response = await API.post("/auth/registration/", form);
 
       console.log("Register success:", response.data);
       setIsSubmitting(false);
@@ -73,6 +74,18 @@ const Page: React.FC = () => {
       console.error(errorData);
       setIsSubmitting(false);
     }
+  };
+
+  const handleSuccess = async (credentialResponse: any) => {
+    const credential = credentialResponse;
+
+    console.log(credential.credential);
+
+    const response = await axios.post("http://localhost:8000/api/auth/google", {
+      id_token: credential.credential,
+    });
+
+    console.log(response.data);
   };
 
   return (
@@ -88,7 +101,12 @@ const Page: React.FC = () => {
           <LogoName />
         </div>
 
-        <h1 className="text-2xl font-semibold my-6">Create your account</h1>
+        <div className="my-6">
+          <h1 className="text-2xl font-semibold">Create your account</h1>
+          {isError.non_field_errors && (
+            <p className="text-red-500 text-sm">* {isError.non_field_errors}</p>
+          )}
+        </div>
 
         <form className="space-y-4" onSubmit={handleForm}>
           {/* Name */}
@@ -97,12 +115,12 @@ const Page: React.FC = () => {
             <Input
               type="text"
               placeholder="Enter your full name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              value={form.username}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
               className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
             />
-            {isError.name && (
-              <p className="text-red-500 text-sm">* {isError.name}</p>
+            {isError.username && (
+              <p className="text-red-500 text-sm">* {isError.username}</p>
             )}
           </div>
 
@@ -148,15 +166,13 @@ const Page: React.FC = () => {
           </div>
 
           {/* Confirm Password */}
-          {/* <Label className="text-base font-medium mb-2">Confirm Password</Label>
+          <Label className="text-base font-medium mb-2">Confirm Password</Label>
           <div className="relative">
             <Input
               type={isShowConfirmPassword ? "text" : "password"}
               placeholder="Confirm your password"
-              value={form.confirmPassword}
-              onChange={(e) =>
-                setForm({ ...form, confirmPassword: e.target.value })
-              }
+              value={form.password2}
+              onChange={(e) => setForm({ ...form, password2: e.target.value })}
               className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
             />
             {isShowConfirmPassword ? (
@@ -170,10 +186,10 @@ const Page: React.FC = () => {
                 onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
               />
             )}
-            {isError.confirmPassword && (
-              <p className="text-red-500 text-sm">{isError.confirmPassword}</p>
+            {isError.password2 && (
+              <p className="text-red-500 text-sm">{isError.password2}</p>
             )}
-          </div> */}
+          </div>
 
           {/* Buttons */}
           <div className="h-36 flex flex-col justify-between relative mt-8">
@@ -189,10 +205,17 @@ const Page: React.FC = () => {
             </div>
 
             <hr />
-            <button className="w-full flex items-center justify-center gap-2 cursor-pointer rounded-full py-3 text-primary border border-primary text-base hover:bg-[#F2F2F2] active:bg-[#F1F1F1]">
+            {/* <button className="w-full flex items-center justify-center gap-2 cursor-pointer rounded-full py-3 text-primary border border-primary text-base hover:bg-[#F2F2F2] active:bg-[#F1F1F1]">
               <img src={googleLog.src} alt="Google Icon" className="h-5 w-5" />
               Continue With Google
-            </button>
+            </button> */}
+            <GoogleOAuthProvider clientId="854666513086-ho6370cfgsg4b9045o9ml80e00kdb4qp.apps.googleusercontent.com">
+              <GoogleLogin
+                onSuccess={handleSuccess}
+                onError={() => console.log("Login Failed")}
+                useOneTap
+              />
+            </GoogleOAuthProvider>
           </div>
         </form>
 

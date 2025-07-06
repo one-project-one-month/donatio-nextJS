@@ -13,25 +13,25 @@ import LogoName from "@/components/common/logo-name";
 import { Label } from "@/components/ui/label";
 
 interface FormState {
-  email: string;
+  username: string;
   password: string;
 }
 
 interface ErrorState {
-  email: string;
+  username: string;
   password: string;
 }
 
 const Page: React.FC = () => {
   const [form, setForm] = useState<FormState>({
-    email: "",
+    username: "",
     password: "",
   });
 
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isError, setIsError] = useState<ErrorState>({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -77,17 +77,17 @@ const Page: React.FC = () => {
         <h1 className="text-2xl font-semibold my-6">Welcome back!</h1>
 
         <form className="space-y-4" onSubmit={handleForm}>
-          <Label className="text-base font-medium mb-2">Email Address</Label>
+          <Label className="text-base font-medium mb-2">Username</Label>
           <div className="relative">
             <Input
-              type="email"
+              type="text"
               placeholder="Please enter your email address"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              value={form.username}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
               className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
             />
-            {isError?.email && (
-              <p className="text-red-500 text-sm">* {isError.email}</p>
+            {isError?.username && (
+              <p className="text-red-500 text-sm">* {isError.username}</p>
             )}
           </div>
 

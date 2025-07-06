@@ -1,6 +1,6 @@
-import LandingPage from "@/components/LandingPage/LandingPage"
-import Footer from "@/components/core/Footer"
-import Navbar from "@/components/core/navbar"
+import LandingPage from "@/components/LandingPage/LandingPage";
+import Footer from "@/components/core/Footer";
+import Navbar from "@/components/core/navbar";
 
 function page() {
   return (
@@ -8,9 +8,8 @@ function page() {
       <Navbar />
       <LandingPage />
       <Footer />
-
     </div>
-  )
+  );
 }
 
-export default page
+export default page;
