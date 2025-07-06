@@ -40,18 +40,18 @@ const formOneSchema = z.object({
 type formOneValue = z.infer<typeof formOneSchema>;
 
 type DonateForm3Props = {
-  formData: DonateFormData;
+  formData: DonateFormData | null;
 };
 
 function DonateForm3({ formData }: DonateForm3Props) {
   const form = useForm<formOneValue>({
     resolver: zodResolver(formOneSchema),
     defaultValues: {
-      organization: formData.organization,
-      event: formData.event,
-      donationAmount: String(formData.amount),
-      phoneNumber: formData.phoneNumber,
-      screenShot: formData.screenShot,
+      organization: formData?.organization,
+      event: formData?.event,
+      donationAmount: String(formData?.amount),
+      phoneNumber: formData?.phoneNumber,
+      screenShot: formData?.screenShot,
     },
   });
 
@@ -70,7 +70,7 @@ function DonateForm3({ formData }: DonateForm3Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
-            value={formData.organization}
+            value={formData?.organization}
             disabled
           />
           <FormInput
@@ -80,7 +80,7 @@ function DonateForm3({ formData }: DonateForm3Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
-            value={formData.event}
+            value={formData?.event}
             disabled
           />
           <FormInput
@@ -117,7 +117,7 @@ function DonateForm3({ formData }: DonateForm3Props) {
             }
             labelClass="mb-1 font-semibold text-base"
             wrapperClass="mb-3"
-            defaultFile={formData.screenShot}
+            defaultFile={formData?.screenShot}
             required
           />
           <Button className="w-full rounded-full py-6 md:py-8 md:mt-5">

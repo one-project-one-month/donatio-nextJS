@@ -11,6 +11,7 @@ import {
 import EventListingCard from "./event-listing-card";
 import DonateFormPopUp, { DonateFormData } from "../form/donate-form-popup";
 import { useEffect, useState } from "react";
+import useDonateStore from "@/store/donateStore";
 
 const events = [
   {
@@ -76,40 +77,36 @@ const events = [
 ];
 
 function EventListing() {
-  const [formData, setFormData] = useState<DonateFormData>({
-    organization: "",
-    event: "",
-    amount: 0,
-    phoneNumber: "",
-    screenShot: undefined,
-  });
+  
+
+  const { donateFormData, setDonateForm} = useDonateStore()
 
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = isVisible ? "hidden" : "auto";
 
-    console.log(formData);
+    console.log(donateFormData);
 
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isVisible, formData]);
+  }, [isVisible, donateFormData]);
 
   return (
     <div>
       <DonateFormPopUp
         isVisible={isVisible}
         setIsVisible={setIsVisible}
-        data={formData}
-        setData={setFormData}
+        data={donateFormData}
+        setData={setDonateForm}
       />
       <div className="grid lg:grid-cols-3 md:grid-cols-2 my-3 sm:gap-18 mb-6 gap-2 w-full justify-center sm:p-0 p-3">
         {events.map((event) => (
           <EventListingCard
             key={event.id}
             data={event}
-            setFormData={setFormData}
+            setFormData={setDonateForm}
             setIsVisible={setIsVisible}
           />
         ))}

@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { DonateFormData } from "./donate-form-popup";
 import { FilePlus2 } from "lucide-react";
+import { getDonateFormData } from "@/store/donateStore";
 
 const formTwoSchema = z.object({
   screenShot: z
@@ -20,7 +21,7 @@ type formTwoValue = z.infer<typeof formTwoSchema>;
 
 type DonateForm2Props = {
   setFormIndex: React.Dispatch<React.SetStateAction<number>>;
-  setFormData: React.Dispatch<React.SetStateAction<DonateFormData>>;
+  setFormData: (data: any) => void;
 };
 
 function DonateForm2({ setFormIndex, setFormData }: DonateForm2Props) {
@@ -32,11 +33,16 @@ function DonateForm2({ setFormIndex, setFormData }: DonateForm2Props) {
   });
 
   const handleContinue = (data: formTwoValue) => {
+
+
+    const formData = {
+      ...getDonateFormData(),
+      screenShot: data.screenShot
+    }
+
+
     setFormIndex(3);
-    setFormData((prev) => ({
-      ...prev,
-      ...data,
-    }));
+    setFormData(formData);
   };
 
   return (

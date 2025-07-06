@@ -5,6 +5,7 @@ import DonateForm1 from "@/features/user/components/form/donate-form-1";
 import DonateForm2 from "@/features/user/components/form/donate-form-2";
 import DonateForm3 from "@/features/user/components/form/donate-form-3";
 import FormStepper from "@/components/common/form-stepper";
+import useDonateStore from "@/store/donateStore";
 
 export type DonateFormData = {
   organization: string;
@@ -15,19 +16,26 @@ export type DonateFormData = {
 };
 
 type DonateFormPopUpProps = {
-    data: DonateFormData;
+    data: DonateFormData | null;
     setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setData: React.Dispatch<React.SetStateAction<DonateFormData>>;
+    setData: (data: any) => void;
     isVisible: boolean;
 }
 
-function DonateFormPopUp({ data, setData, setIsVisible, isVisible}:DonateFormPopUpProps) {
+function DonateFormPopUp({ data, setData, setIsVisible, isVisible }:DonateFormPopUpProps) {
   const [formIndex, setFormIndex] = useState<number>(1);
+
+
+  const handleClosePopUp = () => {
+    setIsVisible(false);
+    setData(null);
+    setFormIndex(1);
+  }
 
   return (
     <>
     {
-      isVisible && <div onClick={() => setIsVisible(false)} className="fixed bg-black/40 top-0 left-0 w-full h-dvh flex items-center justify-center">
+      isVisible && <div onClick={handleClosePopUp} className="fixed bg-black/40 top-0 left-0 w-full h-dvh flex items-center justify-center">
       {/* donate form tabs */}
       <div onClick={(e) => {
         e.stopPropagation()
