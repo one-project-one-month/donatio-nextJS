@@ -11,7 +11,7 @@ function page() {
   //this is where I need to add logout
 
   return (
-    <div className="w-full">
+    <div className="w-full py-5">
       <Navbar />
       <LandingPage />
       <Footer />
