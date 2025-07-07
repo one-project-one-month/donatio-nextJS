@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import image from "@/assets/image/authImage.png";
 import LogoName from "@/components/common/logo-name";
 import Loading from "../../loading";
@@ -8,6 +8,8 @@ import { useParams } from "next/navigation";
 import API from "@/lib/api/axios";
 
 const Page: React.FC = () => {
+  const [isVerified, setIsverified] = useState("");
+
   const params = useParams() as { id?: string };
   const id = params.id ? decodeURIComponent(params.id) : undefined;
 
@@ -20,9 +22,9 @@ const Page: React.FC = () => {
           key: id,
         });
 
-        console.log("Verification response:", response);
+        setIsverified("Verification Successful. You can login now.");
       } catch (error) {
-        console.error("Verification error:", error);
+        setIsverified("Verification Fail. TF you are?");
       }
     };
 
@@ -42,8 +44,10 @@ const Page: React.FC = () => {
         </div>
 
         <div className="mt-6 flex items-center gap-4">
-          <div className="text-2xl">Verifying Email</div>
-          <Loading />
+          <div className="text-2xl text-gray-950">
+            {isVerified === "" ? <>Verifying Email</> : <>{isVerified}</>}
+          </div>
+          {isVerified === "" ? <Loading /> : ""}
         </div>
       </div>
     </section>

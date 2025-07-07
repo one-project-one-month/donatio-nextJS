@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { Eye, EyeClosed, Mail } from "lucide-react";
 import API from "@/lib/api/axios";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,10 @@ import image from "@/assets/image/authImage.png";
 import googleLog from "@/assets/icons/google icon.svg";
 import LogoName from "@/components/common/logo-name";
 import { Label } from "@/components/ui/label";
+
+import useAuthStore from "@/store/useAuthStore";
+
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 interface FormState {
   username: string;
@@ -23,6 +27,11 @@ interface ErrorState {
 }
 
 const Page: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const [form, setForm] = useState<FormState>({
     username: "",
     password: "",
@@ -47,18 +56,29 @@ const Page: React.FC = () => {
 
       const { access, refresh } = response.data;
 
-      localStorage.setItem("accessToken", access);
-      localStorage.setItem("refreshToken", refresh);
+      useAuthStore.getState().setAccessToken(access, refresh);
 
-      console.log("Login success:", response.data);
       setIsSubmitting(false);
       router.push("/");
     } catch (error: any) {
       const errorData = error.response?.data;
       setIsError(errorData);
-      console.log(errorData);
       setIsSubmitting(false);
     }
+  };
+
+  const handleSuccess = async (credentialResponse: any) => {
+    const credential = credentialResponse;
+
+    const response = await API.post("/auth/google", {
+      id_token: credential.credential,
+    });
+
+    const { access, refresh } = response.data;
+
+    useAuthStore.getState().setAccessToken(access, refresh);
+
+    router.push("/");
   };
 
   return (
@@ -128,10 +148,15 @@ const Page: React.FC = () => {
             </div>
 
             <hr />
-            <button className="w-full flex items-center justify-center gap-2 cursor-pointer rounded-full py-3 text-primary border border-primary text-base hover:bg-[#F2F2F2] active:bg-[#F1F1F1]">
-              <img src={googleLog.src} alt="" className="h-5 w-5" />
-              Continue With Google
-            </button>
+            {isClient && (
+              <GoogleOAuthProvider clientId="854666513086-ho6370cfgsg4b9045o9ml80e00kdb4qp.apps.googleusercontent.com">
+                <GoogleLogin
+                  onSuccess={handleSuccess}
+                  onError={() => console.log("Login Failed")}
+                  useOneTap
+                />
+              </GoogleOAuthProvider>
+            )}
           </div>
         </form>
 

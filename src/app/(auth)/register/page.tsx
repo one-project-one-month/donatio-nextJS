@@ -2,18 +2,21 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import API from "@/lib/api/axios";
 import { useRouter } from "next/navigation";
 
+import Image from "next/image";
 import image from "@/assets/image/authImage.png";
-import googleLog from "@/assets/icons/google icon.svg";
+
 import LogoName from "@/components/common/logo-name";
 import { Label } from "@/components/ui/label";
 
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+
+import useAuthStore from "@/store/useAuthStore";
+import { showToast } from "@/lib/toast";
 
 interface FormState {
   username: string;
@@ -39,7 +42,7 @@ const Page: React.FC = () => {
   });
 
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
+  // const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState<ErrorState>({
     username: "",
@@ -49,25 +52,26 @@ const Page: React.FC = () => {
     non_field_errors: "",
   });
 
+  const [isClient, setIsClient] = useState(false);
+
   const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (form.password1 !== form.password2) {
-      setIsError((prev) => ({
-        ...prev,
-        confirmPassword: "Passwords do not match",
-      }));
-      return;
-    }
 
     try {
       setIsSubmitting(true);
       const response = await API.post("/auth/registration/", form);
 
-      console.log("Register success:", response.data);
       setIsSubmitting(false);
-      router.push("/login");
+      showToast.info("Check your email for confirmation");
+      setTimeout(() => {
+        router.push("/login");
+      }, 5000);
     } catch (error: any) {
       const errorData = error.response?.data || {};
       setIsError(errorData);
@@ -79,20 +83,23 @@ const Page: React.FC = () => {
   const handleSuccess = async (credentialResponse: any) => {
     const credential = credentialResponse;
 
-    console.log(credential.credential);
-
-    const response = await axios.post("http://localhost:8000/api/auth/google", {
+    const response = await API.post("/auth/google", {
       id_token: credential.credential,
     });
 
-    console.log(response.data);
+    const { access, refresh } = response.data;
+
+    useAuthStore.getState().setAccessToken(access, refresh);
+
+    router.push("/");
   };
 
   return (
     <section className="h-screen w-screen flex items-center justify-center relative">
-      <img
-        src={image.src}
+      <Image
+        src={image}
         alt="authImage"
+        fill
         className="absolute top-0 left-0 w-full h-full object-cover"
       />
 
@@ -109,12 +116,12 @@ const Page: React.FC = () => {
         </div>
 
         <form className="space-y-4" onSubmit={handleForm}>
-          {/* Name */}
-          <Label className="text-base font-medium mb-2">Full Name</Label>
+          {/* Username */}
+          <Label className="text-base font-medium mb-2">Username</Label>
           <div className="relative">
             <Input
               type="text"
-              placeholder="Enter your full name"
+              placeholder="Enter your username"
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
@@ -146,7 +153,14 @@ const Page: React.FC = () => {
               type={isShowPassword ? "text" : "password"}
               placeholder="Create a password"
               value={form.password1}
-              onChange={(e) => setForm({ ...form, password1: e.target.value })}
+              autoComplete="new-password"
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  password1: e.target.value,
+                  password2: e.target.value,
+                })
+              }
               className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
             />
             {isShowPassword ? (
@@ -165,32 +179,6 @@ const Page: React.FC = () => {
             )}
           </div>
 
-          {/* Confirm Password */}
-          <Label className="text-base font-medium mb-2">Confirm Password</Label>
-          <div className="relative">
-            <Input
-              type={isShowConfirmPassword ? "text" : "password"}
-              placeholder="Confirm your password"
-              value={form.password2}
-              onChange={(e) => setForm({ ...form, password2: e.target.value })}
-              className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
-            />
-            {isShowConfirmPassword ? (
-              <Eye
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black cursor-pointer"
-                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
-              />
-            ) : (
-              <EyeClosed
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black cursor-pointer"
-                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
-              />
-            )}
-            {isError.password2 && (
-              <p className="text-red-500 text-sm">{isError.password2}</p>
-            )}
-          </div>
-
           {/* Buttons */}
           <div className="h-36 flex flex-col justify-between relative mt-8">
             <Button
@@ -205,17 +193,16 @@ const Page: React.FC = () => {
             </div>
 
             <hr />
-            {/* <button className="w-full flex items-center justify-center gap-2 cursor-pointer rounded-full py-3 text-primary border border-primary text-base hover:bg-[#F2F2F2] active:bg-[#F1F1F1]">
-              <img src={googleLog.src} alt="Google Icon" className="h-5 w-5" />
-              Continue With Google
-            </button> */}
-            <GoogleOAuthProvider clientId="854666513086-ho6370cfgsg4b9045o9ml80e00kdb4qp.apps.googleusercontent.com">
-              <GoogleLogin
-                onSuccess={handleSuccess}
-                onError={() => console.log("Login Failed")}
-                useOneTap
-              />
-            </GoogleOAuthProvider>
+
+            {isClient && (
+              <GoogleOAuthProvider clientId="854666513086-ho6370cfgsg4b9045o9ml80e00kdb4qp.apps.googleusercontent.com">
+                <GoogleLogin
+                  onSuccess={handleSuccess}
+                  onError={() => console.log("Login Failed")}
+                  useOneTap
+                />
+              </GoogleOAuthProvider>
+            )}
           </div>
         </form>
 

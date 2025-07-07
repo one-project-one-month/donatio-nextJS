@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Lexend } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/provider/query-provider";
+import ToastProvider from "./toast-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${lexend.className} antialiased`}
       >
         <QueryProvider>{children}</QueryProvider>
+        <ToastProvider />
       </body>
     </html>
   );
