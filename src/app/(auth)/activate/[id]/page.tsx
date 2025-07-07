@@ -23,10 +23,8 @@ const Page: React.FC = () => {
         });
 
         setIsverified("Verification Successful. You can login now.");
-        console.log("Verification response:", response);
       } catch (error) {
         setIsverified("Verification Fail. TF you are?");
-        console.error("Verification error:", error);
       }
     };
 

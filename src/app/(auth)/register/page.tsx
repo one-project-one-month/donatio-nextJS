@@ -67,7 +67,6 @@ const Page: React.FC = () => {
       setIsSubmitting(true);
       const response = await API.post("/auth/registration/", form);
 
-      console.log("Register success:", response.data);
       setIsSubmitting(false);
       showToast.info("Check your email for confirmation");
       setTimeout(() => {
@@ -83,8 +82,6 @@ const Page: React.FC = () => {
 
   const handleSuccess = async (credentialResponse: any) => {
     const credential = credentialResponse;
-
-    console.log(credential.credential);
 
     const response = await API.post("/auth/google", {
       id_token: credential.credential,
