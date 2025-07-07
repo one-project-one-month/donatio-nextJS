@@ -12,6 +12,8 @@ import googleLog from "@/assets/icons/google icon.svg";
 import LogoName from "@/components/common/logo-name";
 import { Label } from "@/components/ui/label";
 
+import useAuthStore from "@/store/useAuthStore";
+
 interface FormState {
   username: string;
   password: string;
@@ -47,8 +49,7 @@ const Page: React.FC = () => {
 
       const { access, refresh } = response.data;
 
-      localStorage.setItem("accessToken", access);
-      localStorage.setItem("refreshToken", refresh);
+      useAuthStore.getState().setAccessToken(access, refresh);
 
       console.log("Login success:", response.data);
       setIsSubmitting(false);
