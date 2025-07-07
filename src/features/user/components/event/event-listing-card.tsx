@@ -50,7 +50,7 @@ function EventListingCard({
       {/* description and title */}
       <div className="text-justify">
         <div className="font-bold text-xl">{data?.title}</div>
-        <div className="text-justify text-sm text-slate-500 hover:text-slate-900 my-3 ">
+        <div className="text-justify text-sm my-3 ">
           {data?.description}
         </div>
       </div>
