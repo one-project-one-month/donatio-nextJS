@@ -142,7 +142,7 @@
 .loader {
   width: 60px;
   aspect-ratio: 4;
-  --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
+  --_g: no-repeat radial-gradient(circle closest-side, #030712 90%, #030712);
   background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
   background-size: calc(100% / 3) 100%;
   animation: l7 1s infinite linear;

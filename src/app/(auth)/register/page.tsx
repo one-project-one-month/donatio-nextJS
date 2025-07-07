@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 import useAuthStore from "@/store/useAuthStore";
+import { showToast } from "@/lib/toast";
 
 interface FormState {
   username: string;
@@ -68,7 +69,10 @@ const Page: React.FC = () => {
 
       console.log("Register success:", response.data);
       setIsSubmitting(false);
-      router.push("/login");
+      showToast.info("Check your email for confirmation");
+      setTimeout(() => {
+        router.push("/login");
+      }, 5000);
     } catch (error: any) {
       const errorData = error.response?.data || {};
       setIsError(errorData);
