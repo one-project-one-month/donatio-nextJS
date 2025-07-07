@@ -10,4 +10,12 @@ const API: AxiosInstance = axios.create({
   },
 });
 
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `JWT ${token}`;
+  }
+  return config;
+});
+
 export default API;
