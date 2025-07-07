@@ -55,7 +55,6 @@
 }
 
 :root {
-
   --color-dodger-blue-600: #1e9aff;
 
   --radius: 0.625rem;
@@ -132,5 +131,30 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@theme {
+  --color-primary: #1e9aff;
+}
+
+/* auth loading  */
+.loader {
+  width: 60px;
+  aspect-ratio: 4;
+  --_g: no-repeat radial-gradient(circle closest-side, #030712 90%, #030712);
+  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+  background-size: calc(100% / 3) 100%;
+  animation: l7 1s infinite linear;
+}
+@keyframes l7 {
+  33% {
+    background-size: calc(100% / 3) 0%, calc(100% / 3) 100%, calc(100% / 3) 100%;
+  }
+  50% {
+    background-size: calc(100% / 3) 100%, calc(100% / 3) 0%, calc(100% / 3) 100%;
+  }
+  66% {
+    background-size: calc(100% / 3) 100%, calc(100% / 3) 100%, calc(100% / 3) 0%;
   }
 }
