@@ -7,7 +7,7 @@ function OrganizationSearchBox() {
 
 
   return (
-    <div className='w-1/3'>
+    <div className='w-full'>
         <div className="relative w-full">
         <Input
         className="rounded-lg pl-12 pr-4 py-5 shadow-md bg-white border border-primary text-base focus:ring-2 focus:ring-dodger-blue-50"
