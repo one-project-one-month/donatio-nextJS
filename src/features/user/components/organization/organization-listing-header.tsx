@@ -14,20 +14,14 @@ import {
 
 function OrganizationListingHeader() {
   return (
-    <div className="py-12 ">
-      <BreadCrumbUI
+    <div className="pb-8 ">
+      {/* <BreadCrumbUI
       currentPageTitle="Organizations"
       links={[{ name: "Donor", path: "/donor" }]}
-      />
-      <div className="my-6 text-center flex flex-col space-y-3 justify-center items-center">
-      <h2 className="text-4xl font-extrabold text-gray-900">Organizations</h2>
-      <p className="mt-2 text-gray-400 max-w-3xl mx-auto">
-        Browse and manage the list of organizations available on the platform.
-        Here you can view details, search, and connect with organizations for
-        donations and collaborations.
-      </p>
-      </div>
-      <div className="my-3 flex space-x-2 items-center justify-center w-full">
+      /> */}
+      <div className="my-6 text-center flex space-y-3 justify-between items-center">
+      <h2 className="text-4xl font-extrabold text-primary">Organizations</h2>
+      <div className="my-3 flex space-x-2 items-center justify-center w-1/2">
       <OrganizationSearchBox />
       <Select>
         <SelectTrigger className="w-[180px] py-5 border-primary">
@@ -43,6 +37,14 @@ function OrganizationListingHeader() {
         </SelectContent>
       </Select>
       </div>
+      </div>
+      
+      <p className="mt-2 text-gray-400 max-w-3xl mb-3">
+        Browse and manage the list of organizations available on the platform.
+        Here you can view details, search, and connect with organizations for
+        donations and collaborations.
+      </p>
+      <Separator />
     </div>
   );
 }
