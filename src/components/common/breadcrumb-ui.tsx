@@ -21,7 +21,7 @@ function BreadCrumbUI({ currentPageTitle, links }: Partial<BreadcrumbUIProps>) {
         {links?.map((item, index) => (
           <Fragment key={index}>
             <BreadcrumbItem>
-              <BreadcrumbLink>
+              <BreadcrumbLink asChild>
                 <Link href={item.path}>{item.name}</Link>
               </BreadcrumbLink>
               <BreadcrumbSeparator />
