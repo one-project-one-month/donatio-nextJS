@@ -9,6 +9,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 const AvatarDropdown = () => {
   return (
@@ -36,7 +37,7 @@ const AvatarDropdown = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <UserCircleIcon />
-            Account
+            <Link href={"/donor/profile"}>Account</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
