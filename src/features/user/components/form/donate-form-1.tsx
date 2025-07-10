@@ -36,17 +36,17 @@ const formOneSchema = z.object({
 type formOneValue = z.infer<typeof formOneSchema>;
 
 type DonateForm1Props = {
-  formData: DonateFormData;
+  formData: DonateFormData | null;
   setFormIndex: React.Dispatch<React.SetStateAction<number>>;
-  setFormData: React.Dispatch<React.SetStateAction<DonateFormData>>;
+  setFormData: (data: DonateFormData) => void;
 }
 
 function DonateForm1({ formData, setFormIndex, setFormData}: DonateForm1Props) {
   const form = useForm<formOneValue>({
     resolver: zodResolver(formOneSchema),
     defaultValues: {
-      organization: formData.organization,
-      event: formData.event,
+      organization: formData?.organization,
+      event: formData?.event,
       donationAmount: "",
       phoneNumber: "",
     },
@@ -56,12 +56,17 @@ function DonateForm1({ formData, setFormIndex, setFormData}: DonateForm1Props) {
 
 
   const handleContinue = (data: formOneValue) => {
-    setFormIndex(2);
-    setFormData((prev) => ({
-      ...prev,
-      ...data,
+
+    const formData = {
+      organization: data.organization,
+      event: data.event,
       amount: Number(data.donationAmount),
-    }));
+      phoneNumber: data.phoneNumber,
+      screenShot: undefined,
+    }
+
+    setFormIndex(2);
+    setFormData(formData);
   }
 
   return (
@@ -75,6 +80,7 @@ function DonateForm1({ formData, setFormIndex, setFormData}: DonateForm1Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
+            value={formData?.organization}
             disabled
           />
           <FormInput
@@ -84,6 +90,7 @@ function DonateForm1({ formData, setFormIndex, setFormData}: DonateForm1Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
+            value={formData?.event}
             disabled
           />
           <FormInput
