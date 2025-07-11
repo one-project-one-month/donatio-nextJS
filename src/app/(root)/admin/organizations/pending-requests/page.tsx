@@ -16,8 +16,7 @@ const PendingOrganizationsPage = () => {
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
 
-  const { data, isLoading } =
-    useOrganizationRequests<OrganizationRequest>(page);
+  const { data, isLoading } = useOrganizationRequests(page);
   const { mutate, isPending: isMutating } = useUpdateOrganizationRequest();
 
   const handleAction = (id: string, action: "approved" | "rejected") => {
@@ -81,7 +80,7 @@ const PendingOrganizationsPage = () => {
             buttonClassName="text-green-600 hover:text-green-800"
             buttonTitle="Approve"
             dialogTitle="Approve this request?"
-            dialogDescription={`Are you sure you want to approve ${row.organization_name}?`}
+            dialogDescription={`Are you sure you want to approve "${row.organization_name}"?`}
             onConfirm={() => handleAction(row.id, "approved")}
             disabled={isMutating}
           />
@@ -91,7 +90,7 @@ const PendingOrganizationsPage = () => {
             buttonClassName="text-red-600 hover:text-red-800"
             buttonTitle="Reject"
             dialogTitle="Reject this request?"
-            dialogDescription={`Are you sure you want to reject ${row.organization_name}?`}
+            dialogDescription={`Are you sure you want to reject "${row.organization_name}"?`}
             onConfirm={() => handleAction(row.id, "rejected")}
             disabled={isMutating}
           />

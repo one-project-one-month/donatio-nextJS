@@ -1,32 +1,26 @@
-import API from "@/lib/api/axios";
 import {
   OrganizationRequest,
   OrganizationResponse,
   UpdatePayload,
   VerifiedOrganization,
 } from "@/features/admin/types/admin";
+import API from "@/lib/api/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const fetchOrganizationRequests = async <
-  T extends OrganizationRequest | VerifiedOrganization
->(
+export const fetchOrganizationRequests = async (
   page: number
-): Promise<OrganizationResponse<T>> => {
+): Promise<OrganizationResponse<OrganizationRequest>> => {
   const { data } = await API.get(
     `/organization-requests/?page=${page}&status=pending`
   );
   return data;
 };
 
-export const useOrganizationRequests = <
-  T extends OrganizationRequest | VerifiedOrganization
->(
-  page: number
-) => {
-  return useQuery<OrganizationResponse<T>>({
+export const useOrganizationRequests = (page: number) => {
+  return useQuery<OrganizationResponse<OrganizationRequest>>({
     queryKey: ["organization-requests", page],
     queryFn: () => fetchOrganizationRequests(page),
-    placeholderData: (previousData) => previousData,
+    placeholderData: (prev) => prev,
   });
 };
 
@@ -46,16 +40,28 @@ export const useUpdateOrganizationRequest = () => {
   });
 };
 
-export const fetchVerifiedOrganizations = async (): Promise<
-  VerifiedOrganization[]
-> => {
-  const { data } = await API.get("/organizations");
-  return data.results;
+export const fetchVerifiedOrganizations = async (
+  page: number
+): Promise<OrganizationResponse<VerifiedOrganization>> => {
+  const { data } = await API.get(`/organizations/?page=${page}`);
+  return data;
 };
 
-export const useVerifiedOrganizations = () => {
-  return useQuery({
-    queryKey: ["verified-organization"],
-    queryFn: fetchVerifiedOrganizations,
+export const useVerifiedOrganizations = (page: number) => {
+  return useQuery<OrganizationResponse<VerifiedOrganization>>({
+    queryKey: ["verified-organizations", page],
+    queryFn: () => fetchVerifiedOrganizations(page),
+    placeholderData: (prev) => prev,
+  });
+};
+
+export const useDeleteOrganization = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => API.delete(`/organizations/${id}/`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["verified-organizations"] });
+    },
   });
 };
