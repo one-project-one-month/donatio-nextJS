@@ -2,8 +2,8 @@
 
 import OrganizationTable from "@/components/common/organization-table";
 import { Button } from "@/components/ui/button";
-import { useVerifiedOrganizations } from "@/queries/useOrganizationRequests";
-import { VerifiedOrganization } from "@/types/admin";
+import { useVerifiedOrganizations } from "@/features/admin/queries/useOrganizationRequests";
+import { VerifiedOrganization } from "@/features/admin/types/admin";
 import { formatDate } from "@/utils/formatDate";
 import { PencilIcon } from "lucide-react";
 

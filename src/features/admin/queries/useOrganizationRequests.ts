@@ -4,7 +4,7 @@ import {
   OrganizationResponse,
   UpdatePayload,
   VerifiedOrganization,
-} from "@/types/admin";
+} from "@/features/admin/types/admin";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const fetchOrganizationRequests = async <
