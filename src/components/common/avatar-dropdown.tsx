@@ -35,9 +35,11 @@ const AvatarDropdown = () => {
         sideOffset={4}
       >
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <UserCircleIcon />
-            <Link href={"/donor/profile"}>Account</Link>
+          <DropdownMenuItem asChild>
+            <Link href={"/donor/profile"}>
+              <UserCircleIcon />
+              Account
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
