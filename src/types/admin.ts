@@ -1,3 +1,12 @@
+export type OrganizationResponse<
+  T = OrganizationRequest | VerifiedOrganization
+> = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+};
+
 export interface Attachment {
   id: string;
   file: string;

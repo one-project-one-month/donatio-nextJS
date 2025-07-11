@@ -2,6 +2,7 @@
 
 import OrganizationTable from "@/components/common/organization-table";
 import { Button } from "@/components/ui/button";
+import Pagination from "@/features/admin/pagination";
 import {
   useOrganizationRequests,
   useUpdateOrganizationRequest,
@@ -9,18 +10,19 @@ import {
 import { OrganizationRequest } from "@/types/admin";
 import { formatDate } from "@/utils/formatDate";
 import { Check, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 const PendingOrganizationsPage = () => {
-  const { data = [], isLoading } = useOrganizationRequests();
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
+  const { data, isLoading } =
+    useOrganizationRequests<OrganizationRequest>(page);
   const { mutate, isPending: isMutating } = useUpdateOrganizationRequest();
 
   const handleAction = (id: string, action: "approved" | "rejected") => {
     mutate({ id, status: action });
   };
-
-  const pendingRequests = data.filter(
-    (req: OrganizationRequest) => req.status === "pending"
-  );
 
   const columns = [
     {
@@ -107,8 +109,14 @@ const PendingOrganizationsPage = () => {
     <div className="p-10">
       <OrganizationTable<OrganizationRequest>
         title="Pending Organizations"
-        data={pendingRequests}
+        data={data?.results ?? []}
         columns={columns}
+      />
+
+      <Pagination
+        itemCount={data?.count ?? 0}
+        pageSize={7}
+        currentPage={page}
       />
     </div>
   );
