@@ -1,13 +1,13 @@
 "use client";
 
 import OrganizationTable from "@/components/common/organization-table";
-import { Button } from "@/components/ui/button";
-import Pagination from "@/features/admin/pagination";
+import ConfirmActionButton from "@/features/admin/components/confirm-action-button";
+import Pagination from "@/features/admin/components/pagination";
 import {
   useOrganizationRequests,
   useUpdateOrganizationRequest,
-} from "@/queries/useOrganizationRequests";
-import { OrganizationRequest } from "@/types/admin";
+} from "@/features/admin/queries/useOrganizationRequests";
+import { OrganizationRequest } from "@/features/admin/types/admin";
 import { formatDate } from "@/utils/formatDate";
 import { Check, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -75,27 +75,26 @@ const PendingOrganizationsPage = () => {
       key: "actions",
       label: "Actions",
       render: (row: OrganizationRequest) => (
-        <div>
-          <Button
-            variant="ghost"
-            size="icon"
-            title="Approve"
-            className="text-green-600 hover:text-green-800"
+        <div className="flex gap-1">
+          <ConfirmActionButton
+            icon={<Check size={15} />}
+            buttonClassName="text-green-600 hover:text-green-800"
+            buttonTitle="Approve"
+            dialogTitle="Approve this request?"
+            dialogDescription={`Are you sure you want to approve ${row.organization_name}?`}
+            onConfirm={() => handleAction(row.id, "approved")}
             disabled={isMutating}
-            onClick={() => handleAction(row.id, "approved")}
-          >
-            <Check size={15} />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            title="Reject"
-            className="text-red-600 hover:text-red-800"
+          />
+
+          <ConfirmActionButton
+            icon={<X size={15} />}
+            buttonClassName="text-red-600 hover:text-red-800"
+            buttonTitle="Reject"
+            dialogTitle="Reject this request?"
+            dialogDescription={`Are you sure you want to reject ${row.organization_name}?`}
+            onConfirm={() => handleAction(row.id, "rejected")}
             disabled={isMutating}
-            onClick={() => handleAction(row.id, "rejected")}
-          >
-            <X size={15} />
-          </Button>
+          />
         </div>
       ),
     },
