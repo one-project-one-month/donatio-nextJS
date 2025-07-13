@@ -28,26 +28,31 @@ const PendingOrganizationsPage = () => {
       key: "organization_name",
       label: "Organization Name",
       render: (row: OrganizationRequest) => row.organization_name,
+      width: "150px",
     },
     {
       key: "submitted_by.username",
       label: "Contact Person",
       render: (row: OrganizationRequest) => row.submitted_by!.username,
+      width: "150px",
     },
     {
       key: "type",
       label: "Type",
       render: (row: OrganizationRequest) => row.type,
+      width: "100px",
     },
     {
       key: "created_at",
       label: "Submission Date",
       render: (row: OrganizationRequest) => formatDate(row.created_at),
+      width: "150px",
     },
     {
       key: "submitted_by.email",
       label: "Email",
       render: (row: OrganizationRequest) => row.submitted_by?.email,
+      width: "200px",
     },
     {
       key: "attachments",
@@ -64,17 +69,19 @@ const PendingOrganizationsPage = () => {
             File
           </a>
         )),
+      width: "100px",
     },
     {
       key: "status",
       label: "Status",
       render: (row: OrganizationRequest) => row.status,
+      width: "100px",
     },
     {
       key: "actions",
       label: "Actions",
       render: (row: OrganizationRequest) => (
-        <div className="flex gap-1">
+        <div className="flex justify-center gap-1">
           <ConfirmActionButton
             icon={<Check size={15} />}
             buttonClassName="text-green-600 hover:text-green-800"
@@ -96,12 +103,9 @@ const PendingOrganizationsPage = () => {
           />
         </div>
       ),
+      width: "100px",
     },
   ];
-
-  if (isLoading) {
-    return <div className="p-10">Loading…</div>;
-  }
 
   return (
     <div className="p-10">
@@ -109,6 +113,7 @@ const PendingOrganizationsPage = () => {
         title="Pending Organizations"
         data={data?.results ?? []}
         columns={columns}
+        isLoading={isLoading}
       />
 
       <Pagination

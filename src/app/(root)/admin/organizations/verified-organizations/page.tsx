@@ -30,37 +30,43 @@ const VerifiedOrganizationsPage = () => {
       key: "organization_name",
       label: "Organization Name",
       render: (row: VerifiedOrganization) => row.name,
+      width: "150px",
     },
     {
       key: "admin.username",
       label: "Admin Name",
       render: (row: VerifiedOrganization) => row.admin!.username,
+      width: "150px",
     },
     {
       key: "email",
       label: "Email",
       render: (row: VerifiedOrganization) => row?.email ?? "-",
+      width: "200px",
     },
     {
       key: "phone_number",
       label: "Phone Number",
       render: (row: VerifiedOrganization) => row?.phone_number ?? "-",
+      width: "200px",
     },
     {
       key: "type",
       label: "Type",
       render: (row: VerifiedOrganization) => row.type,
+      width: "100px",
     },
     {
       key: "created_at",
       label: "Joined Date",
       render: (row: VerifiedOrganization) => formatDate(row.created_at),
+      width: "150px",
     },
     {
       key: "actions",
       label: "Actions",
       render: (row: VerifiedOrganization) => (
-        <div className="flex gap-2">
+        <div className="flex justify-center gap-1">
           <Drawer direction="right">
             <DrawerTrigger asChild>
               <Button
@@ -88,12 +94,9 @@ const VerifiedOrganizationsPage = () => {
           />
         </div>
       ),
+      width: "100px",
     },
   ];
-
-  if (isLoading) {
-    return <div className="p-10">Loading…</div>;
-  }
 
   return (
     <div className="p-10">
@@ -101,6 +104,7 @@ const VerifiedOrganizationsPage = () => {
         title="Verified Organizations"
         data={data?.results ?? []}
         columns={columns}
+        isLoading={isLoading}
       />
 
       <Pagination

@@ -9,39 +9,47 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React from "react";
+import { TableSkeleton } from "./table-skeleton";
 
 interface TableColumn<T> {
   key: string;
   label: string;
   render: (row: T) => React.ReactNode;
+  width?: string;
 }
 
 interface OrganizationTableProps<T> {
   title?: string;
   data: T[];
   columns: TableColumn<T>[];
+  isLoading?: boolean;
+  emptyMessage?: string;
 }
 
 export default function OrganizationTable<T>({
   data,
   columns,
   title,
+  isLoading = false,
+  emptyMessage = "No data to display.",
 }: OrganizationTableProps<T>) {
   return (
     <div className="space-y-8">
       {title && <h1 className="text-xl font-semibold">{title}</h1>}
-      <section className="overflow-x-auto max-w-[1000px] relative mx-auto">
-        <Table className="min-w-[1200px]">
+
+      <div className="relative w-full overflow-x-auto rounded-2xl border">
+        <Table className="min-w-[1000px]">
           <TableHeader>
-            <TableRow>
+            <TableRow className="h-18 bg-dodger-blue-50 hover:bg-dodger-blue-50">
               {columns.map((col, idx) => (
                 <TableHead
                   key={col.key}
-                  className={`${
+                  style={{ width: col.width }}
+                  className={`whitespace-nowrap bg-dodger-blue-50 text-center ${
                     idx === 0
-                      ? "sticky left-0 z-20 bg-white"
+                      ? "sticky left-0 z-20"
                       : idx === columns.length - 1
-                      ? "sticky right-0 text-right z-20 bg-white"
+                      ? "sticky right-0 z-20"
                       : ""
                   }`}
                 >
@@ -52,27 +60,41 @@ export default function OrganizationTable<T>({
           </TableHeader>
 
           <TableBody>
-            {data.map((row, rowIdx) => (
-              <TableRow key={rowIdx}>
-                {columns.map((col, colIdx) => (
-                  <TableCell
-                    key={col.key}
-                    className={`${
-                      colIdx === 0
-                        ? "sticky left-0 z-20 bg-white"
-                        : colIdx === columns.length - 1
-                        ? "sticky right-0 text-right z-20 bg-white"
-                        : "bg-white"
-                    }`}
-                  >
-                    {col.render(row)}
-                  </TableCell>
-                ))}
+            {isLoading ? (
+              <TableSkeleton columns={columns} />
+            ) : data.length === 0 ? (
+              <TableRow className="h-16 hover:bg-white">
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-center text-gray-500"
+                >
+                  {emptyMessage}
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              data.map((row, rowIdx) => (
+                <TableRow key={rowIdx} className="h-16 hover:bg-white">
+                  {columns.map((col, colIdx) => (
+                    <TableCell
+                      key={col.key}
+                      style={{ width: col.width, maxWidth: col.width }}
+                      className={`whitespace-nowrap overflow-hidden truncate text-ellipsis bg-white text-center ${
+                        colIdx === 0
+                          ? "sticky left-0 z-10"
+                          : colIdx === columns.length - 1
+                          ? "sticky right-0 z-10"
+                          : ""
+                      }`}
+                    >
+                      {col.render(row)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
-      </section>
+      </div>
     </div>
   );
 }
