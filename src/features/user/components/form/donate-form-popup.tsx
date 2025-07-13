@@ -35,7 +35,7 @@ function DonateFormPopUp({ data, setData, setIsVisible, isVisible }:DonateFormPo
   return (
     <>
     {
-      isVisible && <div onClick={handleClosePopUp} className="fixed bg-black/40 top-0 left-0 w-full h-dvh flex items-center justify-center">
+      isVisible && <div onClick={handleClosePopUp} className="fixed z-50 bg-black/40 top-0 left-0 w-full h-dvh flex items-center justify-center">
       {/* donate form tabs */}
       <div onClick={(e) => {
         e.stopPropagation()
