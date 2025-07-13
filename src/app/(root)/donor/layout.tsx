@@ -8,7 +8,7 @@ import { ReactNode } from "react";
 
 function UserLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const hideExtras = pathname.includes('/events/') && pathname !== '/events' || pathname.includes('/chat') && pathname !=='/chat';
+  const hideExtras = pathname.includes('/events/') && pathname !== '/events' || pathname.includes('/chat') && pathname !=='/chat' || pathname.includes('/activities/') && pathname !== '/activities';
   return (
     <>
       <div className="max-w-7xl mx-auto pt-10 md:px-8 py-5">
@@ -17,6 +17,7 @@ function UserLayout({ children }: { children: ReactNode }) {
         {!hideExtras && <SearchSection />}
         {children}
         {!hideExtras && <DonationBanner />}
+        
       </div>
 
       <Footer />

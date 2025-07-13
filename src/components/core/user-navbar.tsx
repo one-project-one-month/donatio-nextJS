@@ -39,6 +39,7 @@ function UserNavbar() {
       <div className="flex space-x-5 items-center justify-between text-neutral-700">
         {urlDatas.map((data, idx) => {
           return (<Link key={idx} className={`hidden md:block text-center ${url === data.path && 'text-primary'}`} href={data.path}>{data.name}</Link>)
+
         })}
       </div>
       <div className="flex justify-end md:w-[250px] items-center gap-8">

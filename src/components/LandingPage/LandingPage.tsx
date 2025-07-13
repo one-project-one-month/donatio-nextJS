@@ -10,7 +10,7 @@ import ChangeMakersSection from './ChangeMakersSection'
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col items-center gap-10 px-4">
+    <div className="flex flex-col items-center gap-10">
 
       <HeroSection />
       <CarouselLogoSection />
