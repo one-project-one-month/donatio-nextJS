@@ -1,7 +1,7 @@
 "use client";
 
 import OrganizationCard from "./organization-card";
-import { Organization } from "../../types/Organization";
+import { GetAllOrganizationsResponse, Organization } from "../../types/Organization";
 import PaginationUI from "@/components/common/pagination-ui";
 
 // sample data to test
@@ -69,7 +69,7 @@ const orglist = [
 ];
 
 type OrganizationListingProps = {
-  data: Organization[];
+  data: GetAllOrganizationsResponse;
   page: number;
 };
 
@@ -77,11 +77,11 @@ function OrganizationListing({ data, page }: OrganizationListingProps) {
   return (
     <section>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-8 min-h-[70vh] p-3 md:p-0 grid-cols-1 gap-12 ">
-        {data?.map((org) => (
+        {data?.results.map((org) => (
           <OrganizationCard key={org.id} data={org} />
         ))}
       </div>
-      {/* <div>
+      <div>
         <PaginationUI
           isNext={data?.next ? true : false}
           isPrevious={data?.previous ? true : false}
@@ -89,7 +89,7 @@ function OrganizationListing({ data, page }: OrganizationListingProps) {
           limit={7}
           totalCount={data.count}
         />
-      </div> */}
+      </div>
     </section>
   );
 }
