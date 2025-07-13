@@ -12,6 +12,9 @@ import EventListingCard from "./event-listing-card";
 import DonateFormPopUp, { DonateFormData } from "../form/donate-form-popup";
 import { useEffect, useState } from "react";
 import useDonateStore from "@/store/donateStore";
+import { Calendar } from "lucide-react";
+import { Event, GetAllEventsResponse } from "../../types/Event";
+import PaginationUI from "@/components/common/pagination-ui";
 
 const events = [
   {
@@ -76,11 +79,13 @@ const events = [
   },
 ];
 
-function EventListing() {
-  
+type EventListingProps = {
+  data: GetAllEventsResponse | undefined;
+  page: number;
+};
 
-  const { donateFormData, setDonateForm} = useDonateStore()
-
+function EventListing({ data, page }: EventListingProps) {
+  const { donateFormData, setDonateForm } = useDonateStore();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -94,41 +99,44 @@ function EventListing() {
   }, [isVisible, donateFormData]);
 
   return (
-    <div>
-      <DonateFormPopUp
-        isVisible={isVisible}
-        setIsVisible={setIsVisible}
-        data={donateFormData}
-        setData={setDonateForm}
-      />
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 my-3 sm:gap-18 mb-6 gap-2 w-full justify-center sm:p-0 p-3">
-        {events.map((event) => (
-          <EventListingCard
-            key={event.id}
-            data={event}
-            setFormData={setDonateForm}
+    <>
+      {data && data?.results?.length !== 0 ? (
+        <section>
+          <DonateFormPopUp
+            isVisible={isVisible}
             setIsVisible={setIsVisible}
+            data={donateFormData}
+            setData={setDonateForm}
           />
-        ))}
-      </div>
-      <div>
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            {[1, 2, 3].map((item, index) => (
-              <PaginationItem key={index}>
-                <PaginationLink href="#">{item}</PaginationLink>
-              </PaginationItem>
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 my-3 sm:gap-18 mb-6 gap-2 w-full justify-center">
+            {data?.results.map((event) => (
+              <EventListingCard
+                key={event.id}
+                data={event}
+                setFormData={setDonateForm}
+                setIsVisible={setIsVisible}
+              />
             ))}
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
-    </div>
+          </div>
+          <div>
+            <PaginationUI
+              page={page}
+              totalCount={data.count}
+              isNext={data.next ? true : false}
+              isPrevious={data.previous ? true : false}
+              limit={7}
+            />
+          </div>
+        </section>
+      ) : (
+        <div className="h-dvh flex justify-center items-center animate-fade-in bg-neutral-50">
+          <div className=" flex text-neutral-500 flex-col items-center justify-center">
+            <Calendar size={40} />
+            <p className="text-lg">No events found</p>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

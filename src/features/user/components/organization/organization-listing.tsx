@@ -1,14 +1,8 @@
 "use client";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import OrganizationCard from "./organization-card";
+import { Organization } from "../../types/Organization";
+import PaginationUI from "@/components/common/pagination-ui";
 
 // sample data to test
 const orglist = [
@@ -74,31 +68,28 @@ const orglist = [
   },
 ];
 
-function OrganizationListing() {
+type OrganizationListingProps = {
+  data: Organization[];
+  page: number;
+};
+
+function OrganizationListing({ data, page }: OrganizationListingProps) {
   return (
     <section>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-8  p-3 md:p-0 grid-cols-1 gap-12 ">
-        {orglist.map((org) => (
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-8 min-h-[70vh] p-3 md:p-0 grid-cols-1 gap-12 ">
+        {data?.map((org) => (
           <OrganizationCard key={org.id} data={org} />
         ))}
       </div>
-      <div>
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            {[1, 2, 3].map((item, index) => (
-              <PaginationItem key={index}>
-                <PaginationLink href="#">{item}</PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
+      {/* <div>
+        <PaginationUI
+          isNext={data?.next ? true : false}
+          isPrevious={data?.previous ? true : false}
+          page={page}
+          limit={7}
+          totalCount={data.count}
+        />
+      </div> */}
     </section>
   );
 }

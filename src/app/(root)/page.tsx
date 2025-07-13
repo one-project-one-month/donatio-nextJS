@@ -28,7 +28,7 @@ function Page() {
   }
 
   return (
-    <div className="w-full py-5">
+    <div className="w-full">
       <Navbar />
       <LandingPage />
       <Footer />
