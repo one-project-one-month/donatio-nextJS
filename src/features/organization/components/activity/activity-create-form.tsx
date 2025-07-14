@@ -13,35 +13,23 @@ import FormDateInput from "@/components/common/form-inputs/form-date-input";
 import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const eventFormSchema = z.object({
+const activityFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
-  startDate: z.date(),
-  endDate: z.date(),
-  goalAmount: z
-    .string()
-    .refine(
-      (val) => {
-        const num = Number(val);
-        return !isNaN(num) && num > 0 && num >= 1000000;
-      },
-      {
-        message: "Target Amount must be at least 10,000,00 Kyat",
-      }
-    ),
-  image: z
-    .any(),
+  location: z.string().nonempty("Location shouldn't be empty"),
+  image: z.any().refine((val) => {
+    return val && val.length > 0 && val.every((file: File) => file instanceof File);
+  },"Image shouldn't be empty"),
   content: z.string().min(1, "Content is required"),
 });
 
-type EventFormValues = z.infer<typeof eventFormSchema>;
+type EventFormValues = z.infer<typeof activityFormSchema>;
 
-function EventCreateForm() {
+function ActivityCreateForm() {
   const form = useForm<EventFormValues>({
-    resolver: zodResolver(eventFormSchema),
+    resolver: zodResolver(activityFormSchema),
     defaultValues: {
       title: "",
-      startDate: new Date(),
-      endDate: new Date(),
+      location: "",
       image: undefined,
       content: "",
     },
@@ -56,7 +44,7 @@ function EventCreateForm() {
     <ScrollArea className="h-dvh">
         <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-8">
-        <h1 className="text-3xl font-semibold text-primary mb-8">Create New Event</h1>
+        <h1 className="text-3xl font-semibold text-primary mb-8">Create New Activity</h1>
         <FormInput
           form={form}
           name="title"
@@ -64,40 +52,17 @@ function EventCreateForm() {
           labelClass="md:text-lg font-semibold mb-1"
           wrapperClass="mb-5 mb:mb-3"
           className="h-12"
-          placeholder="Enter event title"
-          required
-        />
-        <FormDateInput
-          form={form}
-          name="startDate"
-          label="Start Date"
-          type="date"
-          labelClass="md:text-lg font-semibold mb-1"
-          wrapperClass="mb-5 mb:mb-3"
-          className="h-12"
-          placeholder="Enter start date"
-          required
-        />
-        <FormDateInput
-          form={form}
-          name="endDate"
-          type="date"
-          label="End Date"
-          labelClass="md:text-lg font-semibold mb-1"
-          wrapperClass="mb-5 mb:mb-3"
-          className="h-12"
-          placeholder="Enter end date"
+          placeholder="Enter activity title"
           required
         />
         <FormInput
           form={form}
-          type="number"
-          name="goalAmount"
-          label="Goal Amount"
+          name="location"
+          label="Location"
           labelClass="md:text-lg font-semibold mb-1"
           wrapperClass="mb-5 mb:mb-3"
           className="h-12"
-          placeholder="Enter target amount"
+          placeholder="Enter activity location"
           required
         />
         <FormFileDropZone
@@ -107,7 +72,7 @@ function EventCreateForm() {
             label={
               <span className="flex items-center gap-2">
                 <FilePlus2 className="w-5 h-5 text-primary" />
-                Upload Receipt Screenshot
+                Add Activity Photos
               </span>
             }
             labelClass="mb-1 font-semibold text-base"
@@ -133,4 +98,4 @@ function EventCreateForm() {
   );
 }
 
-export default EventCreateForm;
+export default ActivityCreateForm;

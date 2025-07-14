@@ -14,6 +14,7 @@ import { useDropzone } from "react-dropzone";
 import { CloudUpload, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export type FormFileDropZoneProps<T extends FieldValues> = Omit<
   ComponentProps<"input">,
@@ -25,7 +26,7 @@ export type FormFileDropZoneProps<T extends FieldValues> = Omit<
   type?: HTMLInputTypeAttribute;
   wrapperClass?: string;
   labelClass?: string;
-  defaultFile?: File;
+  defaultFiles?: File[];
 };
 
 function FormFileDropZone<T extends FieldValues>({
@@ -35,31 +36,28 @@ function FormFileDropZone<T extends FieldValues>({
   type,
   wrapperClass,
   labelClass,
-  defaultFile,
+  defaultFiles = [],
   ...props
 }: FormFileDropZoneProps<T>) {
-  const [file, setFile] = useState<any>(defaultFile?? undefined);
-  const [isFile, setIsFile] = useState<boolean>(defaultFile? true: false);
+  const [files, setFiles] = useState<File[]>(defaultFiles);
+  const [previewFile, setPreviewFile] = useState<File | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  const handleClearFile = () => {
-    setFile(undefined);
-    setIsFile(false);
-    form.setValue(name, undefined as any);
-  }
+  const handleClearFile = (index: number) => {
+    const newFiles = files.filter((_, i) => i !== index);
+    setFiles(newFiles);
+    form.setValue(name, newFiles as any);
+  };
 
   const { getInputProps, getRootProps, isDragActive } = useDropzone({
     accept: {
       "image/jpeg": [],
       "image/png": [],
     },
-    maxFiles: 1,
-    onDrop: (files) => {
-      if (files && files.length > 0) {
-        const selectedFile = files[0];
-        setFile(selectedFile);
-        setIsFile(true);
-        form.setValue(name, selectedFile as any)
-      }
+    onDrop: (dropped) => {
+      const newFiles = [...files, ...dropped];
+      setFiles(newFiles);
+      form.setValue(name, newFiles as any);
     },
   });
 
@@ -67,7 +65,7 @@ function FormFileDropZone<T extends FieldValues>({
     <FormField
       control={form.control}
       name={name}
-      render={({ field }) => (
+      render={() => (
         <FormItem className={cn("w-full", wrapperClass)}>
           <FormLabel className={cn("text-neutral-800", labelClass)}>
             {label}
@@ -76,12 +74,13 @@ function FormFileDropZone<T extends FieldValues>({
           <FormControl>
             <div
               {...getRootProps()}
-              className={`relative border-dashed border-2  text-center cursor-pointer rounded-lg ${
+              className={`relative border-dashed border-2 text-center cursor-pointer rounded-lg ${
                 isDragActive && "border-primary"
               }`}
             >
               <Input
                 {...getInputProps()}
+                multiple
                 className={cn(
                   "border-gray-300 rounded-lg transition-all pr-10",
                   props.className
@@ -91,32 +90,73 @@ function FormFileDropZone<T extends FieldValues>({
                 <div className="text-neutral-400 h-40 flex justify-center items-center">
                   <p>Drop the files here</p>
                 </div>
-              ) : isFile ? (
-                <div className="relative h-40">
-                  <Image
-                    src={URL.createObjectURL(file)}
-                    alt="Uploaded file preview"
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                  <p className="absolute left-2 top-2 text-white bg-black/30 p-2 rounded-2xl px-3 text-xs">{file.name}</p>
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    className="absolute top-2 right-2 z-10"
-                    onClick={(e) => {
-                      handleClearFile();
-                      e.stopPropagation();
-                    }}
-                  >
-                    <Trash2 />
-                  </Button>
+              ) : files.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                  {files.map((file, index) => (
+                    <div key={index} className="relative h-40 rounded overflow-hidden">
+                      <Image
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index}`}
+                        fill
+                        className="object-cover rounded"
+                      />
+                      <p className="absolute left-2 top-2 text-white bg-black/30 p-1 px-2 text-xs rounded">
+                        {file.name.length > 15 ? file.name.slice(0, 15) + "..." : file.name}
+                      </p>
+                      <div className="absolute right-2 top-2 flex gap-1 z-10">
+                        <Dialog
+                          open={isPreviewOpen && previewFile === file}
+                          onOpenChange={(open) => {
+                            setIsPreviewOpen(open);
+                            if (!open) setPreviewFile(null);
+                          }}
+                        >
+                          <DialogTrigger
+                            asChild
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPreviewFile(file);
+                              setIsPreviewOpen(true);
+                            }}
+                          >
+                            <Button size="sm" variant="secondary">
+                              Preview
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent
+                            onClick={(e) => e.stopPropagation()}
+                            className="max-w-[90vw] max-h-[90vh] p-0 overflow-hidden [&>button]:hidden"
+                          >
+                            <div className="relative w-full h-[80vh]">
+                              <Image
+                                src={URL.createObjectURL(file)}
+                                alt="Full image preview"
+                                fill
+                                className="object-contain"
+                              />
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleClearFile(index);
+                          }}
+                        >
+                          <Trash2 />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <div className="flex flex-col h-40 text-neutral-400 justify-center items-center">
                   <CloudUpload size={50} className="mb-2" />
-                  <p className="mb-2">Select your file or drag and drop</p>
+                  <p className="mb-2">Select files or drag and drop</p>
                 </div>
               )}
             </div>

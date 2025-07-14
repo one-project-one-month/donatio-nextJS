@@ -82,9 +82,10 @@ const events = [
 type EventListingProps = {
   data: GetAllEventsResponse | undefined;
   page: number;
+  setPage?: (newPage: number) => void;
 };
 
-function EventListing({ data, page }: EventListingProps) {
+function EventListing({ data, page, setPage }: EventListingProps) {
   const { donateFormData, setDonateForm } = useDonateStore();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -125,6 +126,7 @@ function EventListing({ data, page }: EventListingProps) {
               isNext={data.next ? true : false}
               isPrevious={data.previous ? true : false}
               limit={7}
+              setPage={setPage}
             />
           </div>
         </section>
