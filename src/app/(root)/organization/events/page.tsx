@@ -5,7 +5,7 @@ import EventTable from "@/features/organization/components/event/event-table"
 
 function page() {
   return (
-    <div className="p-5 w-full">
+    <div>
         <EventHeader />
         <EventTable />
         <div className="mt-5">

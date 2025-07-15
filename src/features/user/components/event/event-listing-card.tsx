@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { DonateFormData } from "../form/donate-form-popup";
 import { getDonateFormData } from "@/store/donateStore";
-import { Event } from "../../types/Event";
+import { Event } from "../../../../types/Event";
 import { Image } from "lucide-react";
 
 
@@ -19,7 +19,9 @@ function EventListingCard({
     const formData = {
       ...getDonateFormData(),
       organization: data.organization.name,
-      event: data.title
+      event: data.title,
+      orgId: data.organization.id,
+      eventId: data.id
     }
 
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { FilePlus2 } from "lucide-react";
@@ -9,13 +9,14 @@ import FormInput from "@/components/common/form-inputs/form-inputs";
 import { z } from "zod";
 import FormFileDropZone from "@/components/common/form-inputs/form-file-drop";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import FormDateInput from "@/components/common/form-inputs/form-date-input";
 import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import TransactionAttachmentInput from "../util/transaction-attachment-input";
 
 const activityFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
   location: z.string().nonempty("Location shouldn't be empty"),
+  transactions: z.array(z.string()),
   image: z.any().refine((val) => {
     return val && val.length > 0 && val.every((file: File) => file instanceof File);
   },"Image shouldn't be empty"),
@@ -30,6 +31,7 @@ function ActivityCreateForm() {
     defaultValues: {
       title: "",
       location: "",
+      transactions: [],
       image: undefined,
       content: "",
     },
@@ -65,6 +67,16 @@ function ActivityCreateForm() {
           placeholder="Enter activity location"
           required
         />
+        <Controller
+        name="transactions"
+        control={form.control}
+        render={({ field }) => (
+          <TransactionAttachmentInput
+            value={field.value}
+            onChange={field.onChange}
+          />
+        )}
+      />
         <FormFileDropZone
             name="image"
             type="file"

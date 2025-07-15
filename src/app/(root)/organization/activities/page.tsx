@@ -6,7 +6,7 @@ import ActivityTable from "@/features/organization/components/activity/activity-
 
 function page() {
   return (
-    <div className="p-5 w-full">
+    <div>
       <ActivityHeader />
       <ActivityTable />
       <div className="mt-5">

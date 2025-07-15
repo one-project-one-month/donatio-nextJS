@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 type DonateFormData = {
+  orgId: string;
+  eventId: string;
   organization: string;
   event: string;
   amount: number;
@@ -22,6 +24,8 @@ const useDonateStore = create<DonateStore>((set) => ({
 }));
 
 export const getDonateFormData = () => useDonateStore.getState().donateFormData;
+export const getOrgId = () => useDonateStore.getState().donateFormData?.orgId;
+export const getEventId = () => useDonateStore.getState().donateFormData?.eventId;
 
 
 export default useDonateStore;

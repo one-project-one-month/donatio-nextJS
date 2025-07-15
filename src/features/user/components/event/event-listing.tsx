@@ -13,7 +13,7 @@ import DonateFormPopUp, { DonateFormData } from "../form/donate-form-popup";
 import { useEffect, useState } from "react";
 import useDonateStore from "@/store/donateStore";
 import { Calendar } from "lucide-react";
-import { Event, GetAllEventsResponse } from "../../types/Event";
+import { Event, GetAllEventsResponse } from "../../../../types/Event";
 import PaginationUI from "@/components/common/pagination-ui";
 
 const events = [
@@ -92,7 +92,9 @@ function EventListing({ data, page, setPage }: EventListingProps) {
   useEffect(() => {
     document.body.style.overflow = isVisible ? "hidden" : "auto";
 
-    console.log(donateFormData);
+    if (!donateFormData) {
+      setIsVisible(false);
+    }
 
     return () => {
       document.body.style.overflow = "auto";

@@ -11,7 +11,7 @@ import ActivityRows from "./activity-rows";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { useState } from "react";
 import ActivityEditForm from "./activity-edit-form";
-import { ActivityTableData } from "../../types/Activity";
+import { ActivityTableData } from "@/types/Activity";
 
 
 const dummyActivities = [

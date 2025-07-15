@@ -14,7 +14,7 @@ import { useDropzone } from "react-dropzone";
 import { CloudUpload, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export type FormFileDropZoneProps<T extends FieldValues> = Omit<
   ComponentProps<"input">,
@@ -36,10 +36,10 @@ function FormFileDropZone<T extends FieldValues>({
   type,
   wrapperClass,
   labelClass,
-  defaultFiles = [],
+  defaultFiles,
   ...props
 }: FormFileDropZoneProps<T>) {
-  const [files, setFiles] = useState<File[]>(defaultFiles);
+  const [files, setFiles] = useState<File[]>(defaultFiles?? []);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -127,6 +127,7 @@ function FormFileDropZone<T extends FieldValues>({
                             onClick={(e) => e.stopPropagation()}
                             className="max-w-[90vw] max-h-[90vh] p-0 overflow-hidden [&>button]:hidden"
                           >
+                            <DialogTitle></DialogTitle>
                             <div className="relative w-full h-[80vh]">
                               <Image
                                 src={URL.createObjectURL(file)}
