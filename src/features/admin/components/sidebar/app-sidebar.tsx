@@ -13,8 +13,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { NavMain } from "@/features/admin/sidebar/nav-main";
-import { NavUser } from "@/features/admin/sidebar/nav-user";
+import { NavMain } from "./nav-main";
+import { NavUser } from "./nav-user";
 
 const data = {
   user: {

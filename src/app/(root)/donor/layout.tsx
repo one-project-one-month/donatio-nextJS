@@ -11,7 +11,8 @@ function UserLayout({ children }: { children: ReactNode }) {
   const hideExtras =
     (pathname.includes("/events/") && pathname !== "/events") ||
     (pathname.includes("/chat") && pathname !== "/chat") ||
-    (pathname.includes("/profile") && pathname !== "/profile");
+    (pathname.includes("/profile") && pathname !== "/profile") ||
+    (pathname.includes("/activities/") && pathname !== "/activities");
 
   const isProfile = pathname.includes("/profile") && pathname !== "/profile";
 
