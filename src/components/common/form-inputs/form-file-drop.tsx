@@ -26,8 +26,10 @@ export type FormFileDropZoneProps<T extends FieldValues> = Omit<
   type?: HTMLInputTypeAttribute;
   wrapperClass?: string;
   labelClass?: string;
-  defaultFiles?: File[];
+  defaultFiles?: string[];
 };
+
+type FileOrUrl = File | string;
 
 function FormFileDropZone<T extends FieldValues>({
   form,
@@ -36,11 +38,11 @@ function FormFileDropZone<T extends FieldValues>({
   type,
   wrapperClass,
   labelClass,
-  defaultFiles,
+  defaultFiles = [],
   ...props
 }: FormFileDropZoneProps<T>) {
-  const [files, setFiles] = useState<File[]>(defaultFiles?? []);
-  const [previewFile, setPreviewFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<FileOrUrl[]>(defaultFiles);
+  const [previewFile, setPreviewFile] = useState<FileOrUrl | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const handleClearFile = (index: number) => {
@@ -81,78 +83,85 @@ function FormFileDropZone<T extends FieldValues>({
               <Input
                 {...getInputProps()}
                 multiple
-                className={cn(
-                  "border-gray-300 rounded-lg transition-all pr-10",
-                  props.className
-                )}
+                className={cn("border-gray-300 rounded-lg transition-all pr-10", props.className)}
               />
+
               {isDragActive ? (
                 <div className="text-neutral-400 h-40 flex justify-center items-center">
                   <p>Drop the files here</p>
                 </div>
               ) : files.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                  {files.map((file, index) => (
-                    <div key={index} className="relative h-40 rounded overflow-hidden">
-                      <Image
-                        src={URL.createObjectURL(file)}
-                        alt={`Preview ${index}`}
-                        fill
-                        className="object-cover rounded"
-                      />
-                      <p className="absolute left-2 top-2 text-white bg-black/30 p-1 px-2 text-xs rounded">
-                        {file.name.length > 15 ? file.name.slice(0, 15) + "..." : file.name}
-                      </p>
-                      <div className="absolute right-2 top-2 flex gap-1 z-10">
-                        <Dialog
-                          open={isPreviewOpen && previewFile === file}
-                          onOpenChange={(open) => {
-                            setIsPreviewOpen(open);
-                            if (!open) setPreviewFile(null);
-                          }}
-                        >
-                          <DialogTrigger
-                            asChild
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPreviewFile(file);
-                              setIsPreviewOpen(true);
+                  {files.map((file, index) => {
+                    const isUrl = typeof file === "string";
+                    const imageUrl = isUrl ? file : URL.createObjectURL(file);
+
+                    return (
+                      <div key={index} className="relative h-40 rounded overflow-hidden">
+                        <Image
+                          src={imageUrl}
+                          alt={`Preview ${index}`}
+                          fill
+                          className="object-cover rounded"
+                        />
+                        <p className="absolute left-2 top-2 text-white bg-black/30 p-1 px-2 text-xs rounded">
+                          {isUrl
+                            ? file.split("/").pop()?.slice(0, 15) + "..."
+                            : file.name.length > 15
+                            ? file.name.slice(0, 15) + "..."
+                            : file.name}
+                        </p>
+                        <div className="absolute right-2 top-2 flex gap-1 z-10">
+                          <Dialog
+                            open={isPreviewOpen && previewFile === file}
+                            onOpenChange={(open) => {
+                              setIsPreviewOpen(open);
+                              if (!open) setPreviewFile(null);
                             }}
                           >
-                            <Button size="sm" variant="secondary">
-                              Preview
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent
-                            onClick={(e) => e.stopPropagation()}
-                            className="max-w-[90vw] max-h-[90vh] p-0 overflow-hidden [&>button]:hidden"
-                          >
-                            <DialogTitle></DialogTitle>
-                            <div className="relative w-full h-[80vh]">
-                              <Image
-                                src={URL.createObjectURL(file)}
-                                alt="Full image preview"
-                                fill
-                                className="object-contain"
-                              />
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                            <DialogTrigger
+                              asChild
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPreviewFile(file);
+                                setIsPreviewOpen(true);
+                              }}
+                            >
+                              <Button size="sm" variant="secondary">
+                                Preview
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent
+                              onClick={(e) => e.stopPropagation()}
+                              className="max-w-[90vw] max-h-[90vh] p-0 overflow-hidden"
+                            >
+                              <DialogTitle></DialogTitle>
+                              <div className="relative w-full h-[80vh]">
+                                <Image
+                                  src={imageUrl}
+                                  alt="Full image preview"
+                                  fill
+                                  className="object-contain"
+                                />
+                              </div>
+                            </DialogContent>
+                          </Dialog>
 
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleClearFile(index);
-                          }}
-                        >
-                          <Trash2 />
-                        </Button>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleClearFile(index);
+                            }}
+                          >
+                            <Trash2 />
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="flex flex-col h-40 text-neutral-400 justify-center items-center">
@@ -168,5 +177,6 @@ function FormFileDropZone<T extends FieldValues>({
     />
   );
 }
+
 
 export default FormFileDropZone;

@@ -8,6 +8,13 @@ import {
 } from "@/components/ui/table";
 import { Transaction } from "@/types/Transaction";
 import TransactionRows from "./transaction-rows";
+import {
+  useDeleteTransaction,
+  useUpadateTransactionData,
+} from "../../hooks/organization-transaction-queries";
+import { useCallback, useState } from "react";
+import { Dialog, DialogHeader, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import TransactionExpenseEditForm from "./transaction-expense-edit-form";
 
 type TransactionTableProps = {
   data: Transaction[] | undefined;
@@ -15,6 +22,37 @@ type TransactionTableProps = {
 };
 
 function TransactionTable({ data, isLoading }: TransactionTableProps) {
+
+  
+  const [ selectedData, setSelectedData ] = useState<Transaction>();
+  const [ isOpenEdit, setIsOpenEdit ] = useState<boolean>(false);
+
+  const { deleteTransaction } = useDeleteTransaction();
+  const { upadateTransaction } = useUpadateTransactionData();
+
+  //delete the transaction
+  const handleDelete = useCallback((id: string) => {
+    deleteTransaction(id);
+  }, []);
+
+
+  //handling approve for transactions
+  const handleApprove = useCallback(async (id: string) => {
+
+    const formData = new FormData();
+    formData.append('status', 'approved');
+
+    await upadateTransaction({ data: formData, id});
+  }, []);
+
+  //handle select initial data to edit
+  const handleSelectTransaction = useCallback((data: Transaction) => {
+
+    setSelectedData(data);
+    setIsOpenEdit(true);
+
+  },[]);
+
   return (
     <section className="overflow-x-auto max-w-full rounded-2xl border mt-8 relative">
       <Table>
@@ -41,19 +79,35 @@ function TransactionTable({ data, isLoading }: TransactionTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data && data.length > 0
-            ? data.map((transaction) => (
-                <TransactionRows key={transaction.id} data={transaction} />
-              ))
-            : (
-                <TableRow className="h-24">
-                  <TableCell colSpan={6} className="text-center text-gray-500">
-                    { isLoading ? "Loading transactions..." : "No transactions found." }
-                  </TableCell>
-                </TableRow>
-              )}
+          {data && data.length > 0 ? (
+            data.map((transaction) => (
+              <TransactionRows
+                key={transaction.id}
+                data={transaction}
+                handleDelete={handleDelete}
+                handleApprove={handleApprove}
+                handleEdit={handleSelectTransaction}
+              />
+            ))
+          ) : (
+            <TableRow className="h-24">
+              <TableCell colSpan={6} className="text-center text-gray-500">
+                {isLoading
+                  ? "Loading transactions..."
+                  : "No transactions found."}
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
+      <Dialog open={isOpenEdit} onOpenChange={setIsOpenEdit}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-primary text-2xl font-semibold">Edit Expenses</DialogTitle>
+              </DialogHeader>
+              <TransactionExpenseEditForm initialData={selectedData?? null} setOpenEdit={setIsOpenEdit} />
+            </DialogContent>
+        </Dialog>
     </section>
   );
 }

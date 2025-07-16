@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { FilePlus2 } from "lucide-react";
 import FormInput from "@/components/common/form-inputs/form-inputs";
@@ -11,11 +11,15 @@ import FormFileDropZone from "@/components/common/form-inputs/form-file-drop";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ActivityTableData } from "../../types/Activity";
+import { ActivityTableData } from "@/types/Activity";
+import TransactionAttachmentInput from "../util/transaction-attachment-input";
+import { tr } from "date-fns/locale";
 
 const activityFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
   location: z.string().nonempty("Location shouldn't be empty"),
+  transactions: z
+    .array(z.string()).min(1, "At least one transaction is required"),
   image: z.any().refine((val) => {
     return val && val.length > 0 && val.every((file: File) => file instanceof File);
   }, "Image shouldn't be empty"),
@@ -34,6 +38,7 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
     defaultValues: {
       title: initialData?.title || "",
       location: initialData?.location || "",
+      transactions: [],
       image: undefined,
       content: initialData?.content || "",
     },
@@ -69,6 +74,16 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
           placeholder="Enter activity location"
           required
         />
+        <FormField
+            name="transactions"
+            control={form.control}
+            render={({ field }) => (
+              <TransactionAttachmentInput
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
         <FormFileDropZone
             name="image"
             type="file"

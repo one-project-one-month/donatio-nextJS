@@ -1,8 +1,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Image, Eye, Pencil, Trash2 } from "lucide-react";
-import { ActivityTableData } from "../../types/Activity";
-
+import { ActivityTableData } from "@/types/Activity";
 
 type ActivitiesProps = {
     data: ActivityTableData;

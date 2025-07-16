@@ -1,5 +1,9 @@
 import { Badge } from "@/components/ui/badge"
 import TransactionDonationSearchBox from "./transaction-donation-search-box"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { FilePlus2 } from "lucide-react"
+import TransactionExpenseCreateForm from "./transaction-expense-create-form"
 
 
 function TransactionExpenseHeader() {
@@ -18,6 +22,20 @@ function TransactionExpenseHeader() {
         <div className="flex-1">
           <TransactionDonationSearchBox />
         </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="flex items-center gap-2 w-[220px] py-7 rounded-full"> 
+                <FilePlus2 className="w-5 h-5 text-white" />
+                Add Expenses
+            </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-primary text-2xl font-semibold">Create Expenses</DialogTitle>
+              </DialogHeader>
+              <TransactionExpenseCreateForm />
+            </DialogContent>
+        </Dialog>
       </div>
     </div>
   )

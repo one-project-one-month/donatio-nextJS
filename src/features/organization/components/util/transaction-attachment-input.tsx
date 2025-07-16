@@ -4,16 +4,15 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter
+  DialogFooter,
 } from '@/components/ui/dialog';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 import { useState } from 'react';
 import { useGetTransactionData } from '../../hooks/organization-transaction-queries';
-import { Label } from '@/components/ui/label';
-import TransactionTable from '../transaction/transaction-table';
+import TransactionAttachmentTable from './transaction-attachment-table';
+import { FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 type TransactionAttachmentInputProps = {
   value: string[];
@@ -24,8 +23,7 @@ const TransactionAttachmentInput = ({ value, onChange }: TransactionAttachmentIn
   const [open, setOpen] = useState(false);
   const [tempSelected, setTempSelected] = useState<string[]>(value);
 
-
-  const { data: responseData , isLoading} = useGetTransactionData("donation");
+  const { data: responseData, isLoading } = useGetTransactionData('disbursement');
 
   const toggle = (val: string) => {
     setTempSelected((prev) =>
@@ -38,36 +36,64 @@ const TransactionAttachmentInput = ({ value, onChange }: TransactionAttachmentIn
     setOpen(false);
   };
 
+  const handleClear = () => {
+    onChange([]);
+    setTempSelected([]);
+  };
+
   return (
-    <div className="space-y-2">
-      <Label className='md:text-lg font-semibold mb-3'>Expenses</Label>
-      <div className="min-h-[40px] flex flex-wrap gap-2 p-2 border rounded-md">
-        {value.length === 0 && <span className="text-muted-foreground">No items selected</span>}
-        {value.map((val) => (
-          <Badge key={val} variant="secondary">
-            {responseData?.results.find((o) => o.id === val)?.title}
-          </Badge>
-        ))}
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button type="button" variant="outline" size="sm">
-              + Add
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-6xl">
-            <DialogHeader>
-              <DialogTitle>Select Transactions</DialogTitle>
-            </DialogHeader>
+    <FormItem className="space-y-2">
+      <FormLabel className="text-base md:text-lg font-medium">Expenses</FormLabel>
 
-            <TransactionTable data={responseData?.results} isLoading={isLoading} />
+      <div className="flex flex-col gap-2 border rounded-md p-3 bg-background">
+        <div className="flex flex-wrap gap-2 min-h-[40px] max-h-[120px] overflow-y-auto">
+          {value.length === 0 ? (
+            <span className="text-muted-foreground">No items selected</span>
+          ) : (
+            value.map((val) => (
+              <Badge key={val} variant="secondary">
+                {responseData?.results.find((o) => o.id === val)?.title || val}
+              </Badge>
+            ))
+          )}
+        </div>
 
-            <DialogFooter>
-              <Button onClick={handleSave}>Save</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <div className="flex gap-2">
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button type="button" variant="outline" size="sm">
+                + Add
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-3xl sm:rounded-xl">
+              <DialogHeader>
+                <DialogTitle className="text-xl">Select Transactions</DialogTitle>
+              </DialogHeader>
+
+              <div className="py-2 px-1">
+                <TransactionAttachmentTable
+                  selected={tempSelected}
+                  toggle={toggle}
+                  data={responseData?.results}
+                  isLoading={isLoading}
+                />
+              </div>
+
+              <DialogFooter className="mt-4">
+                <Button onClick={handleSave} disabled={tempSelected.length === 0}>
+                  Save
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Button type="button" variant="destructive" size="sm" onClick={handleClear}>
+            Clear All
+          </Button>
+        </div>
       </div>
-    </div>
+      <FormMessage className="text-xs" />
+    </FormItem>
   );
 };
 
