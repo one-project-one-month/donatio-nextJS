@@ -11,9 +11,8 @@ import FormFileDropZone from "@/components/common/form-inputs/form-file-drop";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Activity, ActivityTableData } from "@/types/Activity";
+import { Activity } from "@/types/Activity";
 import TransactionAttachmentInput from "../util/transaction-attachment-input";
-import { tr } from "date-fns/locale";
 import { useUpadateActivity } from "../../hooks/organization-activity-queries";
 
 const activityFormSchema = z.object({
@@ -42,7 +41,7 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
       transactions: initialData?.activity_transactions.map((at) => {
         return { title: at.transaction.title, id: at.transaction.id }
       }) || [],
-      image: initialData?.attachments,
+      image: initialData?.attachments.map((at) => at.file),
       description: initialData?.description || "",
     },
   });
@@ -50,6 +49,22 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
   const { updateActivity } = useUpadateActivity();
 
   const onSubmit = (data: ActivityValues) => {
+
+
+    // const oldData = {
+    //   title: initialData?.title || "",
+    //   location: initialData?.location || "",
+    //   transactions: initialData?.activity_transactions.map((at) => {
+    //     return { title: at.transaction.title, id: at.transaction.id }
+    //   }) || [],
+    //   image: initialData?.attachments.map((at) => at.file),
+    //   description: initialData?.description || "",
+    // }
+
+    // const changes = getChangedTo(oldData, data);
+
+    // console.log('data', data);
+    // console.log(changes);
     
     const formData = new FormData();
 
@@ -63,7 +78,7 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
     }
     
     for(const file of data.image) {
-      formData.append('attachments', file);
+      formData.append('upload_attachments', file);
     }
 
     updateActivity({ id: initialData?.id?? "", data: formData})
@@ -75,7 +90,7 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
     <ScrollArea className="h-dvh">
         <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-8">
-        <h1 className="text-3xl font-semibold text-primary mb-8">Create New Activity</h1>
+        <h1 className="text-3xl font-semibold text-primary mb-8">Edit New Activity</h1>
         <FormInput
           form={form}
           name="title"

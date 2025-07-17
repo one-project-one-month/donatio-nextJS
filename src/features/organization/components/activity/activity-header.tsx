@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import ActivityCreateForm from './activity-create-form'
 import { number } from 'zod'
+import { useState } from 'react'
 
 
 type ActivityHeaderProps = {
@@ -12,6 +13,12 @@ type ActivityHeaderProps = {
 }
 
 function ActivityHeader({ totalActivities }: ActivityHeaderProps) {
+
+  const [ isOpen, setIsOpen ] = useState(false);
+
+
+
+
   return (
     <div className="space-y-6">
       {/* Header Row */}
@@ -27,7 +34,7 @@ function ActivityHeader({ totalActivities }: ActivityHeaderProps) {
         <div className="flex-1">
           <ActivitySearchBox />
         </div>
-        <Drawer direction="right">
+        <Drawer open={isOpen} onOpenChange={setIsOpen} direction="right">
           <DrawerTrigger asChild>
             <Button className="flex items-center gap-2 w-[220px] py-7 rounded-full">
               <Plus size={18} />

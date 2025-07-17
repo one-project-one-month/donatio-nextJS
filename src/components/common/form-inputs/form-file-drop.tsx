@@ -7,14 +7,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ComponentProps, HTMLInputTypeAttribute, ReactNode } from "react";
+import {
+  ComponentProps,
+  HTMLInputTypeAttribute,
+  ReactNode,
+  useEffect,
+} from "react";
 import { useState } from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { CloudUpload, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export type FormFileDropZoneProps<T extends FieldValues> = Omit<
   ComponentProps<"input">,
@@ -41,7 +51,7 @@ function FormFileDropZone<T extends FieldValues>({
   defaultFiles = [],
   ...props
 }: FormFileDropZoneProps<T>) {
-  const [files, setFiles] = useState<FileOrUrl[]>(defaultFiles);
+  const [files, setFiles] = useState<FileOrUrl[]>(form.getValues(name) || []);
   const [previewFile, setPreviewFile] = useState<FileOrUrl | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -83,7 +93,10 @@ function FormFileDropZone<T extends FieldValues>({
               <Input
                 {...getInputProps()}
                 multiple
-                className={cn("border-gray-300 rounded-lg transition-all pr-10", props.className)}
+                className={cn(
+                  "border-gray-300 rounded-lg transition-all pr-10",
+                  props.className
+                )}
               />
 
               {isDragActive ? (
@@ -97,7 +110,10 @@ function FormFileDropZone<T extends FieldValues>({
                     const imageUrl = isUrl ? file : URL.createObjectURL(file);
 
                     return (
-                      <div key={index} className="relative h-40 rounded overflow-hidden">
+                      <div
+                        key={index}
+                        className="relative h-40 rounded overflow-hidden"
+                      >
                         <Image
                           src={imageUrl}
                           alt={`Preview ${index}`}
@@ -177,6 +193,5 @@ function FormFileDropZone<T extends FieldValues>({
     />
   );
 }
-
 
 export default FormFileDropZone;

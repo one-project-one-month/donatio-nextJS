@@ -58,8 +58,10 @@ function ActivityCreateForm() {
     }
     
     for(const file of data.image) {
-      formData.append('attachments', file);
+      formData.append('uploaded_attachments', file);
     }
+
+    console.log(formData.entries())
 
     await createActivity(formData);
     form.reset();
