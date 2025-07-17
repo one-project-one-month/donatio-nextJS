@@ -1,5 +1,6 @@
+"use client";
 import BreadCrumbUI from "@/components/common/breadcrumb-ui";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import userCoverPhoto from "@/assets/image/userCoverPhoto.png";
 import { Pencil, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,87 +11,51 @@ import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import useAuthStore from "@/store/useAuthStore";
+import API from "@/lib/api/axios";
 
 const page = () => {
-  const lists = [
-    {
-      date: "12/5/2025",
-      time: "12:12:30 PM",
-      organization: "Alu Myanmar",
-      amount: "15,000 MMK",
-      status: "success",
-    },
-    {
-      date: "13/5/2025",
-      time: "09:45:10 AM",
-      organization: "KBZ Bank",
-      amount: "250,000 MMK",
-      status: "pending",
-    },
-    {
-      date: "14/5/2025",
-      time: "03:20:50 PM",
-      organization: "AYA Pay",
-      amount: "5,000 MMK",
-      status: "failed",
-    },
-    {
-      date: "15/5/2025",
-      time: "06:05:15 PM",
-      organization: "Wave Money",
-      amount: "12,500 MMK",
-      status: "success",
-    },
-    {
-      date: "16/5/2025",
-      time: "11:35:45 AM",
-      organization: "Onepay",
-      amount: "50,000 MMK",
-      status: "pending",
-    },
-    {
-      date: "17/5/2025",
-      time: "02:10:20 PM",
-      organization: "Ooredoo",
-      amount: "3,000 MMK",
-      status: "success",
-    },
-    {
-      date: "18/5/2025",
-      time: "08:00:00 AM",
-      organization: "Mytel Pay",
-      amount: "8,800 MMK",
-      status: "failed",
-    },
-    {
-      date: "19/5/2025",
-      time: "10:25:35 AM",
-      organization: "Shwe Bank",
-      amount: "100,000 MMK",
-      status: "success",
-    },
-    {
-      date: "20/5/2025",
-      time: "01:55:55 PM",
-      organization: "CB Pay",
-      amount: "20,000 MMK",
-      status: "pending",
-    },
-    {
-      date: "21/5/2025",
-      time: "04:40:10 PM",
-      organization: "MAB Bank",
-      amount: "75,500 MMK",
-      status: "success",
-    },
-  ];
+  type Attachment = {
+    id: string;
+    file: string;
+  };
+
+  type Donation = {
+    id: string;
+    organization: string;
+    actor: string;
+    event: string | null;
+    title: string;
+    amount: string;
+    type: string;
+    status: string;
+    review_required: boolean;
+    created_at: string;
+    updated_at: string;
+    attachments: Attachment[];
+  };
+
+  const [lists, setLists] = useState<Donation[]>([]);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const response = await API.get("/transactions/history/");
+
+        setLists(response.data);
+      } catch (err) {
+        console.error("Failed to fetch user's transsactions:", err);
+      }
+    };
+    getUserInfo();
+  }, []);
+
+  const userInfo = useAuthStore((state) => state.userInfo);
 
   return (
     <div className="px-4 pt-10">
@@ -111,12 +76,12 @@ const page = () => {
           <div className="flex items-center gap-4">
             <Avatar className="w-16 h-16">
               <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{userInfo?.username?.charAt(0)}</AvatarFallback>
             </Avatar>
 
             <div className="">
-              <div>Htet Aung Lwin</div>
-              <div className="text-gray-500">ayansoetlkwr@mg.com</div>
+              <div>{userInfo?.username}</div>
+              <div className="text-gray-500">{userInfo?.email}</div>
             </div>
           </div>
 
@@ -164,15 +129,20 @@ const page = () => {
                 </TableRow>
               </TableHeader>
               <TableBody className="text-gray-500">
-                {lists.map((list, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="pl-10 py-6">{list.date}</TableCell>
-                    <TableCell className="py-6">{list.time}</TableCell>
-                    <TableCell className="py-6">{list.organization}</TableCell>
-                    <TableCell className="py-6">{list.amount}</TableCell>
-                    <TableCell className="py-6">{list.status}</TableCell>
-                  </TableRow>
-                ))}
+                {lists.map((list, index) => {
+                  const { date, time } = formatDateTime(list.updated_at);
+                  return (
+                    <TableRow key={index}>
+                      <TableCell className="pl-10 py-6">{date}</TableCell>
+                      <TableCell className="py-6">{time}</TableCell>
+                      <TableCell className="py-6">
+                        {list?.organization}
+                      </TableCell>
+                      <TableCell className="py-6">{list?.amount}</TableCell>
+                      <TableCell className="py-6">{list?.status}</TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
@@ -181,5 +151,22 @@ const page = () => {
     </div>
   );
 };
+
+function formatDateTime(isoString: string) {
+  const dateObj = new Date(isoString);
+  const day = dateObj.getDate();
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+  const date = `${day}/${month}/${year}`;
+
+  let hours = dateObj.getHours();
+  const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+  const seconds = dateObj.getSeconds().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "P.M" : "A.M";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  const time = `${hours}:${minutes}:${seconds} ${ampm}`;
+  return { date, time };
+}
 
 export default page;

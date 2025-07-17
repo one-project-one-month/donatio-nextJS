@@ -26,7 +26,6 @@ const urlDatas = [
 function UserNavbar({ isProfile }: { isProfile: boolean }) {
   const url = usePathname();
 
-  console.log(isProfile);
   return (
     <nav className="w-dvw left-0 fixed top-0 z-40">
       <div className="md:max-w-7xl mx-auto bg-white py-5 flex justify-between px-5 md:px-12">

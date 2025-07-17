@@ -3,8 +3,10 @@ import Footer from "@/components/core/Footer";
 import UserNavbar from "@/components/core/user-navbar";
 import DonationBanner from "@/features/user/components/banner/donation-banner";
 import SearchSection from "@/features/user/components/search/search-section";
+import API from "@/lib/api/axios";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
+import useAuthStore from "@/store/useAuthStore";
 
 function UserLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -15,6 +17,20 @@ function UserLayout({ children }: { children: ReactNode }) {
     (pathname.includes("/activities/") && pathname !== "/activities");
 
   const isProfile = pathname.includes("/profile") && pathname !== "/profile";
+
+  const setUserInfo = useAuthStore((state) => state.setUserInfo);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const response = await API.get("/auth/users/me/");
+        setUserInfo(response.data);
+      } catch (err) {
+        console.error("Failed to fetch user info:", err);
+      }
+    };
+    getUserInfo();
+  }, []);
 
   return (
     <>
