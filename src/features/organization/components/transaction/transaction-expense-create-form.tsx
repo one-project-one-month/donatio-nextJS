@@ -34,7 +34,11 @@ const TransactionExpenseCreateFormSchema = z.object({
 
 type TransactionExpenseCreateFormValues = z.infer<typeof TransactionExpenseCreateFormSchema>;
 
-function TransactionExpenseCreateForm() {
+type TransactionExpenseCreateFormProps = {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function TransactionExpenseCreateForm({ setIsOpen }: TransactionExpenseCreateFormProps) {
   const form = useForm<TransactionExpenseCreateFormValues>({
     resolver: zodResolver(TransactionExpenseCreateFormSchema),
     defaultValues: {
@@ -59,7 +63,7 @@ function TransactionExpenseCreateForm() {
 
     await createTransaction({ data: formData, id: ""});
     form.reset();
-
+    setIsOpen(false);
   };
 
   return (

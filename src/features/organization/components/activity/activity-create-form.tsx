@@ -12,44 +12,63 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TransactionAttachmentInput from "../util/transaction-attachment-input";
+import { useCreateActivity } from "../../hooks/organization-activity-queries";
 
 const activityFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
   location: z.string().nonempty("Location shouldn't be empty"),
   transactions: z
-    .array(z.string())
+    .array(z.any())
     .min(1, "At least one transaction is required"),
   image: z.any().refine((val) => {
     return (
       val && val.length > 0 && val.every((file: File) => file instanceof File)
     );
   }, "Image shouldn't be empty"),
-  content: z.string().min(1, "Content is required"),
+  description: z.string().min(1, "Content is required"),
 });
 
-type EventFormValues = z.infer<typeof activityFormSchema>;
+type ActivityFormValues = z.infer<typeof activityFormSchema>;
 
 function ActivityCreateForm() {
-  const form = useForm<EventFormValues>({
+  const form = useForm<ActivityFormValues>({
     resolver: zodResolver(activityFormSchema),
     defaultValues: {
       title: "",
       location: "",
       transactions: [],
       image: undefined,
-      content: "",
+      description: "",
     },
   });
 
-  const onSubmit = (data: EventFormValues) => {
-    // handle form submission
-    console.log(data);
+  const { createActivity } = useCreateActivity();
+
+  const handleCreate = async(data: ActivityFormValues) => {
+
+    const formData = new FormData();
+
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('location', data.location);
+    
+
+    for(const t of data.transactions) {
+      formData.append('transaction_ids', t.id)
+    }
+    
+    for(const file of data.image) {
+      formData.append('attachments', file);
+    }
+
+    await createActivity(formData);
+    form.reset();
   };
 
   return (
     <ScrollArea className="h-dvh">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-8">
+        <form onSubmit={form.handleSubmit(handleCreate)} className="space-y-4 p-8">
           <h1 className="text-3xl font-semibold text-primary mb-8">
             Create New Activity
           </h1>
@@ -99,8 +118,8 @@ function ActivityCreateForm() {
           />
           <FormTextAreaInput
             form={form}
-            name="content"
-            label="Content"
+            name="description"
+            label="Descripiton"
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             placeholder="Enter detail content"

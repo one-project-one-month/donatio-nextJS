@@ -1,69 +1,42 @@
 "use client";
 
+import { useCallback, useState } from "react";
+
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import ActivityRows from "./activity-rows";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
-import { useCallback, useState } from "react";
 import ActivityEditForm from "./activity-edit-form";
-import { ActivityTableData } from "@/types/Activity";
+import { Activity } from "@/types/Activity";
+import { useDeleteActivity } from "../../hooks/organization-activity-queries";
 
-const dummyActivities = [
-  {
-    title: "Food Distribution Drive",
-    date: "2025-06-10",
-    location: "Yangon, Myanmar",
-    totalVoucher: 2,
-    image: "https://example.com/images/food-drive.jpg",
-    content: "A community event to distribute food to those in need.",
-  },
-  {
-    title: "Blood Donation Camp",
-    date: "2025-06-15",
-    location: "Mandalay General Hospital",
-    totalVoucher: 5,
-    image: "https://example.com/images/blood-donation.jpg",
-    content: "Join us to donate blood and save lives.",
-  },
-  {
-    title: "Community Cleanup Day",
-    date: "2025-06-20",
-    location: "Inya Lake Park",
-    totalVoucher: 3,
-    image: "https://example.com/images/cleanup.jpg",
-    content: "Help us clean up the park and make our community cleaner.",
-  },
-  {
-    title: "Free Medical Check-up",
-    date: "2025-06-25",
-    location: "Downtown Health Center",
-    totalVoucher: 4,
-    image: "https://example.com/images/medical-checkup.jpg",
-    content: "Free health check-ups for the community.",
-  },
-  {
-    title: "Tree Plantation Event",
-    date: "2025-06-30",
-    location: "Naypyidaw Green Zone",
-    totalVoucher: 6,
-    image: "https://example.com/images/tree-plantation.jpg",
-    content: "Join us in planting trees to combat climate change.",
-  },
-];
+type ActivityTableProps = {
+  data: Activity[] | null;
+  isLoading: boolean;
+};
 
-function ActivityTable() {
+function ActivityTable({ data, isLoading }: ActivityTableProps) {
+
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState<ActivityTableData>();
+  const [selectedActivity, setSelectedActivity] = useState<Activity>();
 
-  const handleSelectActivity = useCallback((activity: ActivityTableData) => {
+  const { deleteActivity } = useDeleteActivity();
+
+  const handleEdit = useCallback((activity: Activity) => {
     setSelectedActivity(activity);
     setIsEditFormOpen(true);
   }, []);
+
+
+  const handleDelete = useCallback((id: string) => {
+    deleteActivity(id);
+  },[]);
 
   return (
     <section className="overflow-x-auto max-w-full rounded-2xl border mt-8 relative">
@@ -91,13 +64,22 @@ function ActivityTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dummyActivities.map((event, rowIdx) => (
-            <ActivityRows
-              data={event}
-              setData={handleSelectActivity}
-              key={rowIdx}
-            />
-          ))}
+          {data && data.length > 0 ? (
+            data?.map((event, rowIdx) => (
+              <ActivityRows
+                data={event}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                key={rowIdx}
+              />
+            ))
+          ) : (
+            <TableRow className="h-24">
+              <TableCell colSpan={6} className="text-center text-gray-500">
+                {isLoading ? "Loading activities..." : "No activity found."}
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
       <Drawer

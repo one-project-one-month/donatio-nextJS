@@ -4,16 +4,26 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button"
 import { FilePlus2 } from "lucide-react"
 import TransactionExpenseCreateForm from "./transaction-expense-create-form"
+import { useState } from "react"
+
+type TransactionExpensenHeaderProps = {
+  data: {
+    totalExpense?: number;
+  }
+};
+
+function TransactionExpenseHeader({ data }: TransactionExpensenHeaderProps) {
+
+  const [ isOpen, setIsOpen ] = useState<boolean>(false);
 
 
-function TransactionExpenseHeader() {
   return (
     <div className="space-y-6">
       {/* Header Row */}
       <div className="flex items-center justify-between">
         <h1 className="text-primary text-3xl font-semibold">Expenses</h1>
         <Badge variant="outline" className="text-sm text-neutral-500">
-          13 Donations
+           {data.totalExpense} Expenses
         </Badge>
       </div>
 
@@ -22,7 +32,7 @@ function TransactionExpenseHeader() {
         <div className="flex-1">
           <TransactionDonationSearchBox />
         </div>
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2 w-[220px] py-7 rounded-full"> 
                 <FilePlus2 className="w-5 h-5 text-white" />
@@ -33,7 +43,7 @@ function TransactionExpenseHeader() {
               <DialogHeader>
                 <DialogTitle className="text-primary text-2xl font-semibold">Create Expenses</DialogTitle>
               </DialogHeader>
-              <TransactionExpenseCreateForm />
+              <TransactionExpenseCreateForm setIsOpen={setIsOpen} />
             </DialogContent>
         </Dialog>
       </div>

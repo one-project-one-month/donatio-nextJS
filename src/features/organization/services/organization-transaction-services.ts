@@ -1,9 +1,9 @@
 import API from "@/lib/api/axios";
 
-export const getTransactionData = async (type?: string) => {
+export const getTransactionData = async (type?: string, page?: number, pageSize?: number) => {
   try {
     const response = await API.get(
-      `/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/transactions/?type=${type}&page_size=5`
+      `/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/transactions/?type=${type}&page=${page??1}&page_size=${pageSize}`
     );
     return response.data;
   } catch (error) {

@@ -8,18 +8,18 @@ import usePagination from "@/hooks/use-pagination";
 
 function page() {
   const { page, setPage } = usePagination();
-  const { data, isLoading } = useGetTransactionData("disbursement");
+  const { data, isLoading } = useGetTransactionData("disbursement", page, 5);
 
   return (
     <div>
-      <TransactionExpenseHeader />
+      <TransactionExpenseHeader data={{totalExpense: data?.count}} />
       <TransactionTable data={data?.results} isLoading={isLoading} />
       {!isLoading && data !== undefined && (
         <div className="mt-3">
             <PaginationUI
           isNext={data.next ? true : false}
           isPrevious={data.previous ? true : false}
-          totalCount={data.results.length}
+          totalCount={data.count}
           page={page}
           limit={5}
           setPage={setPage}

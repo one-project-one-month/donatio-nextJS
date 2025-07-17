@@ -4,15 +4,21 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from '@/components/
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import ActivityCreateForm from './activity-create-form'
+import { number } from 'zod'
 
-function ActivityHeader() {
+
+type ActivityHeaderProps = {
+  totalActivities: number;
+}
+
+function ActivityHeader({ totalActivities }: ActivityHeaderProps) {
   return (
     <div className="space-y-6">
       {/* Header Row */}
       <div className="flex items-center justify-between">
         <h1 className="text-primary text-3xl font-semibold">Activites</h1>
         <Badge variant="outline" className="text-sm text-neutral-500">
-          13 Activities
+          {totalActivities} Activities
         </Badge>
       </div>
 

@@ -5,31 +5,46 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
-import { useState } from 'react';
-import { useGetTransactionData } from '../../hooks/organization-transaction-queries';
-import TransactionAttachmentTable from './transaction-attachment-table';
-import { FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useState } from "react";
+import { useGetTransactionData } from "../../hooks/organization-transaction-queries";
+import TransactionAttachmentTable from "./transaction-attachment-table";
+import { FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import usePagination from "@/hooks/use-pagination";
+import PaginationUI from "@/components/common/pagination-ui";
+import { TempSelectedTransaction } from "@/types/Transaction";
+
 
 type TransactionAttachmentInputProps = {
-  value: string[];
-  onChange: (value: string[]) => void;
+  value: TempSelectedTransaction[];
+  onChange: (value: TempSelectedTransaction[]) => void;
 };
 
-const TransactionAttachmentInput = ({ value, onChange }: TransactionAttachmentInputProps) => {
+const TransactionAttachmentInput = ({
+  value,
+  onChange,
+}: TransactionAttachmentInputProps) => {
   const [open, setOpen] = useState(false);
-  const [tempSelected, setTempSelected] = useState<string[]>(value);
+  const [tempSelected, setTempSelected] = useState<TempSelectedTransaction[]>(value);
+  const { page, setPage } = usePagination("transaction_page");
 
-  const { data: responseData, isLoading } = useGetTransactionData('disbursement');
+  const { data: responseData, isLoading } = useGetTransactionData(
+    "disbursement",
+    page,
+    5
+  );
 
-  const toggle = (val: string) => {
-    setTempSelected((prev) =>
-      prev.includes(val) ? prev.filter((v) => v !== val) : [...prev, val]
-    );
-  };
+  const toggle = (val: TempSelectedTransaction) => {
+  setTempSelected((prev) =>
+    prev.some((item) => item.id === val.id)
+      ? prev.filter((v) => v.id !== val.id)
+      : [...prev, val]
+  );
+};
+
 
   const handleSave = () => {
     onChange(tempSelected);
@@ -43,7 +58,9 @@ const TransactionAttachmentInput = ({ value, onChange }: TransactionAttachmentIn
 
   return (
     <FormItem className="space-y-2">
-      <FormLabel className="text-base md:text-lg font-medium">Expenses</FormLabel>
+      <FormLabel className="text-base md:text-lg font-medium">
+        Expenses
+      </FormLabel>
 
       <div className="flex flex-col gap-2 border rounded-md p-3 bg-background">
         <div className="flex flex-wrap gap-2 min-h-[40px] max-h-[120px] overflow-y-auto">
@@ -51,8 +68,8 @@ const TransactionAttachmentInput = ({ value, onChange }: TransactionAttachmentIn
             <span className="text-muted-foreground">No items selected</span>
           ) : (
             value.map((val) => (
-              <Badge key={val} variant="secondary">
-                {responseData?.results.find((o) => o.id === val)?.title || val}
+              <Badge key={val.id} variant="secondary">
+                {responseData?.results.find((o) => o.id === val.id)?.title || val.title}
               </Badge>
             ))
           )}
@@ -67,7 +84,9 @@ const TransactionAttachmentInput = ({ value, onChange }: TransactionAttachmentIn
             </DialogTrigger>
             <DialogContent className="sm:max-w-3xl sm:rounded-xl">
               <DialogHeader>
-                <DialogTitle className="text-xl">Select Transactions</DialogTitle>
+                <DialogTitle className="text-xl">
+                  Select Transactions
+                </DialogTitle>
               </DialogHeader>
 
               <div className="py-2 px-1">
@@ -79,15 +98,34 @@ const TransactionAttachmentInput = ({ value, onChange }: TransactionAttachmentIn
                 />
               </div>
 
+              <div className="mt-3">
+                <PaginationUI
+                  isNext={responseData?.next ? true : false}
+                  isPrevious={responseData?.previous ? true : false}
+                  totalCount={responseData?.count?? 0}
+                  page={page}
+                  limit={5}
+                  setPage={setPage}
+                />
+              </div>
+
               <DialogFooter className="mt-4">
-                <Button onClick={handleSave} disabled={tempSelected.length === 0}>
+                <Button
+                  onClick={handleSave}
+                  disabled={tempSelected.length === 0}
+                >
                   Save
                 </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
 
-          <Button type="button" variant="destructive" size="sm" onClick={handleClear}>
+          <Button
+            type="button"
+            variant="destructive"
+            size="sm"
+            onClick={handleClear}
+          >
             Clear All
           </Button>
         </div>

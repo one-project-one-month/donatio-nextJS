@@ -6,6 +6,11 @@ export type TransactionCreateProps = {
   data: FormData;
 };
 
+export type TransactionAttachment = {
+  id: string;
+  file: string;
+}
+
 export type Transaction = {
   id: string;
   organization: string;
@@ -18,10 +23,13 @@ export type Transaction = {
   review_required: boolean;
   created_at: string;
   updated_at: string;
-  attachments: {
-    id: string;
-    file: string;
-  }[];
+  attachments: TransactionAttachment[];
 };
 
 export type TransactionResponse = PaginationProps<Transaction>;
+
+
+export type TempSelectedTransaction = {
+  title: string;
+  id: string;
+}

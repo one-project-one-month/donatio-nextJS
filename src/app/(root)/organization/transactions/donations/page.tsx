@@ -8,7 +8,7 @@ import usePagination from "@/hooks/use-pagination";
 
 function page() {
   const { page, setPage } = usePagination();
-  const { data, isLoading } = useGetTransactionData("donation");
+  const { data, isLoading } = useGetTransactionData("donation", page, 5);
 
   return (
     <div>
@@ -19,7 +19,7 @@ function page() {
             <PaginationUI
           isNext={data.next ? true : false}
           isPrevious={data.previous ? true : false}
-          totalCount={data.results.length}
+          totalCount={data.count}
           page={page}
           limit={5}
           setPage={setPage}

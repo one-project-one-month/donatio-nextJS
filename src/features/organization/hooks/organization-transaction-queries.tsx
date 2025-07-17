@@ -8,10 +8,10 @@ import {
 import { TransactionResponse } from "@/types/Transaction";
 import { showToast } from "@/lib/toast";
 
-export const useGetTransactionData = (type?: string) => {
+export const useGetTransactionData = (type?: string, page?: number, pageSize?: number) => {
   return useQuery<TransactionResponse>({
-    queryKey: ["transactions", type || "all"],
-    queryFn: () => getTransactionData(type),
+    queryKey: ["transactions", type || "all", page],
+    queryFn: () => getTransactionData(type, page, pageSize),
   });
 };
 

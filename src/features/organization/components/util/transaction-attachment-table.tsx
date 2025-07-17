@@ -7,13 +7,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ISODateFormat } from "@/lib/dateFormat";
-import { Transaction } from "@/types/Transaction";
+import { TempSelectedTransaction, Transaction } from "@/types/Transaction";
 
 type TransactionAttachmentTableProps = {
   data: Transaction[] | undefined;
   isLoading?: boolean;
-  toggle: (val: string) => void;
-  selected: string[];
+  toggle: (val: TempSelectedTransaction) => void;
+  selected: TempSelectedTransaction[];
 };
 
 function TransactionAttachmentTable({
@@ -45,7 +45,14 @@ function TransactionAttachmentTable({
                 <TableCell>{transaction.title}</TableCell>
                 <TableCell>{transaction.amount} MMK</TableCell>
                 <TableCell className="sticky right-0 bg-white flex justify-center">
-                  <Checkbox checked={selected.includes(transaction.id)} onCheckedChange={() => toggle(transaction.id)} />
+                  <Checkbox
+                    checked={selected.some(
+                      (item) => item.id === transaction.id
+                    )}
+                    onCheckedChange={() =>
+                      toggle({ title: transaction.title, id: transaction.id })
+                    }
+                  />
                 </TableCell>
               </TableRow>
             ))

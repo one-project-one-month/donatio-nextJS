@@ -11,25 +11,26 @@ import FormFileDropZone from "@/components/common/form-inputs/form-file-drop";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ActivityTableData } from "@/types/Activity";
+import { Activity, ActivityTableData } from "@/types/Activity";
 import TransactionAttachmentInput from "../util/transaction-attachment-input";
 import { tr } from "date-fns/locale";
+import { useUpadateActivity } from "../../hooks/organization-activity-queries";
 
 const activityFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
   location: z.string().nonempty("Location shouldn't be empty"),
   transactions: z
-    .array(z.string()).min(1, "At least one transaction is required"),
+    .array(z.any()).min(1, "At least one transaction is required"),
   image: z.any().refine((val) => {
     return val && val.length > 0 && val.every((file: File) => file instanceof File);
   }, "Image shouldn't be empty"),
-  content: z.string().min(1, "Content is required"),
+  description: z.string().min(1, "Content is required"),
 });
 
 type ActivityValues = z.infer<typeof activityFormSchema>;
 
 type ActivityEditFormProps = {
-  initialData: ActivityTableData | null; 
+  initialData: Activity | null; 
 };
 
 function ActivityEditForm({ initialData }: ActivityEditFormProps) {
@@ -38,15 +39,36 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
     defaultValues: {
       title: initialData?.title || "",
       location: initialData?.location || "",
-      transactions: [],
-      image: undefined,
-      content: initialData?.content || "",
+      transactions: initialData?.activity_transactions.map((at) => {
+        return { title: at.transaction.title, id: at.transaction.id }
+      }) || [],
+      image: initialData?.attachments,
+      description: initialData?.description || "",
     },
   });
 
+  const { updateActivity } = useUpadateActivity();
+
   const onSubmit = (data: ActivityValues) => {
-    // handle form submission
-    console.log(data);
+    
+    const formData = new FormData();
+
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('location', data.location);
+    
+
+    for(const t of data.transactions) {
+      formData.append('transaction_ids', t.id)
+    }
+    
+    for(const file of data.image) {
+      formData.append('attachments', file);
+    }
+
+    updateActivity({ id: initialData?.id?? "", data: formData})
+
+    form.reset();
   };
 
   return (
@@ -100,8 +122,8 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
           />
           <FormTextAreaInput
           form={form}
-          name="content"
-          label="Content"
+          name="description"
+          label="Description"
           labelClass="md:text-lg font-semibold mb-1"
           wrapperClass="mb-5 mb:mb-3"
           placeholder="Enter detail content"
