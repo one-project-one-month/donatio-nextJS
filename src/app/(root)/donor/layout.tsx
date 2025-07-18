@@ -9,6 +9,7 @@ import { ReactNode, useEffect } from "react";
 import useAuthStore from "@/store/useAuthStore";
 
 function UserLayout({ children }: { children: ReactNode }) {
+  
   const pathname = usePathname();
   const hideExtras =
     (pathname.includes("/events/") && pathname !== "/events") ||
@@ -31,7 +32,7 @@ function UserLayout({ children }: { children: ReactNode }) {
     };
     getUserInfo();
   }, []);
-
+    
   return (
     <>
       <div className="max-w-7xl mx-auto pt-20 md:px-8 py-5">
