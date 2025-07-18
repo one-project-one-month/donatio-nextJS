@@ -1,4 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getMessages } from "@/store/chatStore";
 import { Image } from "lucide-react";
 
 
@@ -56,7 +57,17 @@ function SenderBox({text, time}:BoxProps) {
   );
 }
 
-function ChatMessageBox() {
+
+type ChatMessageBoxProps = {
+  type: "organization" | "donor"
+}
+
+function ChatMessageBox({ type }: ChatMessageBoxProps) {
+
+  const messages = getMessages();
+
+
+
   return (
     <ScrollArea className="h-[33rem]">
       <div className="md:px-8 px-4 py-5 flex flex-col justify-end">
@@ -71,8 +82,7 @@ function ChatMessageBox() {
               messages.map((msg, i) => {
                 return (
                   <div key={i}>
-                  {msg.sender === "me" && <SenderBox text={msg.text} time={msg.time} />}
-                  {msg.sender === "other" && <RecieveBox text={msg.text} time={msg.time} />}
+                  {msg.sender_type === type ? <SenderBox text={msg.message} time="10: 00PM" /> : <RecieveBox text={msg.message} time="10:00 PM" />}
                   </div>
                 )
               })
