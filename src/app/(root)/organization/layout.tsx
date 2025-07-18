@@ -3,7 +3,7 @@
 import { AppSidebar } from "@/components/core/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import SideHeader from "@/components/core/sidebar-header";
-import { Calendar, Coins, HeartHandshake } from "lucide-react";
+import { Calendar, Coins, HeartHandshake, MessageCircleMore } from "lucide-react";
 
 const data = {
   user: {
@@ -37,6 +37,11 @@ const data = {
         },
       ],
     },
+    {
+      title: "Chat",
+      url: "/organization/chat",
+      icon: MessageCircleMore
+    }
   ],
 };
 
