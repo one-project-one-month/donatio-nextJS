@@ -136,7 +136,7 @@ const page = () => {
                       <TableCell className="pl-10 py-6">{date}</TableCell>
                       <TableCell className="py-6">{time}</TableCell>
                       <TableCell className="py-6">
-                        {list?.organization}
+                        {/* {list?.organization?} */}
                       </TableCell>
                       <TableCell className="py-6">{list?.amount}</TableCell>
                       <TableCell className="py-6">{list?.status}</TableCell>
