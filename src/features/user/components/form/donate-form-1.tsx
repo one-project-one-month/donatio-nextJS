@@ -57,7 +57,9 @@ function DonateForm1({ formData, setFormIndex, setFormData}: DonateForm1Props) {
 
   const handleContinue = (data: formOneValue) => {
 
-    const formData = {
+    const  newData = {
+      orgId: formData?.orgId || "",
+      eventId: formData?.eventId || "",
       organization: data.organization,
       event: data.event,
       amount: Number(data.donationAmount),
@@ -66,7 +68,7 @@ function DonateForm1({ formData, setFormIndex, setFormData}: DonateForm1Props) {
     }
 
     setFormIndex(2);
-    setFormData(formData);
+    setFormData(newData);
   }
 
   return (

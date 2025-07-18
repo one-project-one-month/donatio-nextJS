@@ -90,7 +90,7 @@ function FormDateInput<T extends FieldValues>({
                   if (date) {
                     setDate(date);
                     setMonth(date);
-
+                    field.onChange(date);
                   }
                 }}
                 onKeyDown={(e) => {

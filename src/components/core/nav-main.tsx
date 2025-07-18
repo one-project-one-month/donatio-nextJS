@@ -20,6 +20,7 @@ type NavItem = {
   children?: {
     title: string;
     url: string;
+    isActive?: boolean;
   }[];
 };
 
@@ -58,7 +59,10 @@ export function NavMain({ items }: { items: NavItem[] }) {
                   <SidebarMenuItem>
                     <button
                       type="button"
-                      className="flex items-center gap-4 py-2 px-4 w-full text-base focus:outline-none"
+                      className={`flex w-full items-center gap-4 py-8 px-4 text-base ${
+                    isOpen &&
+                    "bg-dodger-blue-50 text-primary hover:bg-dodget-blue-50 hover:text-primary"
+                  }`}
                       onClick={() => toggleSection(idx)}
                       aria-expanded={isOpen}
                       aria-controls={`accordion-content-${idx}`}
@@ -88,7 +92,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
                       <SidebarMenuItem key={child.title}>
                         <SidebarMenuButton
                           asChild
-                          className="py-2 px-2 text-sm"
+                          className="py-2 h-12 px-2 text-sm"
                         >
                           <Link href={child.url}>{child.title}</Link>
                         </SidebarMenuButton>
