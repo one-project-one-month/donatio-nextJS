@@ -14,6 +14,7 @@ type PaginationUIProps = {
   totalCount: number;
   page: number;
   limit: number;
+  setPage?: (newPage: number) => void;
 };
 
 function PaginationUI({
@@ -22,12 +23,13 @@ function PaginationUI({
   totalCount,
   page,
   limit,
+  setPage
 }: PaginationUIProps) {
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          {isPrevious && <PaginationPrevious href={`?page=${page - 1}`} />}
+          {isPrevious && <PaginationPrevious onClick={() => setPage && setPage(page - 1)} />}
         </PaginationItem>
         {Array.from(
           {
@@ -35,9 +37,9 @@ function PaginationUI({
           },
           (_, i) => i + 1
         ).map((pg, index) => (
-          <PaginationItem key={index}>
+          <PaginationItem className="cursor-default" key={index}>
             <PaginationLink
-              href={`?page=${pg}`}
+              onClick={() => setPage && setPage(pg)}
               className={`${
                 pg === page && "bg-primary hover:bg-dodger-blue-300 text-white"
               }`}
@@ -47,7 +49,7 @@ function PaginationUI({
           </PaginationItem>
         ))}
         <PaginationItem>
-          {isNext && <PaginationNext href={`?page=${page + 1}`} />}
+          {isNext && <PaginationNext onClick={() => setPage && setPage(page + 1)} />}
         </PaginationItem>
       </PaginationContent>
     </Pagination>

@@ -3,11 +3,19 @@ import ChatInput from "./chat-input"
 import ChatMessageBox from "./chat-message-box"
 
 
-function ChatWindow() {
+type ChatWindowProps = {
+  type: 'organization' | 'donor'
+}
+
+
+function ChatWindow({ type }: ChatWindowProps) {
+
+
+
   return (
     <div className='h-full border rounded-2xl flex flex-col justify-between'>
         <ChatNav />
-        <ChatMessageBox />
+        <ChatMessageBox type={type} />
         <ChatInput />
     </div>
   )

@@ -1,5 +1,5 @@
 import { Image } from "lucide-react"
-import { Organization } from "../../types/Organization"
+import { Organization } from "../../../../types/Organization"
 
 
 type OrganizationCardProps = {

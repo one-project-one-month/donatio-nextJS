@@ -15,8 +15,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const eventFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
-  startDate: z.string().nonempty("Date shouldn't be empty"),
-  endDate: z.string().nonempty("Date shouldn't be empty"),
+  startDate: z.date(),
+  endDate: z.date(),
   goalAmount: z
     .string()
     .refine(
@@ -29,10 +29,7 @@ const eventFormSchema = z.object({
       }
     ),
   image: z
-    .any()
-    .refine((files) => files instanceof FileList && files.length > 0, {
-      message: "Image is required",
-    }),
+    .any(),
   content: z.string().min(1, "Content is required"),
 });
 
@@ -43,8 +40,8 @@ function EventCreateForm() {
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
       title: "",
-      startDate: "",
-      endDate: "",
+      startDate: new Date(),
+      endDate: new Date(),
       image: undefined,
       content: "",
     },

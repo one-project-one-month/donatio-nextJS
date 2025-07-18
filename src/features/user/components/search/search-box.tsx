@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Input } from "@/components/ui/input";
 import { ChevronDown, Search } from "lucide-react";
 import {
@@ -9,8 +9,8 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-function SearchBox() {
 
+function SearchBox() {
   return (
     <div className="md:w-1/2 w-full mx-8 flex items-center ">
       {/* text-input */}
@@ -30,7 +30,9 @@ function SearchBox() {
       <div className="ms-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="bg-white md:py-8  rounded-full hover:bg-slate-300 h-12 text-black border-primary border text-base  focus:ring-2 focus:ring-dodger-blue-50   w-30 pe-3">All <ChevronDown className={"size-4"} /> </Button>
+            <Button className="bg-white md:py-8  rounded-full hover:bg-slate-300 h-12 text-black border-primary border text-base  focus:ring-2 focus:ring-dodger-blue-50   w-30 pe-3">
+              All <ChevronDown className={"size-4"} />{" "}
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuItem>Option 1</DropdownMenuItem>

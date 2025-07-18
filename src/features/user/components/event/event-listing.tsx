@@ -13,7 +13,7 @@ import DonateFormPopUp, { DonateFormData } from "../form/donate-form-popup";
 import { useEffect, useState } from "react";
 import useDonateStore from "@/store/donateStore";
 import { Calendar } from "lucide-react";
-import { Event, GetAllEventsResponse } from "../../types/Event";
+import { Event, GetAllEventsResponse } from "../../../../types/Event";
 import PaginationUI from "@/components/common/pagination-ui";
 
 const events = [
@@ -82,16 +82,19 @@ const events = [
 type EventListingProps = {
   data: GetAllEventsResponse | undefined;
   page: number;
+  setPage?: (newPage: number) => void;
 };
 
-function EventListing({ data, page }: EventListingProps) {
+function EventListing({ data, page, setPage }: EventListingProps) {
   const { donateFormData, setDonateForm } = useDonateStore();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = isVisible ? "hidden" : "auto";
 
-    console.log(donateFormData);
+    if (!donateFormData) {
+      setIsVisible(false);
+    }
 
     return () => {
       document.body.style.overflow = "auto";
@@ -125,6 +128,7 @@ function EventListing({ data, page }: EventListingProps) {
               isNext={data.next ? true : false}
               isPrevious={data.previous ? true : false}
               limit={7}
+              setPage={setPage}
             />
           </div>
         </section>

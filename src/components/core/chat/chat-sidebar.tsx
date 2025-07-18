@@ -1,14 +1,34 @@
-import React from 'react'
-import ChatSearchBox from './chat-search-box'
-import ChatList from './chat-list'
+import React from "react";
+import ChatSearchBox from "./chat-search-box";
+import ChatList from "./chat-list";
+import { Chat } from "@/types/Chat";
 
-function ChatSidebar() {
+type ChatSidebarProps = {
+  data: Chat[] | null;
+  isLoading: boolean;
+  isDonor: boolean;
+};
+
+function ChatSidebar({ data, isLoading, isDonor }: ChatSidebarProps) {
+  const chatList = data?.map((c) => {
+    return {
+      id: c.id,
+      name: isDonor ? c.organization.name ?? "": c.donor.username ?? "",
+      logo: isDonor ? c.organization.name ?? "": c.donor.profile ?? "",
+      lastMsg: "",
+    };
+  });
+
   return (
-    <div className='h-full border rounded-2xl'>
+    <div className="h-full border rounded-2xl">
       <ChatSearchBox />
-      <ChatList />
+      {isLoading ? (
+        <div>loading....</div>
+      ) : (
+        <ChatList data={chatList ?? null} isDonor={isDonor} />
+      )}
     </div>
-  )
+  );
 }
 
-export default ChatSidebar
+export default ChatSidebar;

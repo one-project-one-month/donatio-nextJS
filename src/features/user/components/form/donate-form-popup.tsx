@@ -5,9 +5,10 @@ import DonateForm1 from "@/features/user/components/form/donate-form-1";
 import DonateForm2 from "@/features/user/components/form/donate-form-2";
 import DonateForm3 from "@/features/user/components/form/donate-form-3";
 import FormStepper from "@/components/common/form-stepper";
-import useDonateStore from "@/store/donateStore";
 
 export type DonateFormData = {
+  orgId: string;
+  eventId: string;
   organization: string;
   event: string;
   amount: number;

@@ -1,13 +1,9 @@
-'use client'
+"use client";
 
 import { AppSidebar } from "@/components/core/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import SideHeader from "@/components/core/sidebar-header";
-import { Calendar, Coins, HeartHandshake } from "lucide-react";
-
+import { Calendar, Coins, HeartHandshake, MessageCircleMore } from "lucide-react";
 
 const data = {
   user: {
@@ -19,33 +15,54 @@ const data = {
     {
       title: "Events",
       url: "/organization/events",
-      icon: Calendar
+      icon: Calendar,
     },
     {
       title: "Activities",
       url: "/organization/activities",
-      icon: HeartHandshake
+      icon: HeartHandshake,
     },
     {
       title: "Transitions",
       url: "/organization/transitions",
-      icon: Coins
+      icon: Coins,
+      children: [
+        {
+          title: "Donations",
+          url: "/organization/transactions/donations",
+        },
+        {
+          title: "Expenses",
+          url: "/organization/transactions/expenses",
+        },
+      ],
     },
+    {
+      title: "Chat",
+      url: "/organization/chat",
+      icon: MessageCircleMore
+    }
   ],
 };
 
-export default function OrganizationLayout({ children }: { children: React.ReactNode }) {
+export default function OrganizationLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
     >
       <AppSidebar sidebarData={data} />
       <SidebarInset>
         <SideHeader />
-        {children}
+        <div className="p-5 w-full">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

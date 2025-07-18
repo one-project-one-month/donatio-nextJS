@@ -4,8 +4,8 @@ function EventListingSkeleton() {
   return (
     <div>
       <div className="grid lg:grid-cols-3 md:grid-cols-2 my-3 sm:gap-18 mb-6 gap-2 w-full justify-center">
-        {Array.from({length: 9}).map((event) => (
-          <div className="md:my-0 my-3 flex flex-col justify-between max-h-[600px] max-w-[500px] rounded transition-all duration-300">
+        {Array.from({length: 9}).map((_, idx) => (
+          <div key={idx} className="md:my-0 my-3 flex flex-col justify-between max-h-[600px] max-w-[500px] rounded transition-all duration-300">
             {/* Image skeleton */}
             <div className="rounded-lg overflow-hidden">
               <Skeleton className="w-full h-[300px] rounded" />
