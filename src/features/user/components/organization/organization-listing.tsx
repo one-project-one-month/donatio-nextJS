@@ -1,7 +1,7 @@
 "use client";
 
 import OrganizationCard from "./organization-card";
-import { GetAllOrganizationsResponse, Organization } from "../../types/Organization";
+import { GetAllOrganizationsResponse, Organization } from "../../../../types/Organization";
 import PaginationUI from "@/components/common/pagination-ui";
 
 // sample data to test

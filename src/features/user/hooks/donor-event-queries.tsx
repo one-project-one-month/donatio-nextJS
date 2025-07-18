@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query"
 import { getEvents } from "@/features/user/services/donor-event-services"
-import { GetAllEventsResponse } from "../types/Event";
+import { GetAllEventsResponse } from "../../../types/Event";
 
 
 

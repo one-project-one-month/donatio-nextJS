@@ -10,7 +10,7 @@ import React, { useEffect } from 'react'
 
 function page() {
 
-  const { page } = usePagination();
+  const { page, setPage } = usePagination();
   const { data: events, isLoading, isError } = useGetEvents(page, 6);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function page() {
   return (
     <div className="max-w-7xl md:mx-auto md:px-5 py-5">
         <EventListingHeader />
-        { isLoading ? <EventListingSkeleton /> : <EventListing data={events} page={page} />}
+        { isLoading ? <EventListingSkeleton /> : <EventListing data={events} page={page} setPage={setPage} />}
     </div>
   )
 }

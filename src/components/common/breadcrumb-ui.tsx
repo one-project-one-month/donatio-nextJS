@@ -30,7 +30,9 @@ function BreadCrumbUI({ currentPageTitle, links }: Partial<BreadcrumbUIProps>) {
           </Fragment>
         ))}
         <BreadcrumbItem>
-          <BreadcrumbPage className="text-primary font-semibold">{currentPageTitle}</BreadcrumbPage>
+          <BreadcrumbPage className="text-primary font-semibold">
+            {currentPageTitle}
+          </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

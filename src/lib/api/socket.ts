@@ -1,9 +1,9 @@
 import AppConfig from "@/lib/appConfig";
 
-const WEBSOCKET_URL = AppConfig.BASE_WEBSOCKET_URL || "localhost:5000";
+const WEBSOCKET_URL = AppConfig.BASE_WEBSOCKET_URL || "ws://localhost:8000/ws/chat/";
 
-const createSocket = () => {
-  return new WebSocket(WEBSOCKET_URL);
+const createSocket = (params: string) => {
+  return new WebSocket(`${WEBSOCKET_URL}${params}`);
 };
 
 export default createSocket;

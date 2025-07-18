@@ -45,7 +45,7 @@ function FormTextAreaInput<T extends FieldValues>({
                 {...field}
                 {...props}
                 className={cn(
-                  "border border-gray-300 rounded-lg p-2 w-full resize-y min-h-[100px] transition-all",
+                  "border border-gray-300 rounded-lg p-2 w-full resize-y min-h-[20rem] transition-all",
                   props.className
                 )}
               />
