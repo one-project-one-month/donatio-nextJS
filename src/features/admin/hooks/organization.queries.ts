@@ -1,15 +1,21 @@
 import {
+  Events,
   OrganizationRequest,
-  OrganizationResponse,
+  PaginatedResponse,
   UpdatePayload,
   VerifiedOrganization,
-} from "@/features/admin/types/admin";
+} from "@/features/admin/types";
 import API from "@/lib/api/axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
-export const fetchOrganizationRequests = async (
+const fetchOrganizationRequests = async (
   page: number
-): Promise<OrganizationResponse<OrganizationRequest>> => {
+): Promise<PaginatedResponse<OrganizationRequest>> => {
   const { data } = await API.get(
     `/organization-requests/?page=${page}&status=pending`
   );
@@ -17,10 +23,10 @@ export const fetchOrganizationRequests = async (
 };
 
 export const useOrganizationRequests = (page: number) => {
-  return useQuery<OrganizationResponse<OrganizationRequest>>({
+  return useQuery<PaginatedResponse<OrganizationRequest>>({
     queryKey: ["organization-requests", page],
     queryFn: () => fetchOrganizationRequests(page),
-    placeholderData: (prev) => prev,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -40,18 +46,18 @@ export const useUpdateOrganizationRequest = () => {
   });
 };
 
-export const fetchVerifiedOrganizations = async (
+const fetchVerifiedOrganizations = async (
   page: number
-): Promise<OrganizationResponse<VerifiedOrganization>> => {
+): Promise<PaginatedResponse<VerifiedOrganization>> => {
   const { data } = await API.get(`/organizations/?page=${page}`);
   return data;
 };
 
 export const useVerifiedOrganizations = (page: number) => {
-  return useQuery<OrganizationResponse<VerifiedOrganization>>({
+  return useQuery<PaginatedResponse<VerifiedOrganization>>({
     queryKey: ["verified-organizations", page],
     queryFn: () => fetchVerifiedOrganizations(page),
-    placeholderData: (prev) => prev,
+    placeholderData: keepPreviousData,
   });
 };
 
@@ -63,5 +69,20 @@ export const useDeleteOrganization = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["verified-organizations"] });
     },
+  });
+};
+
+const fetchEvents = async (
+  page: number
+): Promise<PaginatedResponse<Events>> => {
+  const { data } = await API.get(`/events/?page=${page}`);
+  return data;
+};
+
+export const useEvents = (page: number) => {
+  return useQuery<PaginatedResponse<Events>>({
+    queryKey: ["events", page],
+    queryFn: () => fetchEvents(page),
+    placeholderData: keepPreviousData,
   });
 };

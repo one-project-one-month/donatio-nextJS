@@ -47,7 +47,7 @@ export default function OrganizationTable<T>({
                   style={{ width: col.width }}
                   className={`whitespace-nowrap bg-dodger-blue-50 text-center ${
                     idx === 0
-                      ? "sticky left-0 z-20 pl-4"
+                      ? "sticky left-0 z-20"
                       : idx === columns.length - 1
                       ? "sticky right-0 z-20"
                       : ""
@@ -80,7 +80,7 @@ export default function OrganizationTable<T>({
                       style={{ width: col.width, maxWidth: col.width }}
                       className={`whitespace-nowrap overflow-hidden truncate text-ellipsis bg-white text-center ${
                         colIdx === 0
-                          ? "sticky left-0 z-10 pl-4"
+                          ? "sticky left-0 z-10"
                           : colIdx === columns.length - 1
                           ? "sticky right-0 z-10"
                           : ""
