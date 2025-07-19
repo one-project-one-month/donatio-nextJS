@@ -11,7 +11,7 @@ function ChatPage() {
   const { chat_id } = useParams();
   const id = chat_id as string;
 
-  const { sendMessage } = useChatSocket(id);
+  useChatSocket(id);
 
 
 
