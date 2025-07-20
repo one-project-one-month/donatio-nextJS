@@ -66,7 +66,7 @@ export default function OrganizationLayout({
       <AppSidebar sidebarData={data} />
       <SidebarInset>
         <SideHeader />
-        <div className="p-5 w-full">{children}</div>
+        <div className="w-full">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
