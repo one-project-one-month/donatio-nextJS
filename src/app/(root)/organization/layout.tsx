@@ -3,8 +3,7 @@
 import { AppSidebar } from "@/components/core/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import SideHeader from "@/components/core/sidebar-header";
-import { Calendar, Coins, HeartHandshake, MessageCircleMore } from "lucide-react";
-import useAuth from "@/hooks/use-auth";
+import { Calendar, Coins, HeartHandshake, MessageCircleMore, Building2 } from "lucide-react";
 
 const data = {
   navMain: [
@@ -32,6 +31,11 @@ const data = {
           url: "/organization/transactions/expenses",
         },
       ],
+    },
+    {
+      title: "Profile",
+      url: "/organization/profile",
+      icon: Building2,
     },
     {
       title: "Chat",
