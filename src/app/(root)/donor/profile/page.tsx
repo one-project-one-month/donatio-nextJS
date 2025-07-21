@@ -27,7 +27,7 @@ const page = () => {
 
   type Donation = {
     id: string;
-    organization: string;
+    organization: any;
     actor: string;
     event: string | null;
     title: string;
@@ -91,7 +91,7 @@ const page = () => {
             </Button>
             <Button className="rounded-full py-6 cursor-pointer">
               <img src={profile.src} alt="icon" />
-              <div className="text-lg font-normal"> Become an admin</div>
+              <div className="text-lg font-normal">Become an admin</div>
             </Button>
           </div>
         </div>
@@ -136,10 +136,20 @@ const page = () => {
                       <TableCell className="pl-10 py-6">{date}</TableCell>
                       <TableCell className="py-6">{time}</TableCell>
                       <TableCell className="py-6">
-                        {/* {list?.organization?} */}
+                        {list?.organization?.name}
                       </TableCell>
                       <TableCell className="py-6">{list?.amount}</TableCell>
-                      <TableCell className="py-6">{list?.status}</TableCell>
+                      <TableCell className="py-6">
+                        <span
+                          className={`py-2 px-4 rounded-full ${
+                            list?.status === "success"
+                              ? "text-[#00D018] bg-[#F3FFF4]"
+                              : "text-[#d0a300] bg-[#fffcf3]"
+                          }`}
+                        >
+                          {list?.status}
+                        </span>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
