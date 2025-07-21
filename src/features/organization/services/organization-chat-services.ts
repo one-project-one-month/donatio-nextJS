@@ -19,3 +19,14 @@ export const getAllChatsService = async({ page, pageSize}: GetALLChatsProps) => 
         throw error;
     }
 }
+
+
+export const getChatHistory = async(id: string) => {
+    try {
+        const response = await API.get(`/chats/${id}/messages/`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching chat history', error);
+        throw error;
+    }
+}

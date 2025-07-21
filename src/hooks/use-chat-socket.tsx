@@ -1,11 +1,13 @@
-"use client";
-
+// /hooks/useChatSocket.ts
 import createSocket from "@/lib/api/socket";
 import useChatStore from "@/store/chatStore";
 import { useEffect, useRef } from "react";
 
-function useChatSocket(id: string) {
-  const { setSocket, clearSocket } = useChatStore();
+export function useChatSocket(
+  id: string,
+) {
+
+  const { addMessage } = useChatStore();
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -13,24 +15,35 @@ function useChatSocket(id: string) {
     socketRef.current = socket;
 
     socket.onopen = () => {
-      console.log("Web socket connected");
+      console.log("✅ Socket opened");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      addMessage(data);
     };
 
     socket.onclose = () => {
-      console.log("WebSocket closed ❌");
-      clearSocket();
+      console.log("❌ Socket closed");
     };
 
     socket.onerror = (err) => {
-      console.error("WebSocket error:", err);
+      console.error("💥 Socket error", err);
     };
 
-    setSocket(socket);
-
-    return () => socket.close();
+    return () => {
+      socket.close();
+    };
   }, [id]);
 
-  return;
-}
+  const send = (data: any) => {
+    const socket = socketRef.current;
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(data));
+    } else {
+      console.warn("❌ Cannot send, socket not open");
+    }
+  };
 
-export default useChatSocket;
+  return { send };
+}

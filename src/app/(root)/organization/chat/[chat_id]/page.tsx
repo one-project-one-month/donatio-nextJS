@@ -1,26 +1,26 @@
 'use client'
 
 import ChatWindow from '@/components/core/chat/chat-window'
-import useChatSocket from '@/hooks/use-chat-socket'
+import { useGetChatHistory } from '@/features/organization/hooks/organization-chat-queries'
+import {useChatSocket} from '@/hooks/use-chat-socket'
 import { useParams } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 function ChatPage() {
-
 
   const { chat_id } = useParams();
   const id = chat_id as string;
 
-  useChatSocket(id);
 
 
-
+  const { send } = useChatSocket(id);
+  const { data: history, isLoading } = useGetChatHistory(id);
 
   return (
     <div className='h-full w-full'>
-        <ChatWindow type='organization' />
+      <ChatWindow sendMessage={send} type='organization' history={history?? null} />
     </div>
-  )
+  );
 }
 
-export default ChatPage
+export default ChatPage;
