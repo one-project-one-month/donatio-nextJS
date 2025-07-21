@@ -1,7 +1,23 @@
+"use client";
+
 import { KpiCard } from "@/features/organization/components/profile/kpi-card";
+import {
+  useOrganizationActivitiesQuery,
+  useOrganizationEventsQuery,
+} from "@/features/organization/hooks/organization-kpi-queries";
+import { OrganizationProfile } from "@/types/Organization";
+import { formatCurrency } from "@/utils/formatCurrency";
 import { CalendarIcon, HeartIcon, UserIcon } from "lucide-react";
 
-const Overview = () => {
+interface OverviewProps {
+  data: OrganizationProfile;
+}
+
+const Overview = ({ data }: OverviewProps) => {
+  const { stats } = data;
+  const { data: eventsCount } = useOrganizationEventsQuery();
+  const { data: activitiesCount } = useOrganizationActivitiesQuery();
+  const donorsCount = "1,000";
   return (
     <section aria-labelledby="overview-heading" className="space-y-4">
       <h2
@@ -13,18 +29,30 @@ const Overview = () => {
       <div className="flex justify-between items-center">
         <p className="text-xl font-medium text-muted-foreground flex items-baseline gap-3">
           <span>Total Donation:</span>
-          <span className="font-normal">25,000,000 MMK</span>
+          <span className="font-normal">
+            {formatCurrency(stats.total_received_money)} MMK
+          </span>
         </p>
         <p className="text-xl font-medium text-muted-foreground flex items-baseline gap-3">
           <span>Total Expense:</span>
-          <span className="font-normal">5,000,000 MMK</span>
+          <span className="font-normal">
+            {formatCurrency(stats.total_expense)} MMK
+          </span>
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <KpiCard icon={<CalendarIcon />} value={12} label="Events" />
-        <KpiCard icon={<HeartIcon />} value={24} label="Activities" />
-        <KpiCard icon={<UserIcon />} value="1,000" label="Donors" />
+        <KpiCard
+          icon={<CalendarIcon />}
+          value={eventsCount ?? 0}
+          label="Events"
+        />
+        <KpiCard
+          icon={<HeartIcon />}
+          value={activitiesCount ?? 0}
+          label="Activities"
+        />
+        <KpiCard icon={<UserIcon />} value={donorsCount} label="Donors" />
       </div>
     </section>
   );
