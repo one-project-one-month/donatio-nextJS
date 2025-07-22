@@ -1,9 +1,12 @@
 import API from "@/lib/api/axios";
+import { getCurrentOrg } from "@/store/userStore";
+
+const currentOrg = getCurrentOrg();
 
 export const getTransactionData = async (type?: string, page?: number, pageSize?: number) => {
   try {
     const response = await API.get(
-      `/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/transactions/?type=${type}&page=${page??1}&page_size=${pageSize}`
+      `/organizations/${currentOrg}/transactions/?type=${type}&page=${page??1}&page_size=${pageSize}`
     );
     return response.data;
   } catch (error) {
@@ -21,7 +24,7 @@ export const createTransactionService = async ({
 }) => {
   try {
     const response = await API.post(
-      `/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/transactions/`,
+      `/organizations/${currentOrg}/transactions/`,
       data
     );
     return response.data;
@@ -34,7 +37,7 @@ export const createTransactionService = async ({
 export const updateTransactionData = async (data: any, id: string) => {
   try {
     const response = await API.put(
-      `/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/transactions/${id}/`,
+      `/organizations/${currentOrg}/transactions/${id}/`,
       data
     );
     return response.data;
@@ -47,7 +50,7 @@ export const updateTransactionData = async (data: any, id: string) => {
 export const deleteTransactionService = async (id: string) => {
   try {
     const response = await API.delete(
-      `/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/transactions/${id}/`
+      `/organizations/${currentOrg}/transactions/${id}/`
     );
     return response.data;
   } catch (error) {

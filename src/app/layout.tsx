@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Lexend } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/provider/query-provider";
 import ToastProvider from "./toast-provider";
+import { ThemeProvider } from "next-themes";
+import "keen-slider/keen-slider.min.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,8 +36,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${lexend.className} antialiased`}
       >
-        <QueryProvider>{children}</QueryProvider>
-        <ToastProvider />
+        {/* <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+        > */}
+          <QueryProvider>{children}</QueryProvider>
+          <ToastProvider />
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );

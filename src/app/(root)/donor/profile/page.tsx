@@ -16,8 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import useAuthStore from "@/store/useAuthStore";
 import API from "@/lib/api/axios";
+import { useGetUser } from "@/features/user/hooks/donor-user-queries";
 
 const page = () => {
   type Attachment = {
@@ -42,6 +42,10 @@ const page = () => {
 
   const [lists, setLists] = useState<Donation[]>([]);
 
+  const { data: user } = useGetUser();
+
+
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -54,8 +58,6 @@ const page = () => {
     };
     getUserInfo();
   }, []);
-
-  const userInfo = useAuthStore((state) => state.userInfo);
 
   return (
     <div className="px-4 pt-10">
@@ -76,12 +78,12 @@ const page = () => {
           <div className="flex items-center gap-4">
             <Avatar className="w-16 h-16">
               <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>{userInfo?.username?.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
             </Avatar>
 
             <div className="">
-              <div>{userInfo?.username}</div>
-              <div className="text-gray-500">{userInfo?.email}</div>
+              <div>{user?.username}</div>
+              <div className="text-gray-500">{user?.email}</div>
             </div>
           </div>
 

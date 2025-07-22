@@ -1,9 +1,6 @@
 import { PaginationProps } from "@/types/Common";
 
 
-
-
-
 export type Event = {
   id: string;
   organization: {

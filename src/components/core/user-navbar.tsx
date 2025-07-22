@@ -6,7 +6,6 @@ import LogoName from "@/components/common/logo-name";
 import { MessageCircleMore } from "lucide-react";
 import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
-import { isPageStatic } from "next/dist/build/utils";
 
 const urlDatas = [
   {
@@ -23,7 +22,12 @@ const urlDatas = [
   },
 ];
 
-function UserNavbar({ isProfile }: { isProfile: boolean }) {
+
+type UserNavbarProps = {
+  isProfile: boolean;
+}
+
+function UserNavbar({ isProfile }: UserNavbarProps) {
   const url = usePathname();
 
   return (
