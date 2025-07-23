@@ -18,6 +18,7 @@ import useAuthStore from "@/store/useAuthStore";
 import { useGetUser } from "@/features/user/hooks/donor-user-queries";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/store/userStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AvatarDropdown = () => {
   const { data: user } = useGetUser();
@@ -26,7 +27,11 @@ const AvatarDropdown = () => {
   const logout = useAuthStore((state) => state.logout);
   const clearUser = useUserStore((s) => s.clearUserStore);
 
+            const queryClient = useQueryClient();
+
+
   const handleOrgSwitch = (orgId: string) => {
+
     setCurrentOrg(orgId);
     router.push(`/organization/events`);
   };
@@ -90,6 +95,12 @@ const AvatarDropdown = () => {
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() => {
+
+
+
+            queryClient.invalidateQueries({queryKey: ['user']});
+
+
             logout();
             clearUser();
             router.push("/login");
