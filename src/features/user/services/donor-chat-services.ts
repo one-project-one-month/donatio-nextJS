@@ -19,3 +19,14 @@ export const getAllChatsService = async({ page, pageSize}: GetALLChatsProps) => 
         throw error;
     }
 }
+
+export const startChatService = async(id: string) => {
+
+    try {
+        const response = await API.post(`/organizations/${id}/chats/`)
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+
+}

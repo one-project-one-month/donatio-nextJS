@@ -33,7 +33,7 @@ function ActivityListingHeader() {
           </Select>
         </div>
       </div>
-      <p className="mb-3 text-gray-400 max-w-2xl">
+      <p className="mb-3 text-neutral-400 max-w-2xl">
         Browse all your recent activities, track your participation, and stay
         updated with the latest events and opportunities.
       </p>

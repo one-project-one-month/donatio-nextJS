@@ -9,8 +9,8 @@ import Pagination from "@/features/admin/components/pagination";
 import {
   useDeleteOrganization,
   useVerifiedOrganizations,
-} from "@/features/admin/queries/useOrganizationRequests";
-import { VerifiedOrganization } from "@/features/admin/types/admin";
+} from "@/features/admin/hooks/organization.queries";
+import { VerifiedOrganization } from "@/features/admin/types";
 import { formatDate } from "@/utils/formatDate";
 import { EyeIcon, Trash2Icon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -101,7 +101,6 @@ const VerifiedOrganizationsPage = () => {
   return (
     <div className="p-10">
       <OrganizationTable<VerifiedOrganization>
-        title="Verified Organizations"
         data={data?.results ?? []}
         columns={columns}
         isLoading={isLoading}

@@ -8,6 +8,7 @@ export type EventTableData = {
   status: string;
 };
 
+
 export type CreateEventPayload = {
   title: string;
   description: string;
