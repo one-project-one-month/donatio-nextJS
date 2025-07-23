@@ -8,8 +8,6 @@ import SearchSection from "@/features/user/components/search/search-section";
 function UserProfilePage() {
   return (
     <div className="w-full">
-      <SearchSection />
-      {/* Events , Org  and Activitites*/}
       <TabSplitter
         tab1Label={"Events"}
         tab2Label={"Activities"}
@@ -18,7 +16,6 @@ function UserProfilePage() {
         tab2Content={<ActivityLists />}
         tab3Content={<OrgnizationLists />}
       />
-      <DonationBanner />
     </div>
   );
 }

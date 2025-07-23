@@ -24,23 +24,37 @@ export type Chat = {
   created_at: string;
 };
 
+export type Sender = {
+  type: string;
+  id: string;
+};
+
+export type MessageInput = {
+  message: string;
+  sender_type: 'organization' | 'donar';
+  sender_id: string;
+};
+
+export type MessageResponse = MessageInput & {
+  timestamp: string;
+};
 
 export type ChatList = {
-    id: string;
-    logo: string;
-    name: string;
-    lastMsg: string;
+  id: string;
+  logo: string;
+  name: string;
+  lastMsg: string;
+};
+
+
+export type ChatHistory = {
+  id: string;
+  sender: string;
+  content: string;
+  timestamp: string;
+  chat: string;
+  donor: string | null;
+  organization: string | null;
 }
-
-
-export type Message = {
-    sender_type: 'organization' | "donor";
-    sender_id: string;
-    message: string;
-}
-
 
 export type GetAllChatResponse = PaginationProps<Chat>;
-
-
-
