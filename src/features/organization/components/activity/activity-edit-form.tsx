@@ -20,9 +20,6 @@ const activityFormSchema = z.object({
   location: z.string().nonempty("Location shouldn't be empty"),
   transactions: z
     .array(z.any()).min(1, "At least one transaction is required"),
-  image: z.any().refine((val) => {
-    return val && val.length > 0 && val.every((file: File) => file instanceof File);
-  }, "Image shouldn't be empty"),
   description: z.string().min(1, "Content is required"),
 });
 
@@ -30,9 +27,10 @@ type ActivityValues = z.infer<typeof activityFormSchema>;
 
 type ActivityEditFormProps = {
   initialData: Activity | null; 
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ActivityEditForm({ initialData }: ActivityEditFormProps) {
+function ActivityEditForm({ initialData, setIsOpen }: ActivityEditFormProps) {
   const form = useForm<ActivityValues>({
     resolver: zodResolver(activityFormSchema),
     defaultValues: {
@@ -41,30 +39,13 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
       transactions: initialData?.activity_transactions.map((at) => {
         return { title: at.transaction.title, id: at.transaction.id }
       }) || [],
-      image: initialData?.attachments.map((at) => at.file),
       description: initialData?.description || "",
     },
   });
 
   const { updateActivity } = useUpadateActivity();
 
-  const onSubmit = (data: ActivityValues) => {
-
-
-    // const oldData = {
-    //   title: initialData?.title || "",
-    //   location: initialData?.location || "",
-    //   transactions: initialData?.activity_transactions.map((at) => {
-    //     return { title: at.transaction.title, id: at.transaction.id }
-    //   }) || [],
-    //   image: initialData?.attachments.map((at) => at.file),
-    //   description: initialData?.description || "",
-    // }
-
-    // const changes = getChangedTo(oldData, data);
-
-    // console.log('data', data);
-    // console.log(changes);
+  const onSubmit = async (data: ActivityValues) => {
     
     const formData = new FormData();
 
@@ -76,13 +57,9 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
     for(const t of data.transactions) {
       formData.append('transaction_ids', t.id)
     }
-    
-    for(const file of data.image) {
-      formData.append('upload_attachments', file);
-    }
 
-    updateActivity({ id: initialData?.id?? "", data: formData})
-
+    await updateActivity({ id: initialData?.id?? "", data: formData})
+    setIsOpen(false);
     form.reset();
   };
 
@@ -95,7 +72,7 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
           form={form}
           name="title"
           label="Title"
-          labelClass="md:text-lg font-semibold mb-1"
+          labelClass="md:text-lg font-semibold mb-1 dark:text-white"
           wrapperClass="mb-5 mb:mb-3"
           className="h-12"
           placeholder="Enter activity title"
@@ -105,7 +82,7 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
           form={form}
           name="location"
           label="Location"
-          labelClass="md:text-lg font-semibold mb-1"
+          labelClass="md:text-lg font-semibold mb-1 dark:text-white"
           wrapperClass="mb-5 mb:mb-3"
           className="h-12"
           placeholder="Enter activity location"
@@ -121,25 +98,11 @@ function ActivityEditForm({ initialData }: ActivityEditFormProps) {
               />
             )}
           />
-        <FormFileDropZone
-            name="image"
-            type="file"
-            form={form}
-            label={
-              <span className="flex items-center gap-2">
-                <FilePlus2 className="w-5 h-5 text-primary" />
-                Add Activity Photos
-              </span>
-            }
-            labelClass="mb-1 font-semibold text-base"
-            wrapperClass="mb-3"
-            required
-          />
           <FormTextAreaInput
           form={form}
           name="description"
           label="Description"
-          labelClass="md:text-lg font-semibold mb-1"
+          labelClass="md:text-lg font-semibold mb-1 dark:text-white"
           wrapperClass="mb-5 mb:mb-3"
           placeholder="Enter detail content"
           className="h-12"

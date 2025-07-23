@@ -74,7 +74,7 @@ function TransactionExpenseCreateForm({ setIsOpen }: TransactionExpenseCreateFor
           form={form}
           name="title"
           label="Title"
-          labelClass="md:text-lg font-semibold mb-1"
+          labelClass="md:text-lg font-semibold mb-1 dark:text-white"
           wrapperClass="mb-5 mb:mb-3"
           className="h-12"
           placeholder="Enter event title"
@@ -85,7 +85,7 @@ function TransactionExpenseCreateForm({ setIsOpen }: TransactionExpenseCreateFor
           type="number"
           name="amount"
           label="Amount"
-          labelClass="md:text-lg font-semibold mb-1"
+          labelClass="md:text-lg font-semibold mb-1 dark:text-white"
           wrapperClass="mb-5 mb:mb-3"
           className="h-12"
           placeholder="Enter target amount"
@@ -96,7 +96,7 @@ function TransactionExpenseCreateForm({ setIsOpen }: TransactionExpenseCreateFor
             type="file"
             form={form}
             label={
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 dark:text-white">
                 <FilePlus2 className="w-5 h-5 text-primary" />
                 Upload Receipt Screenshot
               </span>

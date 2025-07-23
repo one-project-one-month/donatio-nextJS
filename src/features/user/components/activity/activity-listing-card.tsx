@@ -1,59 +1,58 @@
-import { Calendar, MapPin, TrendingUp } from "lucide-react";
+import { Calendar, Image, MapPin } from "lucide-react";
+import { Activity } from "@/types/Activity";
+import Link from "next/link";
 
 type ActivityListingCardProps = {
-  id: number;
-  title: string;
-  date: string;
-  eventName: string;
-  description: string;
-  status: string;
-  address: string;
-  familiesHelped: number;
-  tags: {
-    Address?: string;
-    Families?: number;
-    Status?: string;
-  };
+  data: Activity;
 };
 
-function ActivityListingCard({ data }: { data: ActivityListingCardProps }) {
+function ActivityListingCard({ data }: ActivityListingCardProps) {
   return (
-    <div className="w-full rounded-2xl hover:shadow-lg shadow-sm p-3 my-10 transition-all duration-300 cursor-default">
-      <div className="flex md:justify-end justify-end mb-3  ">
-        <div className="ms-3 md:px-5 items-center text-xs sm:flex hidden justify-center font-light hover:text-black text-slate-500 transition duration-300">
-          <MapPin className="border transition-all duration-300 ease-in-out rounded-full md:size-9 md:p-2 p-1 size-7 bg-orange-500/[0.3] text-orange-900 me-3 hover:rounded-lg" />{" "}
-          {data?.tags?.Address}
+    <article className="w-full rounded-2xl hover:shadow-md shadow-sm dark:shadow-neutral-700 p-4 my-10 transition-all duration-300 bg-white dark:bg-neutral-950">
+      {/* Top info row */}
+      <div className="flex justify-end mb-3">
+        <div className="flex items-center text-xs text-slate-500 hover:text-black transition-colors duration-300">
+          <MapPin className="rounded-full md:size-9 md:p-2 p-1 size-7 bg-orange-500/30 text-orange-900 dark:bg-neutral-950 dark:border me-2" />
+          <span>{data.location}</span>
         </div>
-        <div className="flex ms-3 px-5 items-center justify-center text-xs font-light hover:text-black text-slate-500 transition duration-300">
-          <TrendingUp className="transition-all duration-300 ease-in-out hover:rounded-lg rounded-full me-3 md:size-9 md:p-2 p-1 size-7 bg-orange-500/[0.1] border text-orange-900" />{" "}
-          {data?.tags?.Families} Families
-        </div>
-        <div className="flex ms-3 ps-5 items-center justify-center text-xs font-light hover:text-black text-slate-500 transition duration-300">
-          <div className="border bg-blue-300 rounded-lg w-fit p-1 px-2 text-blue-900">
-            {data?.tags?.Status}
+      </div>
+
+      {/* Title and Date */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between my-3 gap-2">
+        <div className="text-xl md:text-3xl font-bold text-primary transition-colors duration-300">
+          <span>{data.title}</span>
+          <div className="flex items-center gap-2 text-base my-2 text-muted-foreground">
+            <div className="rounded-full border p-1">
+              <Image size={20}  />
+            </div>
+            <Link
+              href={`/donor/organization/${data.organization.id}`}
+              className="hover:underline text-xs"
+            >
+              by {data.organization.name}
+            </Link>
           </div>
         </div>
-      </div>
-      <div className="flex items-center justify-between my-3">
-        <div className="md:text-3xl text-xl font-bold text-blue-500 hover:text-blue-300 transition-all duration-300">
-          <a href="#">{data.title}</a>
-        </div>
-        <div className="flex items-end justify-center font-light text-slate-500 ">
-          <Calendar className="me-3" /> {data?.date}
+        <div className="flex items-center text-slate-500 text-sm font-light mt-2 md:mt-0">
+          <Calendar className="me-2 size-4" />
+          <span>{data.created_at}</span>
         </div>
       </div>
-      <div>
-        <div className="font-light my-1">{data?.eventName}</div>
+
+      {/* Description */}
+      <p className="text-justify text-slate-500 text-sm leading-relaxed my-4">
+        {data.description}
+      </p>
+
+      <div className="text-end">
+        <Link
+          href={`/donor/activities/${data.id}`}
+          className="text-dodger-blue-400 hover:text-dodger-blue-600 text-sm font-medium transition-colors"
+        >
+          View Detail
+        </Link>
       </div>
-      <div>
-        <div className="text-justify text-slate-400 text-light my-4">
-          {data?.description}
-        </div>
-        <div className="text-end text-blue-300 my-3">
-          <a href="#">View Detail</a>
-        </div>
-      </div>
-    </div>
+    </article>
   );
 }
 

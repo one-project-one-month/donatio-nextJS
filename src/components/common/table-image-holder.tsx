@@ -96,13 +96,13 @@ function TableImageHolder({ data }: TableImageHolderProps) {
               {data.length > 1 && (
                 <>
                   <button
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 text-white z-40 hover:text-gray-300"
+                    className="absolute left-[-100px] top-1/2 transform -translate-y-1/2 text-white z-40 hover:text-gray-300"
                     onClick={() => instanceRef.current?.prev()}
                   >
                     <ChevronLeft size={40} />
                   </button>
                   <button
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white z-40 hover:text-gray-300"
+                    className="absolute right-[-100px]  top-1/2 transform -translate-y-1/2 text-white z-40 hover:text-gray-300"
                     onClick={() => instanceRef.current?.next()}
                   >
                     <ChevronRight size={40} />

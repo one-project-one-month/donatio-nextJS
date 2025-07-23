@@ -3,10 +3,10 @@ import { getCurrentOrg } from "@/store/userStore";
 
 const currentOrg = getCurrentOrg();
 
-export const getTransactionData = async (type?: string, page?: number, pageSize?: number) => {
+export const getTransactionData = async (type?: string, page?: number, pageSize?: number, isUnlinked?: boolean) => {
   try {
     const response = await API.get(
-      `/organizations/${currentOrg}/transactions/?type=${type}&page=${page??1}&page_size=${pageSize}`
+      `/organizations/${currentOrg}/transactions/?type=${type}&page=${page??1}&page_size=${pageSize}&unlinked=${isUnlinked}`
     );
     return response.data;
   } catch (error) {

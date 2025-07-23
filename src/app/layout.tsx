@@ -32,18 +32,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${lexend.className} antialiased`}
       >
-        {/* <ThemeProvider
+        <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem={false}
-        > */}
+        >
           <QueryProvider>{children}</QueryProvider>
           <ToastProvider />
-        {/* </ThemeProvider> */}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -27,10 +27,6 @@ export function useChatSocket(
       console.log("❌ Socket closed");
     };
 
-    socket.onerror = (err) => {
-      console.error("💥 Socket error", err);
-    };
-
     return () => {
       socket.close();
     };
