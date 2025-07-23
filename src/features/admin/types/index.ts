@@ -1,5 +1,5 @@
-export type OrganizationResponse<
-  T = OrganizationRequest | VerifiedOrganization
+export type PaginatedResponse<
+  T = OrganizationRequest | VerifiedOrganization | Events
 > = {
   count: number;
   next: string | null;
@@ -7,9 +7,24 @@ export type OrganizationResponse<
   results: T[];
 };
 
-export interface Attachment {
+interface Attachment {
   id: string;
   file: string;
+}
+
+interface Admin {
+  id: string;
+  username: string;
+  email: string;
+}
+
+interface Organization {
+  id: string;
+  admin: Admin;
+  name: string;
+  phone_number: string | null;
+  email: string | null;
+  attachments: Attachment[];
 }
 
 export interface OrganizationRequest {
@@ -19,7 +34,7 @@ export interface OrganizationRequest {
   submitted_by: {
     username: string;
     email: string;
-  } | null;
+  };
   type: string;
   approved_by: string | null;
   approved_at: string | null;
@@ -31,7 +46,7 @@ export interface OrganizationRequest {
 export interface VerifiedOrganization {
   id: string;
   name: string;
-  admin: { id: string; username: string; email: string } | null;
+  admin: Admin;
   type: string;
   kpay_qr_url: string | null;
   description: string | null;
@@ -47,3 +62,15 @@ export type UpdatePayload = {
   id: string;
   status: "approved" | "rejected";
 };
+
+export interface Events {
+  id: string;
+  organization: Organization;
+  title: string;
+  status: string;
+  description: string;
+  target_amount: string;
+  attachments: Attachment[];
+  start_date: string;
+  end_date: string;
+}

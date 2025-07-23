@@ -2,15 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { DrawerClose, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
-import { VerifiedOrganization } from "@/features/admin/types";
+import { Events } from "@/features/admin/types";
 import { formatDate } from "@/utils/formatDate";
 import { X } from "lucide-react";
 
 interface Props {
-  org: VerifiedOrganization;
+  event: Events;
 }
 
-const DetailsDrawerContent = ({ org }: Props) => {
+const EventDetailsDrawer = ({ event }: Props) => {
   return (
     <div className="flex flex-col gap-4 p-4">
       <DrawerHeader className="p-0 pb-5">
@@ -23,21 +23,20 @@ const DetailsDrawerContent = ({ org }: Props) => {
       </DrawerHeader>
 
       <div className="space-y-6 px-3">
-        <Field label="Contact Person" value={org.admin?.username ?? "-"} />
-        <Field label="Submission Date" value={formatDate(org.created_at)} />
-        <Field label="Email" value={org.email ?? "-"} />
-        <Field label="Phone" value={org.phone_number ?? "-"} />
-        <Field label="Type" value={org.type} />
-        <Field label="Description" value={org.description ?? "-"} />
-        <Field label="Additional Info" value={org.additional_info ?? "-"} />
+        <Field label="Organization" value={event.organization.name} />
+        <Field label="Status" value={event.status} />
+        <Field label="Start Date" value={formatDate(event.start_date)} />
+        <Field label="End Date" value={formatDate(event.end_date)} />
+        <Field label="Target Amount" value={`$${event.target_amount}`} />
+        <Field label="Description" value={event.description} />
 
         <div>
           <div className="text-xs text-muted-foreground mb-1">
-            Uploaded Docs
+            Attachments
           </div>
           <div className="space-y-1">
-            {org.attachments.length > 0 ? (
-              org.attachments.map((a) => (
+            {event.attachments.length > 0 ? (
+              event.attachments.map((a) => (
                 <a
                   key={a.id}
                   href={a.file}
@@ -49,7 +48,7 @@ const DetailsDrawerContent = ({ org }: Props) => {
                 </a>
               ))
             ) : (
-              <div className="text-muted-foreground">No documents</div>
+              <div className="text-muted-foreground">No attachments</div>
             )}
           </div>
         </div>
@@ -65,4 +64,4 @@ const Field = ({ label, value }: { label: string; value: string }) => (
   </div>
 );
 
-export default DetailsDrawerContent;
+export default EventDetailsDrawer;
