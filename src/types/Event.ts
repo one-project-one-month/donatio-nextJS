@@ -1,8 +1,21 @@
 import { PaginationProps } from "@/types/Common";
 
+export type EventTableData = {
+  title: string;
+  start_date: string;
+  end_date: string;
+  target_amount: string;
+  status: string;
+};
 
-
-
+export type CreateEventPayload = {
+  title: string;
+  description: string;
+  target_amount: string;
+  attachments: File[];
+  start_date: string;
+  end_date: string;
+};
 
 export type Event = {
   id: string;
@@ -28,4 +41,4 @@ export type Event = {
 };
 
 
-export type GetAllEventsResponse = PaginationProps<Event>;
+export type EventsResponse = PaginationProps<Event>;
