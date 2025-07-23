@@ -1,6 +1,7 @@
 import logo from "@/assets/icons/profile.svg";
 import banner from "@/assets/image/userCoverPhoto.png";
 import { Button } from "@/components/ui/button";
+import AppConfig from "@/lib/appConfig";
 import { OrganizationProfile } from "@/types/Organization";
 import { Edit2 } from "lucide-react";
 import Image from "next/image";
@@ -10,8 +11,12 @@ interface ProfileProps {
 }
 
 const Profile = ({ data }: ProfileProps) => {
-  const coverImageUrl = data.attachments?.[1]?.file ?? banner;
-  const logoUrl = data.attachments?.[0]?.file ?? logo;
+  const coverImageUrl = data.attachments?.[1]?.file
+    ? `${AppConfig.BASE_ORIGIN}${data.attachments[0].file}`
+    : banner;
+  const logoUrl = data.attachments?.[0]?.file
+    ? `${AppConfig.BASE_ORIGIN}${data.attachments[1].file}`
+    : logo;
 
   return (
     <section aria-labelledby="profile-heading" className="space-y-8">

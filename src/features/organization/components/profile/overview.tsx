@@ -14,10 +14,9 @@ interface OverviewProps {
 }
 
 const Overview = ({ data }: OverviewProps) => {
-  const { stats } = data;
+  const { stats, total_donors } = data;
   const { data: eventsCount } = useOrganizationEventsQuery();
   const { data: activitiesCount } = useOrganizationActivitiesQuery();
-  const donorsCount = "1,000";
   return (
     <section aria-labelledby="overview-heading" className="space-y-4">
       <h2
@@ -52,7 +51,7 @@ const Overview = ({ data }: OverviewProps) => {
           value={activitiesCount ?? 0}
           label="Activities"
         />
-        <KpiCard icon={<UserIcon />} value={donorsCount} label="Donors" />
+        <KpiCard icon={<UserIcon />} value={total_donors ?? 0} label="Donors" />
       </div>
     </section>
   );

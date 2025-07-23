@@ -40,7 +40,10 @@ export type OrganizationProfile = {
   created_at: string;
   updated_at: string;
   attachments: Attachment[];
+  kpay_qr_image: string | null;
   stats: OrganizationStats;
+  total_donations: number;
+  total_donors: number;
 };
 
 export type Organization = {
