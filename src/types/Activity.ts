@@ -26,6 +26,11 @@ export type ActivityTransaction = {
   linked_at: string;
 }
 
+export type Attachment = {
+  id: string;
+  file: string;
+}
+
 export type Activity = {
   id: string;
   organization: Organization;
@@ -35,7 +40,7 @@ export type Activity = {
   created_at: string;
   updated_at: string;
   activity_transactions: ActivityTransaction[];
-  attachments: any[];
+  attachments: Attachment[];
 }
 
 

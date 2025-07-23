@@ -26,6 +26,7 @@ function TransactionTable({ data, isLoading }: TransactionTableProps) {
   
   const [ selectedData, setSelectedData ] = useState<Transaction>();
   const [ isOpenEdit, setIsOpenEdit ] = useState<boolean>(false);
+  const [isView, setIsView] = useState<boolean>(false);
 
   const { deleteTransaction } = useDeleteTransaction();
   const { upadateTransaction } = useUpadateTransactionData();
@@ -48,8 +49,17 @@ function TransactionTable({ data, isLoading }: TransactionTableProps) {
   //handle select initial data to edit
   const handleSelectTransaction = useCallback((data: Transaction) => {
 
+    setIsView(false);
     setSelectedData(data);
     setIsOpenEdit(true);
+
+  },[]);
+
+
+  const handleView = useCallback((data: Transaction) => {
+
+    handleSelectTransaction(data);
+    setIsView(true);
 
   },[]);
 
@@ -57,8 +67,8 @@ function TransactionTable({ data, isLoading }: TransactionTableProps) {
     <section className="overflow-x-auto max-w-full rounded-2xl border mt-8 relative">
       <Table>
         <TableHeader>
-          <TableRow className="h-20 bg-dodger-blue-50 hover:bg-dodger-blue-50">
-            <TableHead className="sticky min-w-[200px] text-base p-5 font-bold bg-dodger-blue-50 text-start left-0 z-10">
+          <TableRow className="h-20 bg-dodger-blue-50 dark:bg-neutral-950 hover:bg-dodger-blue-50">
+            <TableHead className="sticky min-w-[200px] text-base p-5 font-bold dark:bg-neutral-950 bg-dodger-blue-50 text-start left-0 z-10">
               Date
             </TableHead>
             <TableHead className="min-w-[200px] text-base font-bold text-start">
@@ -73,7 +83,7 @@ function TransactionTable({ data, isLoading }: TransactionTableProps) {
             <TableHead className="min-w-[200px] text-base font-bold text-start">
               Receipt
             </TableHead>
-            <TableHead className="sticky min-w-[200px] text-base font-bold text-center bg-dodger-blue-50 right-0 z-10">
+            <TableHead className="sticky min-w-[200px] text-base font-bold text-center dark:bg-neutral-950 bg-dodger-blue-50 right-0 z-10">
               Actions
             </TableHead>
           </TableRow>
@@ -87,6 +97,7 @@ function TransactionTable({ data, isLoading }: TransactionTableProps) {
                 handleDelete={handleDelete}
                 handleApprove={handleApprove}
                 handleEdit={handleSelectTransaction}
+                handleView={handleView}
               />
             ))
           ) : (
@@ -105,7 +116,7 @@ function TransactionTable({ data, isLoading }: TransactionTableProps) {
               <DialogHeader>
                 <DialogTitle className="text-primary text-2xl font-semibold">Edit Expenses</DialogTitle>
               </DialogHeader>
-              <TransactionExpenseEditForm initialData={selectedData?? null} setOpenEdit={setIsOpenEdit} />
+              <TransactionExpenseEditForm initialData={selectedData?? null} setOpenEdit={setIsOpenEdit} isView={isView} />
             </DialogContent>
         </Dialog>
     </section>

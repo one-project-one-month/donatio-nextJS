@@ -19,19 +19,7 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-let isRefreshing = false;
-let failedQueue: any[] = [];
-
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
-  });
-  failedQueue = [];
-};
+const { setAccessToken, logout } = useAuthStore.getState();
 
 API.interceptors.response.use(
   (response) => response,
@@ -39,61 +27,33 @@ API.interceptors.response.use(
     const originalRequest = error.config;
 
     if (
-      error.response &&
-      error.response.status === 401 &&
+      error.response?.status === 401 &&
       !originalRequest._retry
     ) {
-      if (isRefreshing) {
-        return new Promise(function (resolve, reject) {
-          failedQueue.push({ resolve, reject });
-        })
-          .then((token) => {
-            originalRequest.headers.Authorization = `JWT ${token}`;
-            return API(originalRequest);
-          })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
-      }
 
       originalRequest._retry = true;
-      isRefreshing = true;
 
       const refreshToken = getRefreshToken();
 
       if (!refreshToken) {
-        console.error("No refresh token found. Logging out.");
-        useAuthStore.getState().logout();
-        window.location.href = "/login";
+        logout();
         return Promise.reject(error);
       }
 
       try {
-        const response = await axios.post(
-          `${AppConfig.BASE_URL}/token/refresh/`,
-          {
-            refresh: refreshToken,
-          }
-        );
+        const response = await API.post(`/token/refresh/`, {
+          refresh: refreshToken,
+        });
 
         const newAccessToken = response.data.access;
+        setAccessToken(newAccessToken, refreshToken);
 
-        // update Zustand store with new access token
-        useAuthStore.getState().setAccessToken(newAccessToken, refreshToken);
-
-        API.defaults.headers.Authorization = `JWT ${newAccessToken}`;
-        originalRequest.headers.Authorization = `JWT ${newAccessToken}`;
-
-        processQueue(null, newAccessToken);
+        API.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return API(originalRequest);
       } catch (err) {
-        processQueue(err, null);
-        console.error("Refresh token invalid. Logging out.");
-        useAuthStore.getState().logout();
-        window.location.href = "/login";
+        logout();
         return Promise.reject(err);
-      } finally {
-        isRefreshing = false;
       }
     }
 

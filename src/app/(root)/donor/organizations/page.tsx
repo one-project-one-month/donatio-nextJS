@@ -26,7 +26,7 @@ function page() {
 
 
   return (
-    <div className="max-w-7xl mx-auto px-5 md:px-12 py-5">
+    <div className="max-w-7xl mx-auto px-5 py-5">
         <OrganizationListingHeader />
         { isLoading ? <OrganizationListingSkeleton /> : <OrganizationListing data={organizations} page={page} />}
     </div>

@@ -1,12 +1,11 @@
-"use client";
-
+// /hooks/useChatSocket.ts
 import createSocket from "@/lib/api/socket";
-import { showToast } from "@/lib/toast";
 import useChatStore from "@/store/chatStore";
-import { Message } from "@/types/Chat";
 import { useEffect, useRef } from "react";
 
-function useChatSocket(id: string) {
+export function useChatSocket(
+  id: string,
+) {
 
   const { addMessage } = useChatStore();
   const socketRef = useRef<WebSocket | null>(null);
@@ -16,36 +15,31 @@ function useChatSocket(id: string) {
     socketRef.current = socket;
 
     socket.onopen = () => {
-      console.log("Web socket connected");
+      console.log("✅ Socket opened");
     };
 
-    socket.onmessage = (e) => {
-      const data = JSON.parse(e.data);
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
       addMessage(data);
     };
 
     socket.onclose = () => {
-      console.log("WebSocket closed ❌");
+      console.log("❌ Socket closed");
     };
 
-    socket.onerror = (err) => {
-      console.error("WebSocket error:", err);
-      showToast.error("Socket Error!!")
+    return () => {
+      socket.close();
     };
-
-    return () => socket.close();
   }, [id]);
 
-
-
-
-  const sendMessage = (message: Message) => {
-    if(socketRef.current?.readyState === WebSocket.OPEN) {
-        socketRef.current.send(JSON.stringify({ message }));
+  const send = (data: any) => {
+    const socket = socketRef.current;
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(data));
+    } else {
+      console.warn("❌ Cannot send, socket not open");
     }
-  }
+  };
 
-  return { sendMessage };
+  return { send };
 }
-
-export default useChatSocket;

@@ -1,4 +1,8 @@
 import API from "@/lib/api/axios";
+import { getCurrentOrg } from "@/store/userStore";
+
+
+const currentOrg = getCurrentOrg();
 
 
 type CreateServiceProps = {
@@ -23,7 +27,7 @@ type DeleteServiceProps = {
 
 export const createOrganizationActivityService = async({ data }: CreateServiceProps) => {
     try {
-        const response = await API.post("/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/activities/", data);
+        const response = await API.post(`/organizations/${currentOrg}/activities/`, data);
         return response.data;
     } catch (error) {
         console.error("Error create activity data:", error);
@@ -34,7 +38,7 @@ export const createOrganizationActivityService = async({ data }: CreateServicePr
 
 export const getOrganizationActivityService = async ({ page, page_size}: GetServiceProps) => {
     try {
-        const response = await API.get(`/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/activities/?page=${page??1}&page_size=${page_size}`);
+        const response = await API.get(`/organizations/${currentOrg}/activities/?page=${page??1}&page_size=${page_size}`);
         return response.data;
 
     } catch(error) {
@@ -45,7 +49,7 @@ export const getOrganizationActivityService = async ({ page, page_size}: GetServ
 
 export const updateOrganizationActivityService = async ({ id, data}: UpdateServiceProps) => {
     try {
-        const response = await API.patch(`/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/activities/${id}/`, data);
+        const response = await API.patch(`/organizations/${currentOrg}/activities/${id}/`, data);
         return response.data;
 
     } catch(error) {
@@ -56,7 +60,7 @@ export const updateOrganizationActivityService = async ({ id, data}: UpdateServi
 
 export const deleteOrganizationActivityService = async({ id }: DeleteServiceProps) => {
     try {
-        const response = await API.delete(`/organizations/ce379294-7cd3-4b36-93ea-67c663f2cb28/activities/${id}/`);
+        const response = await API.delete(`/organizations/${currentOrg}/activities/${id}/`);
         return response.data;
 
     } catch(error) {

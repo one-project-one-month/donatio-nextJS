@@ -39,7 +39,7 @@ function OrganizationListingHeader() {
       </div>
       </div>
       
-      <p className="mt-2 text-gray-400 max-w-3xl mb-3">
+      <p className="mt-2 text-neutral-400 max-w-3xl mb-3">
         Browse and manage the list of organizations available on the platform.
         Here you can view details, search, and connect with organizations for
         donations and collaborations.

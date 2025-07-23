@@ -1,6 +1,6 @@
 "use client";
 import BreadCrumbUI from "@/components/common/breadcrumb-ui";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import userCoverPhoto from "@/assets/image/userCoverPhoto.png";
 import { Pencil, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,8 +16,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import useAuthStore from "@/store/useAuthStore";
 import API from "@/lib/api/axios";
+import { useGetUser } from "@/features/user/hooks/donor-user-queries";
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const page = () => {
   type Attachment = {
@@ -27,7 +38,7 @@ const page = () => {
 
   type Donation = {
     id: string;
-    organization: string;
+    organization: any;
     actor: string;
     event: string | null;
     title: string;
@@ -42,6 +53,10 @@ const page = () => {
 
   const [lists, setLists] = useState<Donation[]>([]);
 
+  const { data: user } = useGetUser();
+
+
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -55,8 +70,46 @@ const page = () => {
     getUserInfo();
   }, []);
 
-  const userInfo = useAuthStore((state) => state.userInfo);
 
+  interface FormState {
+    full_name: string;
+    phone_number: string;
+    profile_picture: File | null;
+  }
+  const [form, setForm] = useState<FormState>({
+    full_name: "",
+    phone_number: "",
+    profile_picture: null,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleForm = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      setIsSubmitting(true);
+
+      const formData = new FormData();
+      formData.append("full_name", form.full_name);
+      formData.append("phone_number", form.phone_number);
+      if (form.profile_picture) {
+        formData.append("profile_picture", form.profile_picture);
+      }
+
+      const response = await API.put("/auth/users/me/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(response.data);
+
+      setIsSubmitting(false);
+    } catch (error) {
+      setIsSubmitting(false);
+      console.error(error);
+    }
+  };
   return (
     <div className="px-4 pt-10">
       <BreadCrumbUI
@@ -76,22 +129,95 @@ const page = () => {
           <div className="flex items-center gap-4">
             <Avatar className="w-16 h-16">
               <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>{userInfo?.username?.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
             </Avatar>
 
             <div className="">
-              <div>{userInfo?.username}</div>
-              <div className="text-gray-500">{userInfo?.email}</div>
+              <div>{user?.username}</div>
+              <div className="text-gray-500">{user?.email}</div>
             </div>
           </div>
 
           <div className="flex flex-col gap-4 items-end">
-            <Button className="bg-white/0 text-gray-500 shadow-none hover:bg-white/0 cursor-pointer w-fit rounded-full py-6 ">
-              <Pencil /> <div className="text-lg font-normal">Edit info</div>
-            </Button>
+            <Dialog>
+              <DialogTrigger className="bg-white/0 text-gray-500 flex space-x-2 justify-center items-center shadow-none hover:bg-white/0 cursor-pointer w-fit rounded-full py-6 ">
+                  <Pencil />
+                  <div className="text-lg font-normal">Edit info</div>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit Profile</DialogTitle>
+                  <DialogDescription>
+                    Make changes to your profile here. Click save when you are
+                    done.
+                  </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleForm} className="flex flex-col gap-4">
+                  <div>
+                    <label htmlFor="full_name">Fullname</label>
+                    <Input
+                      type="text"
+                      name="full_name"
+                      className="mt-2"
+                      placeholder="fullname"
+                      value={form.full_name}
+                      onChange={(e) =>
+                        setForm({ ...form, full_name: e.target.value })
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="phone_number">Phone Number</label>
+                    <Input
+                      type="number"
+                      name="phone_number"
+                      className="mt-2"
+                      placeholder="+ 848380"
+                      value={form.phone_number}
+                      onChange={(e) =>
+                        setForm({ ...form, phone_number: e.target.value })
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="profile_picture">Profile Picture</label>
+                    <Input
+                      type="file"
+                      name="profile_picture"
+                      className="mt-2"
+                      onChange={(e) => {
+                        const file = e.target.files && e.target.files[0];
+                        setForm({ ...form, profile_picture: file || null });
+                      }}
+                    />
+                  </div>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button
+                        variant="outline"
+                        className="cursor-pointer"
+                        type="button"
+                      >
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                    <Button
+                      type="submit"
+                      className="cursor-pointer"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Saving..." : "Save Changes"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
             <Button className="rounded-full py-6 cursor-pointer">
               <img src={profile.src} alt="icon" />
-              <div className="text-lg font-normal"> Become an admin</div>
+              <div className="text-lg font-normal">Become an admin</div>
             </Button>
           </div>
         </div>
@@ -136,10 +262,20 @@ const page = () => {
                       <TableCell className="pl-10 py-6">{date}</TableCell>
                       <TableCell className="py-6">{time}</TableCell>
                       <TableCell className="py-6">
-                        {/* {list?.organization?} */}
+                        {list?.organization?.name}
                       </TableCell>
                       <TableCell className="py-6">{list?.amount}</TableCell>
-                      <TableCell className="py-6">{list?.status}</TableCell>
+                      <TableCell className="py-6">
+                        <span
+                          className={`py-2 px-4 rounded-full ${
+                            list?.status === "success"
+                              ? "text-[#00D018] bg-[#F3FFF4]"
+                              : "text-[#d0a300] bg-[#fffcf3]"
+                          }`}
+                        >
+                          {list?.status}
+                        </span>
+                      </TableCell>
                     </TableRow>
                   );
                 })}

@@ -3,6 +3,7 @@ import { DonateFormData } from "../form/donate-form-popup";
 import { getDonateFormData } from "@/store/donateStore";
 import { Event } from "../../../../types/Event";
 import { Image } from "lucide-react";
+import Link from "next/link";
 
 
 function EventListingCard({
@@ -30,7 +31,7 @@ function EventListingCard({
   };
 
   return (
-    <div className="md:my-0 my-3 flex flex-col justify-between max-h-[600px] max-w-[500px]  transition-all duration-300 ">
+    <Link href={`/donor/events/${data.id}`} className="md:my-0 my-3 flex flex-col justify-between max-h-[600px] max-w-[500px]  transition-all duration-300 ">
       <div className="rounded-lg  overflow-hidden">
         {
           data.attachments.length > 0 ? (
@@ -60,7 +61,7 @@ function EventListingCard({
       </div>
       {/* Button to donate */}
       <Button onClick={handlePopUp}>Donate Now</Button>
-    </div>
+    </Link>
   );
 }
 

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { DrawerClose, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
-import { VerifiedOrganization } from "@/features/admin/types/admin";
+import { VerifiedOrganization } from "@/features/admin/types";
 import { formatDate } from "@/utils/formatDate";
 import { X } from "lucide-react";
 

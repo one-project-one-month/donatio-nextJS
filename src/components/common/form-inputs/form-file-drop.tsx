@@ -48,6 +48,7 @@ function FormFileDropZone<T extends FieldValues>({
   type,
   wrapperClass,
   labelClass,
+  disabled = false, // Default to false
   defaultFiles = [],
   ...props
 }: FormFileDropZoneProps<T>) {
@@ -56,6 +57,7 @@ function FormFileDropZone<T extends FieldValues>({
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const handleClearFile = (index: number) => {
+    if (disabled) return;
     const newFiles = files.filter((_, i) => i !== index);
     setFiles(newFiles);
     form.setValue(name, newFiles as any);
@@ -67,10 +69,12 @@ function FormFileDropZone<T extends FieldValues>({
       "image/png": [],
     },
     onDrop: (dropped) => {
+      if (disabled) return;
       const newFiles = [...files, ...dropped];
       setFiles(newFiles);
       form.setValue(name, newFiles as any);
     },
+    disabled,
   });
 
   return (
@@ -86,16 +90,20 @@ function FormFileDropZone<T extends FieldValues>({
           <FormControl>
             <div
               {...getRootProps()}
-              className={`relative border-dashed border-2 text-center cursor-pointer rounded-lg ${
-                isDragActive && "border-primary"
-              }`}
+              className={cn(
+                "relative border-dashed border-2 text-center rounded-lg",
+                isDragActive && "border-primary",
+                disabled ? "cursor-not-allowed bg-muted/50" : "cursor-pointer"
+              )}
             >
               <Input
                 {...getInputProps()}
                 multiple
+                disabled={disabled}
                 className={cn(
                   "border-gray-300 rounded-lg transition-all pr-10",
-                  props.className
+                  props.className,
+                  disabled && "pointer-events-none opacity-50"
                 )}
               />
 
@@ -127,54 +135,57 @@ function FormFileDropZone<T extends FieldValues>({
                             ? file.name.slice(0, 15) + "..."
                             : file.name}
                         </p>
-                        <div className="absolute right-2 top-2 flex gap-1 z-10">
-                          <Dialog
-                            open={isPreviewOpen && previewFile === file}
-                            onOpenChange={(open) => {
-                              setIsPreviewOpen(open);
-                              if (!open) setPreviewFile(null);
-                            }}
-                          >
-                            <DialogTrigger
-                              asChild
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setPreviewFile(file);
-                                setIsPreviewOpen(true);
+                        {
+                          <div className="absolute right-2 top-2 flex gap-1 z-10">
+                            <Dialog
+                              open={isPreviewOpen && previewFile === file}
+                              onOpenChange={(open) => {
+                                setIsPreviewOpen(open);
+                                if (!open) setPreviewFile(null);
                               }}
                             >
-                              <Button size="sm" variant="secondary">
-                                Preview
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent
-                              onClick={(e) => e.stopPropagation()}
-                              className="max-w-[90vw] max-h-[90vh] p-0 overflow-hidden"
-                            >
-                              <DialogTitle></DialogTitle>
-                              <div className="relative w-full h-[80vh]">
-                                <Image
-                                  src={imageUrl}
-                                  alt="Full image preview"
-                                  fill
-                                  className="object-contain"
-                                />
-                              </div>
-                            </DialogContent>
-                          </Dialog>
+                              <DialogTrigger
+                                asChild
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPreviewFile(file);
+                                  setIsPreviewOpen(true);
+                                }}
+                              >
+                                <Button size="sm" variant="secondary">
+                                  Preview
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent
+                                onClick={(e) => e.stopPropagation()}
+                                className="max-w-[90vw] max-h-[90vh] p-0 overflow-hidden"
+                              >
+                                <DialogTitle></DialogTitle>
+                                <div className="relative w-full h-[80vh]">
+                                  <Image
+                                    src={imageUrl}
+                                    alt="Full image preview"
+                                    fill
+                                    className="object-contain"
+                                  />
+                                </div>
+                              </DialogContent>
+                            </Dialog>
 
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleClearFile(index);
-                            }}
-                          >
-                            <Trash2 />
-                          </Button>
-                        </div>
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              disabled={disabled}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleClearFile(index);
+                              }}
+                            >
+                              <Trash2 />
+                            </Button>
+                          </div>
+                        }
                       </div>
                     );
                   })}

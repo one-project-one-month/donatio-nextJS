@@ -43,7 +43,7 @@ export const useUpadateActivity = () => {
 
     const queryClient = useQueryClient();
 
-    const { mutate: updateActivity } = useMutation({
+    const { mutateAsync: updateActivity } = useMutation({
         mutationFn: ({ id, data}: {id: string, data: any}) => updateOrganizationActivityService({id, data}),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['activities'], exact: false});

@@ -34,7 +34,8 @@ const TransactionAttachmentInput = ({
   const { data: responseData, isLoading } = useGetTransactionData(
     "disbursement",
     page,
-    5
+    5,
+    true
   );
 
   const toggle = (val: TempSelectedTransaction) => {

@@ -6,8 +6,8 @@ import Pagination from "@/features/admin/components/pagination";
 import {
   useOrganizationRequests,
   useUpdateOrganizationRequest,
-} from "@/features/admin/queries/useOrganizationRequests";
-import { OrganizationRequest } from "@/features/admin/types/admin";
+} from "@/features/admin/hooks/organization.queries";
+import { OrganizationRequest } from "@/features/admin/types";
 import { formatDate } from "@/utils/formatDate";
 import { Check, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -110,7 +110,6 @@ const PendingOrganizationsPage = () => {
   return (
     <div className="p-10">
       <OrganizationTable<OrganizationRequest>
-        title="Pending Organizations"
         data={data?.results ?? []}
         columns={columns}
         isLoading={isLoading}

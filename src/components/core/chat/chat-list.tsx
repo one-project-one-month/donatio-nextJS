@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import useChatStore from "@/store/chatStore";
 import type { ChatList } from "@/types/Chat";
 import { Image } from "lucide-react";
 import Link from "next/link";
@@ -15,10 +16,12 @@ type ChatListProps = {
 function ChatList({ data, isDonor }: ChatListProps) {
 
   const [ openIdx, setOpenIdx ] = useState<number | null>(null);
+  const { setMessage } = useChatStore();
 
 
-  const handleCurrentChat = (idx: number) => {
+  const handleCurrentChat = async (idx: number, id: string) => {
     setOpenIdx(idx);
+    setMessage([]);
   }
 
 
@@ -29,10 +32,10 @@ function ChatList({ data, isDonor }: ChatListProps) {
         return (
           <Link
             href={`${isDonor ? "/donor" : "/organization"}/chat/${list.id}`}
-            onClick={() => handleCurrentChat(i)}
+            onClick={() => handleCurrentChat(i, list.id)}
             key={i}
-            className={`flex justify-start items-center cursor-default border-b hover:bg-gray-100 border-black/5 p-2 relative ${
-              i === openIdx && "bg-gray-100"
+            className={`flex justify-start items-center cursor-default border-b hover:bg-neutral-100 dark:hover:bg-neutral-900 border-black/5 p-2 relative ${
+              i === openIdx && "bg-neutral-100 dark:bg-neutral-900"
             }`}
           >
             <div className="p-3">
@@ -40,11 +43,7 @@ function ChatList({ data, isDonor }: ChatListProps) {
             </div>
             <div className="p-3">
               <h2 className="font-semibold">{list.name}</h2>
-              <p className="text-sm text-neutral-600">Last message field</p>
             </div>
-            <Badge className="absolute h-5 w-5 right-2 top-2 rounded-full">
-              1
-            </Badge>
           </Link>
         );
       })}

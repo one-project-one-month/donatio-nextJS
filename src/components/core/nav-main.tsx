@@ -61,7 +61,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
                       type="button"
                       className={`flex w-full items-center gap-4 py-8 px-4 text-base ${
                     isOpen &&
-                    "bg-dodger-blue-50 text-primary hover:bg-dodget-blue-50 hover:text-primary"
+                    "bg-dodger-blue-50 dark:bg-neutral-800 text-primary hover:bg-dodget-blue-50 hover:text-primary"
                   }`}
                       onClick={() => toggleSection(idx)}
                       aria-expanded={isOpen}
@@ -110,7 +110,7 @@ export function NavMain({ items }: { items: NavItem[] }) {
                   onClick={() => toggleSection(idx)}
                   className={`flex items-center gap-4 py-8 px-4 text-base ${
                     isOpen &&
-                    "bg-dodger-blue-50 text-primary hover:bg-dodget-blue-50 hover:text-primary"
+                    "bg-dodger-blue-50 dark:bg-neutral-800 text-primary hover:bg-dodget-blue-50 hover:text-primary"
                   }`}
                 >
                   <Link href={item.url}>

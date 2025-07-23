@@ -59,7 +59,7 @@ const Page: React.FC = () => {
       useAuthStore.getState().setAccessToken(access, refresh);
 
       setIsSubmitting(false);
-      router.push("/");
+      router.push("/donor/events");
     } catch (error: any) {
       const errorData = error.response?.data;
       setIsError(errorData);

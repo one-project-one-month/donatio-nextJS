@@ -4,7 +4,7 @@ import { Facebook, Instagram, Linkedin } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="py-8 text-sm bg-dodget-blue-25 border-t">
+    <footer className="py-8 text-sm bg-dodget-blue-25 dark:bg-neutral-950 border-t">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-5 md:px-12 py-8">
         <div className="flex flex-col space-y-5 items-start">
           <LogoName />

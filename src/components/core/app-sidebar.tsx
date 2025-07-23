@@ -27,11 +27,6 @@ type NavMainItem = {
 };
 
 type AppSidebarData = {
-    user: {
-        name: string;
-        email: string;
-        avatar: string;
-    };
     navMain: NavMainItem[];
 };
 
@@ -59,7 +54,7 @@ export function AppSidebar({ sidebarData, ...props }: AppSidebarProps) {
         <NavMain items={sidebarData.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={sidebarData.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

@@ -1,6 +1,10 @@
 import { MessageCircle } from "lucide-react";
 
 function Page() {
+    
+
+
+
     return (
         <div className="flex flex-col border rounded-2xl items-center justify-center h-full w-full text-center">
             <MessageCircle size={64} className="text-primary mb-4" />
