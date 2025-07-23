@@ -70,7 +70,7 @@ const page = () => {
     getUserInfo();
   }, []);
 
-  const userInfo = useAuthStore((state) => state.userInfo);
+
   interface FormState {
     full_name: string;
     phone_number: string;
@@ -140,11 +140,9 @@ const page = () => {
 
           <div className="flex flex-col gap-4 items-end">
             <Dialog>
-              <DialogTrigger>
-                <Button className="bg-white/0 text-gray-500 shadow-none hover:bg-white/0 cursor-pointer w-fit rounded-full py-6 ">
+              <DialogTrigger className="bg-white/0 text-gray-500 shadow-none hover:bg-white/0 cursor-pointer w-fit rounded-full py-6 ">
                   <Pencil />
                   <div className="text-lg font-normal">Edit info</div>
-                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
