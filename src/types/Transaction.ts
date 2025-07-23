@@ -1,3 +1,4 @@
+import { Attachment } from "./Activity";
 import { PaginationProps } from "./Common";
 
 
@@ -11,10 +12,24 @@ export type TransactionAttachment = {
   file: string;
 }
 
+type Organization = {
+  id: string;
+  admin: string;
+  name: string;
+  attachments: Attachment[];
+}
+
+type Actor = {
+  id: string;
+  username: string;
+  email: string;
+  profile: any | null;
+}
+
 export type Transaction = {
   id: string;
-  organization: string;
-  actor: string;
+  organization: Organization;
+  actor: Actor;
   event: string;
   title: string;
   amount: string;

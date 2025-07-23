@@ -61,8 +61,6 @@ function ActivityCreateForm() {
       formData.append('uploaded_attachments', file);
     }
 
-    console.log(formData.entries())
-
     await createActivity(formData);
     form.reset();
   };
@@ -78,7 +76,7 @@ function ActivityCreateForm() {
             form={form}
             name="title"
             label="Title"
-            labelClass="md:text-lg font-semibold mb-1"
+            labelClass="md:text-lg font-semibold mb-1 dark:text-white"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
             placeholder="Enter activity title"
@@ -88,7 +86,7 @@ function ActivityCreateForm() {
             form={form}
             name="location"
             label="Location"
-            labelClass="md:text-lg font-semibold mb-1"
+            labelClass="md:text-lg font-semibold mb-1 dark:text-white"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
             placeholder="Enter activity location"
@@ -109,7 +107,7 @@ function ActivityCreateForm() {
             type="file"
             form={form}
             label={
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 dark:text-white">
                 <FilePlus2 className="w-5 h-5 text-primary" />
                 Add Activity Photos
               </span>
@@ -122,7 +120,7 @@ function ActivityCreateForm() {
             form={form}
             name="description"
             label="Descripiton"
-            labelClass="md:text-lg font-semibold mb-1"
+            labelClass="md:text-lg font-semibold mb-1 dark:text-white"
             wrapperClass="mb-5 mb:mb-3"
             placeholder="Enter detail content"
             className="h-12"

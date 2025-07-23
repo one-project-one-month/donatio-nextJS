@@ -4,8 +4,8 @@ function ActivityListingSkeleton() {
   return (
     <div>
       <div className="p-5">
-        {Array.from({ length: 4 }).map((activity) => (
-          <div className="w-full rounded-2xl shadow-sm p-3 my-10 cursor-default animate-pulse">
+        {Array.from({ length: 4 }).map((_, idx) => (
+          <div key={idx} className="w-full rounded-2xl shadow-sm p-3 my-10 cursor-default animate-pulse">
             {/* Tags section */}
             <div className="flex md:justify-end justify-end mb-3">
               <Skeleton className="h-6 w-24 ms-3 md:px-5 hidden sm:flex rounded" />

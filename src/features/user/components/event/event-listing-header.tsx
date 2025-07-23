@@ -10,7 +10,7 @@ function EventListingHeader() {
 
         <EventSearchBox />
       </div>
-      <p className="mt-2 text-gray-400 max-w-2xl mb-3">
+      <p className="mt-2 text-neutral-400 max-w-2xl mb-3">
         Discover upcoming and ongoing events. Explore details, participate, and
         support causes that matter to you.
       </p>

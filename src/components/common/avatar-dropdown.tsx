@@ -1,5 +1,8 @@
-import { LogOutIcon, UserCircleIcon } from "lucide-react";
-
+import {
+  LogOutIcon,
+  UserCircleIcon,
+  Building2Icon,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -8,13 +11,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import useAuthStore from "@/store/useAuthStore";
+import { useGetUser } from "@/features/user/hooks/donor-user-queries";
+import { useRouter } from "next/navigation";
+import useUserStore from "@/store/userStore";
 
 const AvatarDropdown = () => {
-  const userInfo = useAuthStore((state) => state.userInfo);
+  const { data: user } = useGetUser();
+  const { setCurrentOrg } = useUserStore();
+  const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
+  const clearUser = useUserStore((s) => s.clearUserStore);
+
+  const handleOrgSwitch = (orgId: string) => {
+    setCurrentOrg(orgId);
+    router.push(`/organization/events`);
+  };
 
   return (
     <DropdownMenu>
@@ -22,19 +37,17 @@ const AvatarDropdown = () => {
         <div className="flex justify-center items-center space-x-3">
           <Avatar>
             <AvatarImage
-              src={
-                userInfo.profile
-                  ? userInfo.profile
-                  : "https://github.com/shadcn.png"
-              }
-              alt="@shadcn"
+              src={user?.profile || "https://github.com/shadcn.png"}
+              alt="@avatar"
             />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>
+              {user?.username?.charAt(0)?.toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <div className="md:grid flex-1 text-left text-sm leading-tight hidden">
-            <span className="truncate font-medium">{userInfo?.username}</span>
+            <span className="truncate font-medium">{user?.username}</span>
             <span className="truncate text-xs text-muted-foreground">
-              {userInfo?.email}
+              {user?.email}
             </span>
           </div>
         </div>
@@ -47,15 +60,42 @@ const AvatarDropdown = () => {
       >
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href={"/donor/profile"} className="cursor-pointer">
-              <UserCircleIcon />
+            <Link href="/donor/profile" className="cursor-pointer">
+              <UserCircleIcon className="mr-2 h-4 w-4" />
               Account
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
+
+        {/* Organization Role Switch */}
+        {user && user?.organizations?.length > 0 && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>Switch to Organization</DropdownMenuLabel>
+
+            {user?.organizations.map((org: any) => (
+              <DropdownMenuItem
+                key={org.id}
+                className="cursor-pointer"
+                onClick={() => handleOrgSwitch(org.id)}
+              >
+                <Building2Icon className="mr-2 h-4 w-4" />
+                {org.name}
+              </DropdownMenuItem>
+            ))}
+          </>
+        )}
+
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onClick={() => logout()}>
-          <LogOutIcon />
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => {
+            logout();
+            clearUser();
+            router.push("/login");
+          }}
+        >
+          <LogOutIcon className="mr-2 h-4 w-4" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

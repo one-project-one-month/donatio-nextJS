@@ -34,8 +34,8 @@ function ChatList({ data, isDonor }: ChatListProps) {
             href={`${isDonor ? "/donor" : "/organization"}/chat/${list.id}`}
             onClick={() => handleCurrentChat(i, list.id)}
             key={i}
-            className={`flex justify-start items-center cursor-default border-b hover:bg-gray-100 border-black/5 p-2 relative ${
-              i === openIdx && "bg-gray-100"
+            className={`flex justify-start items-center cursor-default border-b hover:bg-neutral-100 dark:hover:bg-neutral-900 border-black/5 p-2 relative ${
+              i === openIdx && "bg-neutral-100 dark:bg-neutral-900"
             }`}
           >
             <div className="p-3">
