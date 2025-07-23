@@ -58,3 +58,9 @@ export type ChatHistory = {
 }
 
 export type GetAllChatResponse = PaginationProps<Chat>;
+
+
+export type StartChatResponse = {
+  created: boolean;
+  chat_id: string;
+}

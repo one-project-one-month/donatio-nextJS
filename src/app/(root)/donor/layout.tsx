@@ -4,35 +4,22 @@ import Footer from "@/components/core/Footer";
 import UserNavbar from "@/components/core/user-navbar";
 import DonationBanner from "@/features/user/components/banner/donation-banner";
 import SearchSection from "@/features/user/components/search/search-section";
-import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { ReactNode } from "react";
 import useAuth from "@/hooks/use-auth";
-import { getCurrentOrg } from "@/store/userStore";
 
 function UserLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const hideExtras =
     (pathname.includes("/events/") && pathname !== "/events") ||
     (pathname.includes("/chat") && pathname !== "/chat") ||
     (pathname.includes("/profile") && pathname !== "/profile") ||
-    (pathname.includes("/activities/") && pathname !== "/activities");
+    (pathname.includes("/activities/") && pathname !== "/activities") ||
+    (pathname.includes("/organizations") && pathname !== "/organizations");
 
   const isProfile = pathname.includes("/profile") && pathname !== "/profile";
 
   useAuth();
-
-  // useEffect(() => {
-  //   const getUserInfo = async () => {
-  //     try {
-  //       const response = await API.get("/auth/users/me/");
-  //       setUserInfo(response.data);
-  //     } catch (err) {
-  //       console.error("Failed to fetch user info:", err);
-  //     }
-  //   };
-  //   getUserInfo();
-  // }, []);
 
   return (
     <>
