@@ -43,11 +43,7 @@ function ChatList({ data, isDonor }: ChatListProps) {
             </div>
             <div className="p-3">
               <h2 className="font-semibold">{list.name}</h2>
-              <p className="text-sm text-neutral-600">Last message field</p>
             </div>
-            <Badge className="absolute h-5 w-5 right-2 top-2 rounded-full">
-              1
-            </Badge>
           </Link>
         );
       })}
