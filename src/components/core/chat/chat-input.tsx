@@ -2,23 +2,33 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useGetUser } from "@/features/user/hooks/donor-user-queries";
+import { getCurrentOrg, getUser } from "@/store/userStore";
 import { MessageInput } from "@/types/Chat";
 import { Send } from "lucide-react";
 import React, { useState } from "react";
 
 type ChatInputProps = {
   sendMessage: (data: MessageInput) => void;
-  type: 'organization' | 'donar';
+  type: 'organization' | 'donor';
 };
 
 function ChatInput({ sendMessage, type }: ChatInputProps) {
   const [input, setInput] = useState("");
 
+
+  const currentOrg = getCurrentOrg()?? "";
+  const currentUser = getUser()?? "";
+
+
   const handleSendMessage = () => {
+
+    console.log(currentUser);
+
     if (input.trim()) {
       const data: MessageInput = {
         message: input,
-        sender_id: "ce379294-7cd3-4b36-93ea-67c663f2cb28",
+        sender_id: type === 'donor' ? currentUser: currentOrg,
         sender_type: type,
       };
 

@@ -67,7 +67,7 @@ function DateDivider({ label }: { label: string }) {
 }
 
 type ChatMessageBoxProps = {
-  type: "organization" | "donar";
+  type: "organization" | "donor";
   history: ChatHistory[] | null;
 };
 

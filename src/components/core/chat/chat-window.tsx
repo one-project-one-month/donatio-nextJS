@@ -5,7 +5,7 @@ import { ChatHistory, MessageInput } from "@/types/Chat"
 
 
 type ChatWindowProps = {
-  type: 'organization' | 'donar'
+  type: 'organization' | 'donor'
   sendMessage: (data: MessageInput) => void;
   history: ChatHistory[] |  null;
 }

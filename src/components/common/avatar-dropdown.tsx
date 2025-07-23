@@ -1,8 +1,4 @@
-import {
-  LogOutIcon,
-  UserCircleIcon,
-  Building2Icon,
-} from "lucide-react";
+import { LogOutIcon, UserCircleIcon, Building2Icon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -27,11 +23,9 @@ const AvatarDropdown = () => {
   const logout = useAuthStore((state) => state.logout);
   const clearUser = useUserStore((s) => s.clearUserStore);
 
-            const queryClient = useQueryClient();
-
+  const queryClient = useQueryClient();
 
   const handleOrgSwitch = (orgId: string) => {
-
     setCurrentOrg(orgId);
     router.push(`/organization/events`);
   };
@@ -95,11 +89,7 @@ const AvatarDropdown = () => {
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() => {
-
-
-
-            queryClient.invalidateQueries({queryKey: ['user']});
-
+            queryClient.invalidateQueries({ queryKey: ["user"] });
 
             logout();
             clearUser();

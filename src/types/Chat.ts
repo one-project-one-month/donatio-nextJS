@@ -31,7 +31,7 @@ export type Sender = {
 
 export type MessageInput = {
   message: string;
-  sender_type: 'organization' | 'donar';
+  sender_type: 'organization' | 'donor';
   sender_id: string;
 };
 
