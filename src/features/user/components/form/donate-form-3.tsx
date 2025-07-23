@@ -7,8 +7,9 @@ import FormInput from "@/components/common/form-inputs/form-inputs";
 import { Button } from "@/components/ui/button";
 import { DonateFormData } from "./donate-form-popup";
 import FormFileDropZone from "@/components/common/form-inputs/form-file-drop";
-import { useState } from "react";
-import { FilePlus2, Image, Trash2 } from "lucide-react";
+import { FilePlus2 } from "lucide-react";
+import { useCreateTransaction } from "../../hooks/donor-transaction-queries";
+import { getDonateFormData, getEventId, getOrgId } from "@/store/donateStore";
 
 const formOneSchema = z.object({
   organization: z
@@ -31,39 +32,59 @@ const formOneSchema = z.object({
   phoneNumber: z
     .string()
     .regex(/^\d{10,15}$/, "Phone Number must be 10-15 digits"),
-  screenShot: z
-    .instanceof(File)
-    .refine((file) => file.type === "image/jpeg" || file.type === "image/png", {
-      message: "File must be a JPG or PNG image",
-    }),
+  screenShot: z.any().refine((val) => {
+    return (
+      val && val.length > 0 && val.every((file: File) => file instanceof File)
+    );
+  }, "Image shouldn't be empty"),
 });
 
 type formOneValue = z.infer<typeof formOneSchema>;
 
 type DonateForm3Props = {
-  formData: DonateFormData;
+  formData: DonateFormData | null;
 };
 
-function DonateForm3({ formData }: DonateForm3Props) {
+function DonateForm3({ formData: donateFormData }: DonateForm3Props) {
+  const { makeTransaction, isSuccess } = useCreateTransaction();
+
   const form = useForm<formOneValue>({
     resolver: zodResolver(formOneSchema),
     defaultValues: {
-      organization: formData.organization,
-      event: formData.event,
-      donationAmount: String(formData.amount),
-      phoneNumber: formData.phoneNumber,
-      screenShot: formData.screenShot,
+      organization: donateFormData?.organization,
+      event: donateFormData?.event,
+      donationAmount: String(donateFormData?.amount),
+      phoneNumber: donateFormData?.phoneNumber,
+      screenShot: donateFormData?.screenShot,
     },
   });
 
-  const handleContinue = (data: formOneValue) => {
-    console.log(data);
+  const handleDonate = (data: formOneValue) => {
+    const formData = new FormData();
+    formData.append("event", donateFormData?.eventId || "");
+    formData.append("title", data.event);
+    formData.append("amount", data.donationAmount);
+    formData.append("type", "donation");
+
+    for (const file of data.screenShot) {
+      formData.append("uploaded_attachments", file); // repeat the same key
+    }
+
+    makeTransaction({
+      data: formData,
+      id: donateFormData?.orgId || "",
+    });
+
+    if(isSuccess) {
+      form.reset();
+    }
+
   };
 
   return (
     <div className="w-full p-3">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleContinue)}>
+        <form onSubmit={form.handleSubmit(handleDonate)}>
           <FormInput
             form={form}
             name="organization"
@@ -71,6 +92,7 @@ function DonateForm3({ formData }: DonateForm3Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
+            value={donateFormData?.organization}
             disabled
           />
           <FormInput
@@ -80,6 +102,7 @@ function DonateForm3({ formData }: DonateForm3Props) {
             labelClass="md:text-lg font-semibold mb-1"
             wrapperClass="mb-5 mb:mb-3"
             className="h-12"
+            value={donateFormData?.event}
             disabled
           />
           <FormInput
@@ -116,7 +139,11 @@ function DonateForm3({ formData }: DonateForm3Props) {
             }
             labelClass="mb-1 font-semibold text-base"
             wrapperClass="mb-3"
-            defaultFile={formData.screenShot}
+            defaultFiles={
+              donateFormData?.screenShot
+                ? (donateFormData.screenShot as any)
+                : []
+            }
             required
           />
           <Button className="w-full rounded-full py-6 md:py-8 md:mt-5">

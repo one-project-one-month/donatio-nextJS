@@ -1,3 +1,4 @@
+"use client"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,7 +22,7 @@ function BreadCrumbUI({ currentPageTitle, links }: Partial<BreadcrumbUIProps>) {
         {links?.map((item, index) => (
           <Fragment key={index}>
             <BreadcrumbItem>
-              <BreadcrumbLink>
+              <BreadcrumbLink asChild>
                 <Link href={item.path}>{item.name}</Link>
               </BreadcrumbLink>
               <BreadcrumbSeparator />
@@ -29,7 +30,9 @@ function BreadCrumbUI({ currentPageTitle, links }: Partial<BreadcrumbUIProps>) {
           </Fragment>
         ))}
         <BreadcrumbItem>
-          <BreadcrumbPage className="text-primary font-semibold">{currentPageTitle}</BreadcrumbPage>
+          <BreadcrumbPage className="text-primary font-semibold">
+            {currentPageTitle}
+          </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

@@ -1,28 +1,26 @@
-'use client'
-
-import { Button } from "@/components/ui/button";
+import TabSplitter from "@/components/common/tab-splitter";
+import ActivityLists from "@/components/ui/activities-list";
+import EventLists from "@/components/ui/events-list";
+import OrgnizationLists from "@/components/ui/orgs-list";
 import DonationBanner from "@/features/user/components/banner/donation-banner";
-import DonateFormPopUp from "@/features/user/components/form/donate-form-popup";
-import OrgAdminRequestFormPopUp from "@/features/user/components/form/org-admin-request-form-popup";
 import SearchSection from "@/features/user/components/search/search-section";
-import { useState } from "react";
-
 
 function UserProfilePage() {
-
-  const [isVisible, setIsVisible] = useState(false);
-
   return (
     <div className="w-full">
-      <Button onClick={() => setIsVisible(true)}>Click</Button>
-      {/* <DonateFormPopUp data={{organization: "Alu Myanmar",
-          event: "Water Festival",
-          amount: 0,
-          phoneNumber: "",
-          screenShot: undefined,}} isVisible={isVisible}  setIsVisible={setIsVisible}/> */}
-        <OrgAdminRequestFormPopUp isVisible={isVisible}  setIsVisible={setIsVisible} />
+      <SearchSection />
+      {/* Events , Org  and Activitites*/}
+      <TabSplitter
+        tab1Label={"Events"}
+        tab2Label={"Activities"}
+        tab3Label={"Orgnizations"}
+        tab1Content={<EventLists />}
+        tab2Content={<ActivityLists />}
+        tab3Content={<OrgnizationLists />}
+      />
+      <DonationBanner />
     </div>
-  )
+  );
 }
 
 export default UserProfilePage;

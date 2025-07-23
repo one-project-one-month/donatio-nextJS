@@ -5,22 +5,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { QRCodeSVG } from "qrcode.react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { DonateFormData } from "./donate-form-popup";
 import { FilePlus2 } from "lucide-react";
+import { getDonateFormData } from "@/store/donateStore";
 
 const formTwoSchema = z.object({
-  screenShot: z
-    .instanceof(File)
-    .refine((file) => file.type === "image/jpeg" || file.type === "image/png", {
-      message: "File must be a JPG or PNG image",
-    }),
+  screenShot: z.any().refine((val) => {
+      return val && val.length > 0 && val.every((file: File) => file instanceof File);
+    }, "Image shouldn't be empty"),
 });
 
 type formTwoValue = z.infer<typeof formTwoSchema>;
 
 type DonateForm2Props = {
   setFormIndex: React.Dispatch<React.SetStateAction<number>>;
-  setFormData: React.Dispatch<React.SetStateAction<DonateFormData>>;
+  setFormData: (data: any) => void;
 };
 
 function DonateForm2({ setFormIndex, setFormData }: DonateForm2Props) {
@@ -32,11 +30,16 @@ function DonateForm2({ setFormIndex, setFormData }: DonateForm2Props) {
   });
 
   const handleContinue = (data: formTwoValue) => {
+
+
+    const formData = {
+      ...getDonateFormData(),
+      screenShot: data.screenShot
+    }
+
+
     setFormIndex(3);
-    setFormData((prev) => ({
-      ...prev,
-      ...data,
-    }));
+    setFormData(formData);
   };
 
   return (

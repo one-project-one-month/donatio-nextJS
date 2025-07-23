@@ -46,7 +46,15 @@ function OrgAdminRequestFormPopUp({
   });
 
   const handleRequestSubmit = (data: requestFormValues) => {
-    console.log(data);
+
+    const formData = new FormData();
+    formData.append('organization_name', data.name);
+    formData.append('upload_documents', data.attachment);
+    formData.append('type', data.type);
+
+    console.log([...formData.entries()]);
+
+    form.reset();
   };
 
   return (
@@ -54,7 +62,7 @@ function OrgAdminRequestFormPopUp({
       {isVisible && (
         <div
           onClick={() => setIsVisible(false)}
-          className="absolute bg-black/40 top-0 left-0 w-full h-full flex items-center justify-center"
+          className="fixed bg-black/40 top-0 left-0 w-full h-dvh flex items-center justify-center z-50"
         >
           <div
             onClick={(e) => e.stopPropagation()}
