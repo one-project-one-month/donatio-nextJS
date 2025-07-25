@@ -3,7 +3,7 @@ import { getCurrentOrg } from "@/store/userStore";
 import { CreateEventPayload } from "@/types/Event";
 
 type CreateServiceProps = {
-  data: CreateEventPayload;
+  data: FormData;
 };
 
 type GetServiceProps = {
