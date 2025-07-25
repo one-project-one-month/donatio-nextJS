@@ -53,22 +53,22 @@ const { createEvent } = useCreateEvent();
   const onSubmit = (data: EventFormValues) => {
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("content", data.content);
-    formData.append("startDate", data.startDate.toISOString());
-    formData.append("endDate", data.endDate.toISOString());
-    formData.append("goalAmount", data.goalAmount);
+    formData.append("description", data.content);
+    formData.append("start_date", data.startDate.toISOString());
+    formData.append("end_date", data.endDate.toISOString());
+    formData.append("target_amount", data.goalAmount);
     if (data.image) {
-      formData.append("image", data.image);
+      formData.append("uploaded_attachments", data.image);
     }
-    const formattedData = {
-      title: data.title,
-      start_date: data.startDate.toISOString(),
-      end_date: data.endDate.toISOString(),
-      target_amount: data.goalAmount,
-      description: data.content,
-      attachments: data.image ? [data.image] : [],
-    };
-    createEvent(formattedData);
+    // const formattedData = {
+    //   title: data.title,
+    //   start_date: data.startDate.toISOString(),
+    //   end_date: data.endDate.toISOString(),
+    //   target_amount: data.goalAmount,
+    //   description: data.content,
+    //   attachments: data.image ? [data.image] : [],
+    // };
+    createEvent(formData);
     form.reset();
   };
 

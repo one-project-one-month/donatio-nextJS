@@ -12,7 +12,7 @@ import { showToast } from "@/lib/toast";
 export const useCreateEvent = () => {
   const queryClient = useQueryClient();
   const { mutateAsync: createEvent } = useMutation({
-    mutationFn: (data: CreateEventPayload) => createEventService({ data }),
+    mutationFn: (data: FormData) => createEventService({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events", "all"] });
     },
