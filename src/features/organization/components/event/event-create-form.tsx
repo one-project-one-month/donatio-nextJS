@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import FormDateInput from "@/components/common/form-inputs/form-date-input";
 import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateEvent } from "../../hooks/organization-event-queries";
 
 const eventFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
@@ -36,6 +37,8 @@ const eventFormSchema = z.object({
 type EventFormValues = z.infer<typeof eventFormSchema>;
 
 function EventCreateForm() {
+const { createEvent } = useCreateEvent();
+
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
@@ -48,8 +51,25 @@ function EventCreateForm() {
   });
 
   const onSubmit = (data: EventFormValues) => {
-    // handle form submission
-    console.log(data);
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("content", data.content);
+    formData.append("startDate", data.startDate.toISOString());
+    formData.append("endDate", data.endDate.toISOString());
+    formData.append("goalAmount", data.goalAmount);
+    if (data.image) {
+      formData.append("image", data.image);
+    }
+    // createEvent(formData);
+    const formattedData = {
+      title: data.title,
+      start_date: data.startDate.toISOString(),
+      end_date: data.endDate.toISOString(),
+      target_amount: data.goalAmount,
+      description: data.content,
+      attachments: data.image ? [data.image] : [],
+    };
+    createEvent(formattedData);
   };
 
   return (

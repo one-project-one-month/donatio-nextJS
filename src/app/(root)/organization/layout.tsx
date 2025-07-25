@@ -4,13 +4,9 @@ import { AppSidebar } from "@/components/core/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import SideHeader from "@/components/core/sidebar-header";
 import { Calendar, Coins, HeartHandshake, MessageCircleMore } from "lucide-react";
+import useAuth from "@/hooks/use-auth";
 
 const data = {
-  user: {
-    name: "Wai Yan Linn",
-    email: "linn@gmail.com",
-    avatar: "https://github.com/shadcn.png",
-  },
   navMain: [
     {
       title: "Events",
@@ -50,6 +46,10 @@ export default function OrganizationLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  useAuth();
+
+
   return (
     <SidebarProvider
       style={

@@ -11,6 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { ModeToggle } from "./mode-toggle";
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -43,6 +44,9 @@ export default function SiteHeader() {
             ))}
           </BreadcrumbList>
         </Breadcrumb>
+        <div className="ml-auto p-2">
+          <ModeToggle />
+        </div>
       </div>
     </header>
   );
