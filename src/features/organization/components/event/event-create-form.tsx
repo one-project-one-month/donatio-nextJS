@@ -14,6 +14,7 @@ import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-inp
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateEvent } from "../../hooks/organization-event-queries";
 
+// schema for event form validation
 const eventFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
   startDate: z.date(),
@@ -33,7 +34,6 @@ const eventFormSchema = z.object({
     .any(),
   content: z.string().min(1, "Content is required"),
 });
-
 type EventFormValues = z.infer<typeof eventFormSchema>;
 
 function EventCreateForm() {
@@ -60,7 +60,6 @@ const { createEvent } = useCreateEvent();
     if (data.image) {
       formData.append("image", data.image);
     }
-    // createEvent(formData);
     const formattedData = {
       title: data.title,
       start_date: data.startDate.toISOString(),
@@ -70,6 +69,7 @@ const { createEvent } = useCreateEvent();
       attachments: data.image ? [data.image] : [],
     };
     createEvent(formattedData);
+    form.reset();
   };
 
   return (
@@ -127,7 +127,7 @@ const { createEvent } = useCreateEvent();
             label={
               <span className="flex items-center gap-2">
                 <FilePlus2 className="w-5 h-5 text-primary" />
-                Upload Receipt Screenshot
+                Upload Attachments
               </span>
             }
             labelClass="mb-1 font-semibold text-base"
