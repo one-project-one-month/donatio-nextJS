@@ -1,3 +1,10 @@
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   FormControl,
   FormField,
@@ -7,23 +14,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { CloudUpload, Trash2 } from "lucide-react";
+import Image from "next/image";
 import {
   ComponentProps,
   HTMLInputTypeAttribute,
   ReactNode,
+  useState,
 } from "react";
-import { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
-import { CloudUpload, Trash2 } from "lucide-react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useState } from "react";
+import { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
 export type FormFileDropZoneProps<T extends FieldValues> = Omit<
   ComponentProps<"input">,
@@ -44,12 +44,14 @@ function FormFileDropZone<T extends FieldValues>({
   form,
   name,
   label,
+  type,
   wrapperClass,
   labelClass,
-  disabled = false, // Default to false
+  disabled = false,
   defaultFiles = [],
   ...props
 }: FormFileDropZoneProps<T>) {
+  const [files, setFiles] = useState<FileOrUrl[]>(form.getValues(name) || []);
   const [previewFile, setPreviewFile] = useState<FileOrUrl | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -69,7 +71,7 @@ function FormFileDropZone<T extends FieldValues>({
       if (disabled) return;
       const newFiles = [...files, ...dropped];
       setFiles(newFiles);
-      form.setValue(name, newFiles as any);
+      form.setValue(name, newFiles as any, { shouldDirty: true });
     },
     disabled,
   });
@@ -104,15 +106,15 @@ function FormFileDropZone<T extends FieldValues>({
                 )}
               />
 
-                {isDragActive ? (
-                  <div className="text-neutral-400 h-40 flex justify-center items-center">
-                    <p>Drop the files here</p>
-                  </div>
-                ) : files.length > 0 ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                    {files.map((file, index) => {
-                      const isUrl = typeof file === "string";
-                      const imageUrl = isUrl ? file : URL.createObjectURL(file);
+              {isDragActive ? (
+                <div className="text-neutral-400 h-40 flex justify-center items-center">
+                  <p>Drop the files here</p>
+                </div>
+              ) : files.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+                  {files.map((file, index) => {
+                    const isUrl = typeof file === "string";
+                    const imageUrl = isUrl ? file : URL.createObjectURL(file);
 
                     return (
                       <div

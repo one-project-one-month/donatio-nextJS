@@ -5,10 +5,11 @@ import {
   updateOrganizationProfile,
 } from "../services/organization-profile-services";
 
-export const useOrganizationProfileQuery = () => {
+export const useOrganizationProfileQuery = (id: string | null) => {
   return useQuery<OrganizationProfile>({
-    queryKey: ["organization-profile"],
-    queryFn: getOrganizationProfile,
+    queryKey: ["organization-profile", id],
+    queryFn: () => getOrganizationProfile(id ?? ""),
+    enabled: !!id,
   });
 };
 

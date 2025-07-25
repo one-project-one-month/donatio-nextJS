@@ -1,17 +1,19 @@
 "use client";
 
 import { AppSidebar } from "@/components/core/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import SideHeader from "@/components/core/sidebar-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import OnboardingModal from "@/features/organization/components/profile/onboarding/onboarding-modal";
+import { useOrganizationProfileQuery } from "@/features/organization/hooks/organization-profile-queries";
+import { isProfileComplete } from "@/features/organization/utils/profile-completion";
+import useUserStore from "@/store/userStore";
 import {
+  Building2,
   Calendar,
   Coins,
   HeartHandshake,
   MessageCircleMore,
-  Building2,
 } from "lucide-react";
-import { useOrganizationProfileQuery } from "@/features/organization/hooks/organization-profile-queries";
-import OnboardingModal from "@/features/organization/components/profile/onboarding/onboarding-modal";
 import { useEffect, useState } from "react";
 
 const data = {
@@ -54,24 +56,24 @@ const data = {
   ],
 };
 
-import { isProfileComplete } from "@/features/organization/utils/profile-completion";
-
 export default function OrganizationLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { data: organization, isLoading } = useOrganizationProfileQuery();
+  const currentOrg = useUserStore((state) => state.currentOrg);
+  const { data: organization, isSuccess } =
+    useOrganizationProfileQuery(currentOrg);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    if (organization && !isProfileComplete(organization)) {
+    if (isSuccess && organization && !isProfileComplete(organization)) {
       const hasDismissed = localStorage.getItem("onboardingDismissed");
       if (hasDismissed !== "true") {
         setIsModalOpen(true);
       }
     }
-  }, [organization]);
+  }, [organization, isSuccess]);
 
   const handleClose = () => {
     localStorage.setItem("onboardingDismissed", "true");
@@ -92,7 +94,7 @@ export default function OrganizationLayout({
         <SideHeader />
         <div className="w-full">{children}</div>
       </SidebarInset>
-      {!isLoading && organization && (
+      {isSuccess && organization && (
         <OnboardingModal
           organization={organization}
           isOpen={isModalOpen}

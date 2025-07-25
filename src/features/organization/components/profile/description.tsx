@@ -10,11 +10,17 @@ const Description = ({ data }: DescriptionProps) => {
     .map((paragraph, index) => <p key={index}>{paragraph}</p>);
 
   return (
-    <section aria-labelledby="description-heading" className="space-y-6">
-      <h2 id="description-heading" className="text-2xl font-semibold">
+    <section
+      aria-labelledby="description-heading"
+      className="space-y-4 md:space-y-6"
+    >
+      <h2
+        id="description-heading"
+        className="text-xl md:text-2xl font-semibold"
+      >
         Description
       </h2>
-      <div className="text-muted-foreground space-y-4 text-xl">
+      <div className="text-muted-foreground space-y-4 text-base md:text-lg">
         {descriptionParagraphs}
       </div>
     </section>

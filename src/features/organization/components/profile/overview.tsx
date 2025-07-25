@@ -21,18 +21,18 @@ const Overview = ({ data }: OverviewProps) => {
     <section aria-labelledby="overview-heading" className="space-y-4">
       <h2
         id="overview-heading"
-        className="text-3xl font-medium text-dodger-blue-600"
+        className="text-2xl md:text-3xl font-medium text-dodger-blue-600"
       >
         Overview
       </h2>
-      <div className="flex justify-between items-center">
-        <p className="text-xl font-medium text-muted-foreground flex items-baseline gap-3">
+      <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-2 md:gap-4">
+        <p className="text-base md:text-xl font-medium text-muted-foreground flex items-baseline gap-2">
           <span>Total Donation:</span>
           <span className="font-normal">
             {formatCurrency(stats.total_received_money)} MMK
           </span>
         </p>
-        <p className="text-xl font-medium text-muted-foreground flex items-baseline gap-3">
+        <p className="text-base md:text-xl font-medium text-muted-foreground flex items-baseline gap-2">
           <span>Total Expense:</span>
           <span className="font-normal">
             {formatCurrency(stats.total_expense)} MMK
