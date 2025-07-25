@@ -8,9 +8,10 @@ type EventRowsProps = {
   data: Event;
   handleEdit: (data: Event) => void;
   handleDelete: (id: string) => void;
+  handleView: (data: Event) => void;
 };
 
-function EventRows({ data, handleEdit, handleDelete }: EventRowsProps) {
+function EventRows({ data, handleEdit, handleDelete, handleView }: EventRowsProps) {
   return (
     <TableRow className="h-24 hover:bg-white">
       <TableCell className="sticky min-w-[200px] text-start bg-white left-0 z-10 p-5">{data.title}</TableCell>
@@ -24,7 +25,7 @@ function EventRows({ data, handleEdit, handleDelete }: EventRowsProps) {
       </TableCell>
       <TableCell className="sticky min-w-[200px] text-center bg-white right-0 z-10">
         <div className="flex items-center justify-center gap-2">
-          <Button variant="ghost" size="icon" title="View">
+          <Button variant="ghost" size="icon" title="View" onClick={() => handleView(data)}>
             <Eye className="w-5 h-5 text-blue-500 hover:text-blue-700" />
           </Button>
           <Button variant="ghost" size="icon" title="Edit" onClick={() => handleEdit(data)}>

@@ -42,7 +42,7 @@ function EventHeader({ totalEvents }: EventHeaderProps) {
             </Button>
           </DrawerTrigger>
           <DrawerContent className="max-w-xl min-w-[600px]">
-            <DrawerTitle>Create New Event</DrawerTitle>
+            <DrawerTitle className="hidden">Create New Event</DrawerTitle>
             <EventCreateForm />
           </DrawerContent>
         </Drawer>
