@@ -4,6 +4,7 @@ import { getDonateFormData } from "@/store/donateStore";
 import { Event } from "../../../../types/Event";
 import { Image } from "lucide-react";
 import Link from "next/link";
+import { getRandomImg } from "@/lib/common";
 
 
 function EventListingCard({
@@ -31,19 +32,22 @@ function EventListingCard({
   };
 
   return (
-    <Link href={`/donor/events/${data.id}`} className="md:my-0 my-3 flex flex-col justify-between max-h-[600px] max-w-[500px]  transition-all duration-300 ">
+    <div className="md:my-0 my-3 flex flex-col justify-between max-h-[600px] max-w-[500px]  transition-all duration-300 ">
+      <Link href={`/donor/events/${data.id}`}>
       <div className="rounded-lg  overflow-hidden">
         {
           data.attachments.length > 0 ? (
             <img
-              src={data.attachments[0].url}
+              src={`http://localhost:8000/${data.attachments[0]}`}
               alt={data.title}
               className="w-full h-64 object-cover"
             />
           ) : (
-            <div className="w-full h-64 text-neutral-500 bg-neutral-200 flex items-center justify-center">
-              <Image size={40} />
-            </div>
+            <img
+              src={getRandomImg('event')??"https://i.pinimg.com/736x/dd/cb/36/ddcb361a6f93e2518268638305e528ba.jpg"}
+              alt={data.title}
+              className="w-full h-64 object-cover"
+            />
           )
         }
         <div className="flex justify-between mb-1 text-sm my-2">
@@ -59,9 +63,13 @@ function EventListingCard({
           {data?.description}
         </div>
       </div>
+      </Link>
       {/* Button to donate */}
-      <Button onClick={handlePopUp}>Donate Now</Button>
-    </Link>
+      <Button onClick={(e) => {
+        e.stopPropagation();
+        handlePopUp()
+      }}>Donate Now</Button>
+    </div>
   );
 }
 

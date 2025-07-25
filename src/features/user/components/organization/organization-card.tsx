@@ -1,6 +1,7 @@
 import { Image as ImageIcon } from "lucide-react";
 import { Organization } from "../../../../types/Organization";
 import Link from "next/link";
+import { getRandomImg } from "@/lib/common";
 
 type OrganizationCardProps = {
   data: Organization;
@@ -12,18 +13,21 @@ function OrganizationCard({ data }: OrganizationCardProps) {
       <div className="bg-white dark:bg-neutral-950 text-center transition-all flex flex-col relative group hover:shadow-md dark:shadow-neutral-700 rounded-2xl overflow-hidden border border-gray-100 dark:border-neutral-500">
       {/* Image Area */}
       <div className="w-full h-[240px] flex justify-center items-center bg-gray-50 dark:bg-neutral-900 relative">
-        {data?.attachments?.[0] ? (
-          <img
-            src={data.attachments[0]}
-            alt={data.name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex flex-col items-center justify-center text-neutral-300">
-            <ImageIcon className="w-16 h-16" />
-            <span className="text-sm mt-2 text-neutral-400">No Image</span>
-          </div>
-        )}
+        {
+                  data.attachments.length > 0 ? (
+                    <img
+                      src={`http://localhost:8000${data.attachments[0].file}`}
+                      alt={data.name}
+                      className="w-full h-64 object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={getRandomImg('event')??"https://i.pinimg.com/736x/dd/cb/36/ddcb361a6f93e2518268638305e528ba.jpg"}
+                      alt={data.name}
+                      className="w-full h-64 object-cover"
+                    />
+                  )
+                }
       </div>
 
       {/* Name and Type */}
