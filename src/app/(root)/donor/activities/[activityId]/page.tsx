@@ -67,7 +67,7 @@ export default function Page() {
 
     return (<div className="mx-auto rounded-3xl my-10 px-5">
             <BreadCrumbUI
-                links={[{ name: "Activities", path: "/activities" }]}
+                links={[{ name: "Activities", path: "/donor/activities" }]}
                 currentPageTitle={data?.title} />
             <ActivityDetail data={data?? null} />
 
