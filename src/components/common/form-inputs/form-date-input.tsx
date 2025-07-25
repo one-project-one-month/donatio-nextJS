@@ -37,8 +37,8 @@ export type FormInputProps<T extends FieldValues> = Omit<
   labelClass?: string;
 };
 
-//formating date
-function formatDate(date: Date | undefined) {
+//formating date  : exported for default : later to confirm
+export function formatDate(date: Date | undefined) {
   if (!date) {
     return "";
   }
