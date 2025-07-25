@@ -131,7 +131,7 @@ function EventEditForm({ initialData, isView, setOpenEdit }: EventEditFormProps)
             className="h-12"
             placeholder="Enter start date"
             required={!isView}
-            isView={isView}
+            isView={true}
           />
 
           <FormDefaultDateInput
@@ -191,7 +191,7 @@ function EventEditForm({ initialData, isView, setOpenEdit }: EventEditFormProps)
             labelClass="mb-1 font-semibold text-base"
             wrapperClass="mb-3"
             defaultFiles={initialData?.attachments.map((f) => f.file)}
-            disabled={isView}
+            disabled={true}
           />
 
           <FormTextAreaInput

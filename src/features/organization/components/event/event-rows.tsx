@@ -31,9 +31,9 @@ function EventRows({ data, handleEdit, handleDelete, handleView }: EventRowsProp
           <Button variant="ghost" size="icon" title="Edit" onClick={() => handleEdit(data)}>
             <Pencil className="w-5 h-5 text-green-500 hover:text-yellow-700" />
           </Button>
-          <Button variant="ghost" size="icon" title="Delete" onClick={() => handleDelete(data.id)}>
+          {/* <Button variant="ghost" size="icon" title="Delete" onClick={() => handleDelete(data.id)}>
             <Trash2 className="w-5 h-5 text-red-500 hover:text-red-700" />
-          </Button>
+          </Button> */}
         </div>
       </TableCell>
     </TableRow>
