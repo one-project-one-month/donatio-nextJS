@@ -8,16 +8,6 @@ export type EventTableData = {
   status: string;
 };
 
-
-export type CreateEventPayload = {
-  title: string;
-  description: string;
-  target_amount: string;
-  attachments: File[];
-  start_date: string;
-  end_date: string;
-};
-
 export type Event = {
   id: string;
   organization: {

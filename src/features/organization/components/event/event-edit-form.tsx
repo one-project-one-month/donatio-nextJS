@@ -10,11 +10,11 @@ import { FilePlus2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FormInput from "@/components/common/form-inputs/form-inputs";
 import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-input";
-import FormFileDropZone from "@/components/common/form-inputs/form-file-drop";
 import FormDefaultDateInput from "@/components/common/form-inputs/form-date-default-input";
 
 import { Event } from "@/types/Event";
 import { useUpdateEvent } from "../../hooks/organization-event-queries";
+import FormFileDefaultDropZone from "@/components/common/form-inputs/form-file-default-drop";
 
 // schema for event form validation
 const eventFormSchema = z.object({
@@ -76,7 +76,7 @@ function EventEditForm({ initialData, isView, setOpenEdit }: EventEditFormProps)
   }, [initialData, form]);
 
   const onSubmit = (data: EventValues) => {
-    console.log("Form data before submission:", data);
+    // console.log("Form data before submission:", data);
     const formData = new FormData();
     formData.append("title", data.title || "");
     formData.append(
@@ -102,6 +102,7 @@ function EventEditForm({ initialData, isView, setOpenEdit }: EventEditFormProps)
     form.reset();
   };
 
+  // console.log("attachment:", initialData?.attachments.map((f) => f.file));
   return (
     <ScrollArea className="h-dvh">
       <Form {...form}>
@@ -178,19 +179,19 @@ function EventEditForm({ initialData, isView, setOpenEdit }: EventEditFormProps)
             )}
           />
 
-          <FormFileDropZone
+          <FormFileDefaultDropZone
             name="image"
             type="file"
             form={form}
             label={
               <span className="flex items-center gap-2">
                 <FilePlus2 className="w-5 h-5 text-primary" />
-                Upload Event Images
+                View Event Images
               </span>
             }
             labelClass="mb-1 font-semibold text-base"
             wrapperClass="mb-3"
-            defaultFiles={initialData?.attachments.map((f) => f.file)}
+            defaultFiles={initialData?.attachments?.map((f) => f.file)}
             disabled={true}
           />
 
