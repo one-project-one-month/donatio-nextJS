@@ -5,14 +5,14 @@ import {
   getEventService,
   closeEventService,
 } from "../services/organization-event-services";
-import { CreateEventPayload, EventsResponse } from "@/types/Event";
+import {EventsResponse } from "@/types/Event";
 import { showToast } from "@/lib/toast";
 
-// Create Event Hook : Confirm Start Date
 export const useCreateEvent = () => {
   const queryClient = useQueryClient();
   const { mutateAsync: createEvent } = useMutation({
-    mutationFn: (data: FormData) => createEventService({ data }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mutationFn: (data: any) => createEventService({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events", "all"] });
     },
