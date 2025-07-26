@@ -11,8 +11,8 @@ import { useEffect } from "react";
 
 function page() {
 
-  const { page } = usePagination();
-  const { data: organizations, isLoading, isError} = useGetOrganizations(page);
+  const { page, setPage } = usePagination();
+  const { data: organizations, isLoading, isError} = useGetOrganizations(page, 12);
 
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function page() {
   return (
     <div className="max-w-7xl mx-auto px-5 py-5">
         <OrganizationListingHeader />
-        { isLoading ? <OrganizationListingSkeleton /> : <OrganizationListing data={organizations} page={page} />}
+        { isLoading ? <OrganizationListingSkeleton /> : <OrganizationListing data={organizations??null} page={page} setPage={setPage} />}
     </div>
   )
 }

@@ -55,8 +55,6 @@ const page = () => {
 
   const { data: user } = useGetUser();
 
-
-
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -69,7 +67,6 @@ const page = () => {
     };
     getUserInfo();
   }, []);
-
 
   interface FormState {
     full_name: string;
@@ -141,8 +138,8 @@ const page = () => {
           <div className="flex flex-col gap-4 items-end">
             <Dialog>
               <DialogTrigger className="bg-white/0 text-gray-500 flex space-x-2 justify-center items-center shadow-none hover:bg-white/0 cursor-pointer w-fit rounded-full py-6 ">
-                  <Pencil />
-                  <div className="text-lg font-normal">Edit info</div>
+                <Pencil />
+                <div className="text-lg font-normal">Edit info</div>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -255,30 +252,41 @@ const page = () => {
                 </TableRow>
               </TableHeader>
               <TableBody className="text-gray-500">
-                {lists.map((list, index) => {
-                  const { date, time } = formatDateTime(list.updated_at);
-                  return (
-                    <TableRow key={index}>
-                      <TableCell className="pl-10 py-6">{date}</TableCell>
-                      <TableCell className="py-6">{time}</TableCell>
-                      <TableCell className="py-6">
-                        {list?.organization?.name}
-                      </TableCell>
-                      <TableCell className="py-6">{list?.amount}</TableCell>
-                      <TableCell className="py-6">
-                        <span
-                          className={`py-2 px-4 rounded-full ${
-                            list?.status === "success"
-                              ? "text-[#00D018] bg-[#F3FFF4]"
-                              : "text-[#d0a300] bg-[#fffcf3]"
-                          }`}
-                        >
-                          {list?.status}
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {lists.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="text-center py-10 text-gray-400 text-sm italic"
+                    >
+                      No donation found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  lists.map((list, index) => {
+                    const { date, time } = formatDateTime(list.updated_at);
+                    return (
+                      <TableRow key={index}>
+                        <TableCell className="pl-10 py-6">{date}</TableCell>
+                        <TableCell className="py-6">{time}</TableCell>
+                        <TableCell className="py-6">
+                          {list?.organization?.name}
+                        </TableCell>
+                        <TableCell className="py-6">{list?.amount}</TableCell>
+                        <TableCell className="py-6">
+                          <span
+                            className={`py-2 px-4 rounded-full ${
+                              list?.status === "success"
+                                ? "text-[#00D018] bg-[#F3FFF4]"
+                                : "text-[#d0a300] bg-[#fffcf3]"
+                            }`}
+                          >
+                            {list?.status}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
               </TableBody>
             </Table>
           </div>

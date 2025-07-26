@@ -10,6 +10,8 @@ import useAuth from "@/hooks/use-auth";
 
 function UserLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+
+  
   const hideExtras =
     (pathname.includes("/events/") && pathname !== "/events") ||
     (pathname.includes("/chat") && pathname !== "/chat") ||

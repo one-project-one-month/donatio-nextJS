@@ -12,7 +12,7 @@ function page() {
   const { data, isLoading } = useGetActivity(page, 5);
 
   return (
-    <div>
+    <div className="p-5">
       <ActivityHeader totalActivities={data?.count?? 0} />
       <ActivityTable data={data?.results?? null} isLoading={isLoading} />
       <div className="mt-5">

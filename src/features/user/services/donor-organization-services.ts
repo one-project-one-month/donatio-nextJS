@@ -1,8 +1,8 @@
 import API from "@/lib/api/axios"
 
-export const getOrganizations =  async(page: number) => {
+export const getOrganizations =  async(page: number, pageSize?: number) => {
     try {
-        const response = await API.get(`/organizations?page=${page}`);
+        const response = await API.get(`/organizations?page=${page}&page_size=${pageSize}`);
 
         return response.data;
 

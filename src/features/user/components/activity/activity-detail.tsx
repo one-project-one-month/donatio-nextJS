@@ -38,7 +38,7 @@ function ActivityInfo({ data }: ActivityDetailProps) {
               <Image size={18} />
             </div>
             <Link
-              href={`/donor/organization/${data?.organization.id}`}
+              href={`/donor/organizations/${data?.organization.id}`}
               className="hover:underline font-medium"
             >
               by {data?.organization.name}
