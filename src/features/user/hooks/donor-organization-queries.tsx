@@ -1,15 +1,15 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { getOrganizationActivities, getOrganizationById, getOrganizationEvents, getOrganizations } from "@/features/user/services/donor-organization-services"
 import { GetAllOrganizationsResponse, Organization } from "@/types/Organization"
-import { GetAllEventsResponse } from "@/types/Event"
+import { EventsResponse } from "@/types/Event"
 import { ActivityResponse } from "@/types/Activity"
 
 
-export const useGetOrganizations = (page: number) => {
+export const useGetOrganizations = (page: number, pageSize?: number) => {
 
     return useQuery<GetAllOrganizationsResponse>({
         queryKey: ['organizations', page],
-        queryFn: () => getOrganizations(page)
+        queryFn: () => getOrganizations(page, pageSize)
     })
 }
 
@@ -25,7 +25,7 @@ export const useGetOrganizationById = (id: string) => {
 
 export const useGetOrganizationEvents  = (id: string) => {
 
-    return useQuery<GetAllEventsResponse>({
+    return useQuery<EventsResponse>({
         queryKey: ['organizations', id, 'events'],
         queryFn: () => getOrganizationEvents(id),
     })
@@ -33,7 +33,7 @@ export const useGetOrganizationEvents  = (id: string) => {
 
 export const useGetOrganizationActivities = (id: string | null) => {
   return useInfiniteQuery<ActivityResponse>({
-    queryKey: ['activities'],
+    queryKey: ['organizations', id, 'activities'],
     queryFn: ({ pageParam = 1 }) => getOrganizationActivities(pageParam as number, 10, id??""),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.next) {

@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Organization } from "@/types/Organization";
 import { Image as ImageIcon, LucideMessageCircleMore } from "lucide-react";
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   useGetOrganizationActivities,
@@ -16,6 +15,9 @@ import { showToast } from "@/lib/toast";
 import ActivityListingSkeleton from "../activity/acitivity-listing-skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStartChat } from "../../hooks/donor-chat-queries";
+import { getRandomImg } from "@/lib/common";
+import coverImg from "@/assets/image/donateImg2.jpg";
+import Image from "next/image";
 
 type OrganizationDetailProps = {
   data: Organization | null;
@@ -26,7 +28,7 @@ function OrganizationDetail({ data }: OrganizationDetailProps) {
 
   const { page, setPage } = usePagination("eventPage");
 
-  const { startChat } = useStartChat()
+  const { startChat } = useStartChat();
 
   const {
     data: activity,
@@ -74,20 +76,39 @@ function OrganizationDetail({ data }: OrganizationDetailProps) {
   return (
     <section>
       <div className="flex flex-col text-neutral-400 justify-center items-center bg-neutral-100 dark:bg-neutral-900 w-full h-96 rounded-xl mt-5">
-        {data?.attachments[1] ? (
-          <div></div>
+        {data && data.attachments.length > 0 ? (
+          <Image
+            src={data.attachments[1].url}
+            alt={data?.name ?? ""}
+            className="w-full rounded-xl h-96 object-cover"
+          />
         ) : (
-          <>
-            {" "}
-            <ImageIcon size={50} />
-            <span className="text-sm mt-3">No Image</span>
-          </>
+          <Image
+            src={coverImg}
+            alt={data?.name ?? ""}
+            className="w-full h-96 rounded-xl object-cover"
+          />
         )}
       </div>
       <div className="mt-4 flex flex-col items-center md:flex-row justify-between gap-4">
         <div className="flex items-center gap-3 mt-2">
           <div className="w-20 h-20  rounded-full flex items-center border justify-center overflow-hidden relative">
-            <ImageIcon className="text-neutral-400" />
+            {data && data.attachments.length > 0 ? (
+              <img
+                src={data.attachments[0].url}
+                alt={data.name}
+                className="w-full object-cover"
+              />
+            ) : (
+              <img
+                src={
+                  getRandomImg("event") ??
+                  "https://i.pinimg.com/736x/dd/cb/36/ddcb361a6f93e2518268638305e528ba.jpg"
+                }
+                alt={data?.name}
+                className="w-full object-cover"
+              />
+            )}
           </div>
           <div className="flex flex-col gap-2">
             <span className="text-3xl font-bold">{data?.name}</span>
@@ -99,7 +120,10 @@ function OrganizationDetail({ data }: OrganizationDetailProps) {
         </div>
 
         <div className="md:items-end gap-2">
-          <Button onClick={() => startChat(data?.id?? "")} className="flex min-w-[200px] items-center gap-2 py-7 bg-primary text-white rounded-full hover:bg-primary/80 transition-colors cursor-pointer">
+          <Button
+            onClick={() => startChat(data?.id ?? "")}
+            className="flex min-w-[200px] items-center gap-2 py-7 bg-primary text-white rounded-full hover:bg-primary/80 transition-colors cursor-pointer"
+          >
             <LucideMessageCircleMore />
             Send Message
           </Button>

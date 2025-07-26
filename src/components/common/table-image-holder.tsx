@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import { ImageDown, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import AppConfig from "@/lib/appConfig";
 
 type TableImageHolderProps = {
   data: {
@@ -34,7 +35,7 @@ function TableImageHolder({ data }: TableImageHolderProps) {
         {data && data.length !== 0 ? (
           <>
             <img
-              src={data[0].file}
+              src={`${data[0].file}`}
               alt="Preview"
               className="w-28 h-20 object-cover rounded-md"
             />

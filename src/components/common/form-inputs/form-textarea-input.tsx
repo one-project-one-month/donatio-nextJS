@@ -28,7 +28,6 @@ function FormTextAreaInput<T extends FieldValues>({
   labelClass,
   ...props
 }: FormTextAreaProps<T>) {
-
   return (
     <FormField
       control={form.control}
@@ -45,7 +44,7 @@ function FormTextAreaInput<T extends FieldValues>({
                 {...field}
                 {...props}
                 className={cn(
-                  "border border-gray-300 rounded-lg p-2 w-full resize-y min-h-[20rem] transition-all",
+                  "border border-gray-300 rounded-lg p-2 w-full resize-y transition-all",
                   props.className
                 )}
               />

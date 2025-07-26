@@ -8,6 +8,7 @@ export type EventTableData = {
   status: string;
 };
 
+
 export type Event = {
   id: string;
   organization: {
@@ -31,5 +32,11 @@ export type Event = {
   end_date: string;
 };
 
+export type GetAllEventsResponse = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Event[];
+};
 
 export type EventsResponse = PaginationProps<Event>;
