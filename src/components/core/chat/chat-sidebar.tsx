@@ -14,7 +14,7 @@ function ChatSidebar({ data, isLoading, isDonor }: ChatSidebarProps) {
     return {
       id: c.id,
       name: isDonor ? c.organization.name ?? "": c.donor.username ?? "",
-      logo: isDonor ? c.organization.name ?? "": c.donor.profile ?? "",
+      logo: isDonor ? c.organization.attachments[0].file ?? "": c.donor.profile.profile_picture ?? "",
       lastMsg: "",
     };
   });

@@ -2,6 +2,8 @@
 
 import { AppSidebar } from "@/components/core/app-sidebar";
 import SideHeader from "@/components/core/sidebar-header";
+import { useRouter } from "next/navigation";
+
 import useAuth from "@/hooks/use-auth";
 import { getCurrentOrg } from "@/store/userStore";
 import { useRouter } from "next/navigation";

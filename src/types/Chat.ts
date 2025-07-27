@@ -1,4 +1,5 @@
 import { PaginationProps } from "./Common";
+import { Organization } from "./Organization";
 
 export type Donor = {
   id: string;
@@ -6,15 +7,9 @@ export type Donor = {
   email: string;
   is_staff: boolean;
   is_superuser: boolean;
-  profile: string | null;
+  profile: any;
   joined_at: string;
   is_org_admin: boolean;
-};
-
-export type Organization = {
-  id: string;
-  admin: string;
-  name: string;
 };
 
 export type Chat = {
