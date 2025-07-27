@@ -1,62 +1,39 @@
 "use client";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import EventListingCard from "./event-listing-card";
-import DonateFormPopUp, { DonateFormData } from "../form/donate-form-popup";
-import { useEffect, useState } from "react";
-import useDonateStore from "@/store/donateStore";
-import { Calendar } from "lucide-react";
-import { GetAllEventsResponse } from "../../../../types/Event";
-import PaginationUI from "@/components/common/pagination-ui";
 import NodataBlock from "@/components/common/no-data-block";
-
+import PaginationUI from "@/components/common/pagination-ui";
+import { useDonationForm } from "@/hooks/use-donation-form";
+import { GetAllEventsResponse } from "@/types/Event";
+import DonateFormPopUp from "../form/donate-form-popup";
+import EventListingCard from "./event-listing-card";
 
 type EventListingProps = {
-  data: GetAllEventsResponse | null;
+  data: GetAllEventsResponse | undefined;
   page: number;
   setPage?: (newPage: number) => void;
 };
 
 function EventListing({ data, page, setPage }: EventListingProps) {
-  const { donateFormData, setDonateForm } = useDonateStore();
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    document.body.style.overflow = isVisible ? "hidden" : "auto";
-
-    if (!donateFormData) {
-      setIsVisible(false);
-    }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isVisible, donateFormData]);
+  const { donationData, openDonationForm, setDonationData } = useDonationForm();
 
   return (
     <>
       {data && data?.results?.length !== 0 ? (
         <section>
-          <DonateFormPopUp
-            isVisible={isVisible}
-            setIsVisible={setIsVisible}
-            data={donateFormData}
-            setData={setDonateForm}
-          />
-          <div className="grid lg:grid-cols-3 md:grid-cols-2 my-3 sm:gap-18 mb-6 gap-2 w-full justify-center">
+          <DonateFormPopUp data={donationData} setData={setDonationData} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 my-3 mb-6 w-full">
             {data?.results.map((event) => (
               <EventListingCard
                 key={event.id}
                 data={event}
-                setFormData={setDonateForm}
-                setIsVisible={setIsVisible}
+                openForm={() =>
+                  openDonationForm({
+                    organization: event.organization.name,
+                    event: event.title,
+                    orgId: event.organization.id,
+                    eventId: event.id,
+                  })
+                }
               />
             ))}
           </div>
@@ -64,8 +41,8 @@ function EventListing({ data, page, setPage }: EventListingProps) {
             <PaginationUI
               page={page}
               totalCount={data.count}
-              isNext={data.next ? true : false}
-              isPrevious={data.previous ? true : false}
+              isNext={!!data.next}
+              isPrevious={!!data.previous}
               limit={7}
               setPage={setPage}
             />
