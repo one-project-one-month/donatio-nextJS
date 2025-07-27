@@ -8,7 +8,7 @@ const EventDescription = ({ description }: EventDescriptionProps) => {
       <div className="text-lg md:text-2xl font-semibold text-gray-800">
         Description
       </div>
-      <p className="font-normal text-gray-500 text-md md:text-xl leading-relaxed">
+      <p className="font-normal text-gray-500 text-md md:text-lg leading-relaxed">
         {description}
       </p>
     </div>

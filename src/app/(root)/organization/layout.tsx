@@ -2,13 +2,9 @@
 
 import { AppSidebar } from "@/components/core/app-sidebar";
 import SideHeader from "@/components/core/sidebar-header";
-
-import { Calendar, Coins, HeartHandshake, MessageCircleMore } from "lucide-react";
 import useAuth from "@/hooks/use-auth";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { getCurrentOrg } from "@/store/userStore";
-
+import { useRouter } from "next/navigation";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import OnboardingModal from "@/features/organization/components/profile/onboarding/onboarding-modal";
 import { useOrganizationProfileQuery } from "@/features/organization/hooks/organization-profile-queries";
@@ -22,7 +18,6 @@ import {
   MessageCircleMore,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-
 
 const data = {
   navMain: [
@@ -74,7 +69,6 @@ export default function OrganizationLayout({
     useOrganizationProfileQuery(currentOrg);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
   const router = useRouter();
 
   useAuth();
@@ -88,24 +82,18 @@ export default function OrganizationLayout({
     }
   }, [organization, isSuccess]);
 
-
   const handleClose = () => {
     localStorage.setItem("onboardingDismissed", "true");
     setIsModalOpen(false);
   };
 
   useEffect(() => {
-
     const currentOrg = getCurrentOrg();
 
-    if(!currentOrg) {
-      router.push("/donor/events")
+    if (!currentOrg) {
+      router.push("/donor/events");
     }
-
-
-
-  },[])
-
+  }, []);
 
   return (
     <SidebarProvider
