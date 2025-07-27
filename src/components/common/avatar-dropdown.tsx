@@ -1,22 +1,29 @@
-import { LogOutIcon, UserCircleIcon, Building2Icon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuSeparator,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import useAuthStore from "@/store/useAuthStore";
 import { useGetUser } from "@/features/user/hooks/donor-user-queries";
-import { useRouter } from "next/navigation";
+import useAuthStore from "@/store/useAuthStore";
 import useUserStore from "@/store/userStore";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  Building2Icon,
+  LogOutIcon,
+  SunMoon,
+  UserCircleIcon,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const AvatarDropdown = () => {
+  const { setTheme, theme } = useTheme();
   const { data: user } = useGetUser();
   const { setCurrentOrg } = useUserStore();
   const router = useRouter();
@@ -43,7 +50,7 @@ const AvatarDropdown = () => {
               {user?.username?.charAt(0)?.toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="md:grid flex-1 text-left text-sm leading-tight hidden">
+          <div className="hidden flex-1 text-left text-sm leading-tight md:grid">
             <span className="truncate font-medium">{user?.username}</span>
             <span className="truncate text-xs text-muted-foreground">
               {user?.email}
@@ -86,6 +93,13 @@ const AvatarDropdown = () => {
         )}
 
         <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        >
+          <SunMoon className="mr-2 h-4 w-4" />
+          <span>Toggle Theme</span>
+        </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() => {

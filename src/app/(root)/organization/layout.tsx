@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 import useAuth from "@/hooks/use-auth";
 import { getCurrentOrg } from "@/store/userStore";
-import { useRouter } from "next/navigation";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import OnboardingModal from "@/features/organization/components/profile/onboarding/onboarding-modal";
 import { useOrganizationProfileQuery } from "@/features/organization/hooks/organization-profile-queries";
