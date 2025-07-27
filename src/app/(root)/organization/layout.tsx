@@ -3,10 +3,8 @@
 import { AppSidebar } from "@/components/core/app-sidebar";
 import SideHeader from "@/components/core/sidebar-header";
 
-import { Calendar, Coins, HeartHandshake, MessageCircleMore } from "lucide-react";
 import useAuth from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { getCurrentOrg } from "@/store/userStore";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
