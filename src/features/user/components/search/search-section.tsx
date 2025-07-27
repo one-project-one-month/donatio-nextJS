@@ -9,9 +9,8 @@ function SearchSection() {
       <Image
         src={searchSectionBackground}
         alt="Search section background"
-        layout="fill"
-        objectFit="contain"
-        objectPosition="center bottom"
+        fill
+        className="object-contain object-bottom"
       />
       {/* topics */}
       <h1 className="font-bold text-primary mb-4 text-lg md:text-3xl  lg:text-4xl text-center">
