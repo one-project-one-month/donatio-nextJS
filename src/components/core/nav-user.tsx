@@ -50,7 +50,10 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage
-                  src={user?.profile || "https://github.com/shadcn.png"}
+                  src={
+                    user?.profile?.profile_picture ||
+                    "https://github.com/shadcn.png"
+                  }
                   alt="@avatar"
                 />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
@@ -74,7 +77,10 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={user?.profile || "https://github.com/shadcn.png"}
+                    src={
+                      user?.profile?.profile_picture ||
+                      "https://github.com/shadcn.png"
+                    }
                     alt="@avatar"
                   />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>

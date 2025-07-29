@@ -73,10 +73,20 @@ const page = () => {
     phone_number: string;
     profile_picture: File | null;
   }
+  interface AdminFormState {
+    organization_name: string;
+    uploaded_attachments: File | null;
+    type: string;
+  }
   const [form, setForm] = useState<FormState>({
     full_name: "",
     phone_number: "",
     profile_picture: null,
+  });
+  const [adminForm, setAdminForm] = useState<AdminFormState>({
+    organization_name: "",
+    uploaded_attachments: null,
+    type: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -94,6 +104,34 @@ const page = () => {
       }
 
       const response = await API.put("/auth/users/me/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log(response.data);
+
+      setIsSubmitting(false);
+    } catch (error) {
+      setIsSubmitting(false);
+      console.error(error);
+    }
+  };
+
+  const handleAdminForm = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      setIsSubmitting(true);
+
+      const formData = new FormData();
+      formData.append("organization_name", adminForm.organization_name);
+      formData.append("type", adminForm.type);
+      if (adminForm.uploaded_attachments) {
+        formData.append("uploaded_attachments", adminForm.uploaded_attachments);
+      }
+
+      const response = await API.post("/organization-requests/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -125,12 +163,22 @@ const page = () => {
         <div className="my-6 flex items-start justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="w-16 h-16">
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage
+                src={
+                  user?.profile?.profile_picture ||
+                  "https://github.com/shadcn.png"
+                }
+              />
+
               <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
             </Avatar>
 
             <div className="">
-              <div>{user?.username}</div>
+              <div>
+                {user?.profile?.full_name
+                  ? user?.profile?.full_name
+                  : user?.username}
+              </div>
               <div className="text-gray-500">{user?.email}</div>
             </div>
           </div>
@@ -212,10 +260,92 @@ const page = () => {
               </DialogContent>
             </Dialog>
 
-            <Button className="rounded-full py-6 cursor-pointer">
-              <img src={profile.src} alt="icon" />
-              <div className="text-lg font-normal">Become an admin</div>
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="rounded-full py-6 cursor-pointer">
+                  <img src={profile.src} alt="icon" />
+                  <div className="text-lg font-normal">Become an admin</div>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Become an admin</DialogTitle>
+                  <DialogDescription>
+                    Fill the form and push submit.
+                  </DialogDescription>
+                </DialogHeader>
+                <form
+                  onSubmit={handleAdminForm}
+                  className="flex flex-col gap-4"
+                >
+                  <div>
+                    <label htmlFor="full_name">Orgnization Name</label>
+                    <Input
+                      type="text"
+                      name="orgnization_name"
+                      className="mt-2"
+                      placeholder="orgnization name"
+                      value={adminForm.organization_name}
+                      onChange={(e) =>
+                        setAdminForm({
+                          ...adminForm,
+                          organization_name: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="full_name">Uploaded Attachements</label>
+                    <Input
+                      type="file"
+                      name="uploaded_attachments"
+                      className="mt-2"
+                      placeholder="image"
+                      onChange={(e) => {
+                        const file = e.target.files && e.target.files[0];
+                        setAdminForm({
+                          ...adminForm,
+                          uploaded_attachments: file || null,
+                        });
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="full_name">Type</label>
+                    <Input
+                      type="text"
+                      name="type"
+                      className="mt-2"
+                      placeholder="type"
+                      value={adminForm.type}
+                      onChange={(e) =>
+                        setAdminForm({ ...adminForm, type: e.target.value })
+                      }
+                    />
+                  </div>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button
+                        variant="outline"
+                        className="cursor-pointer"
+                        type="button"
+                      >
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                    <Button
+                      type="submit"
+                      className="cursor-pointer"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Submitting..." : "Submit"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
