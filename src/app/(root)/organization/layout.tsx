@@ -4,12 +4,11 @@ import { AppSidebar } from "@/components/core/app-sidebar";
 import SideHeader from "@/components/core/sidebar-header";
 import { useRouter } from "next/navigation";
 
-import useAuth from "@/hooks/use-auth";
-import { getCurrentOrg } from "@/store/userStore";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import OnboardingModal from "@/features/organization/components/profile/onboarding/onboarding-modal";
 import { useOrganizationProfileQuery } from "@/features/organization/hooks/organization-profile-queries";
 import { isProfileComplete } from "@/features/organization/utils/profile-completion";
+import { useAuth } from "@/hooks/use-auth";
 import useUserStore from "@/store/userStore";
 import {
   Building2,
@@ -19,6 +18,7 @@ import {
   MessageCircleMore,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import Loading from "./loading";
 
 const data = {
   navMain: [
@@ -65,14 +65,26 @@ export default function OrganizationLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { isLoading, isAuthenticated } = useAuth();
+  const router = useRouter();
+
   const currentOrg = useUserStore((state) => state.currentOrg);
   const { data: organization, isSuccess } =
     useOrganizationProfileQuery(currentOrg);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const router = useRouter();
+  useEffect(() => {
+    if (isLoading) return;
 
-  useAuth();
+    if (!isAuthenticated) {
+      router.push("/login");
+      return;
+    }
+
+    if (!currentOrg) {
+      router.push("/donor/events");
+    }
+  }, [isLoading, isAuthenticated, currentOrg, router]);
 
   useEffect(() => {
     if (isSuccess && organization && !isProfileComplete(organization)) {
@@ -88,13 +100,9 @@ export default function OrganizationLayout({
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    const currentOrg = getCurrentOrg();
-
-    if (!currentOrg) {
-      router.push("/donor/events");
-    }
-  }, []);
+  if (isLoading || !currentOrg) {
+    return <Loading />;
+  }
 
   return (
     <SidebarProvider

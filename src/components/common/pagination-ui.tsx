@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import {
   Pagination,
   PaginationContent,
@@ -23,33 +24,45 @@ function PaginationUI({
   totalCount,
   page,
   limit,
-  setPage
+  setPage,
 }: PaginationUIProps) {
   return (
-    <Pagination>
-      <PaginationContent>
+    <Pagination className="py-5">
+      <PaginationContent className="gap-x-2">
         <PaginationItem>
-          {isPrevious && <PaginationPrevious onClick={() => setPage && setPage(page - 1)} />}
+          {isPrevious && (
+            <PaginationPrevious
+              className="h-9 w-9 cursor-pointer"
+              onClick={() => setPage && setPage(page - 1)}
+            />
+          )}
         </PaginationItem>
         {Array.from(
           {
-            length: Math.ceil(totalCount / limit)
+            length: Math.ceil(totalCount / limit),
           },
           (_, i) => i + 1
         ).map((pg, index) => (
-          <PaginationItem className="cursor-default" key={index}>
+          <PaginationItem className="cursor-pointer" key={index}>
             <PaginationLink
               onClick={() => setPage && setPage(pg)}
-              className={`${
-                pg === page && "bg-primary hover:bg-dodger-blue-300 text-white"
-              }`}
+              className={cn(
+                "flex h-9 w-9 items-center justify-center",
+                pg === page &&
+                  "bg-primary hover:bg-primary text-white hover:text-white"
+              )}
             >
               {pg}
             </PaginationLink>
           </PaginationItem>
         ))}
         <PaginationItem>
-          {isNext && <PaginationNext onClick={() => setPage && setPage(page + 1)} />}
+          {isNext && (
+            <PaginationNext
+              className="h-9 w-9 cursor-pointer"
+              onClick={() => setPage && setPage(page + 1)}
+            />
+          )}
         </PaginationItem>
       </PaginationContent>
     </Pagination>

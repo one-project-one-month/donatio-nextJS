@@ -52,6 +52,7 @@
   --color-dodger-blue-800: #0f62be;
   --color-dodger-blue-900: #135495;
   --color-dodger-blue-950: #11335a;
+  --color-border-gray: #eee;
 }
 
 :root {

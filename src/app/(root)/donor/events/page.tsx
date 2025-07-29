@@ -5,6 +5,7 @@ import EventListingHeader from "@/features/user/components/event/event-listing-h
 import EventListingSkeleton from "@/features/user/components/event/event-listing-skeleton";
 import { useGetEvents } from "@/features/user/hooks/donor-event-queries";
 import usePagination from "@/hooks/use-pagination";
+import { showToast } from "@/lib/toast";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 
@@ -22,6 +23,7 @@ function Page() {
   } = useGetEvents(page, PAGE_SIZE, debouncedSearchValue);
 
   if (isError) {
+    showToast.error("Error loading event details.");
     return <div>Error loading event details.</div>;
   }
 
