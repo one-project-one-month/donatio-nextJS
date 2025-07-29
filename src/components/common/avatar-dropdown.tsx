@@ -8,10 +8,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useGetUser } from "@/features/user/hooks/donor-user-queries";
-import useAuthStore from "@/store/useAuthStore";
+import { useAuth } from "@/hooks/use-auth";
 import useUserStore from "@/store/userStore";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   Building2Icon,
   LogOutIcon,
@@ -24,13 +22,9 @@ import { useRouter } from "next/navigation";
 
 const AvatarDropdown = () => {
   const { setTheme, theme } = useTheme();
-  const { data: user } = useGetUser();
+  const { user, logout } = useAuth();
   const { setCurrentOrg } = useUserStore();
   const router = useRouter();
-  const logout = useAuthStore((state) => state.logout);
-  const clearUser = useUserStore((s) => s.clearUserStore);
-
-  const queryClient = useQueryClient();
 
   const handleOrgSwitch = (orgId: string) => {
     setCurrentOrg(orgId);
@@ -100,16 +94,7 @@ const AvatarDropdown = () => {
           <SunMoon className="mr-2 h-4 w-4" />
           <span>Toggle Theme</span>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => {
-            queryClient.invalidateQueries({ queryKey: ["user"] });
-
-            logout();
-            clearUser();
-            router.push("/login");
-          }}
-        >
+        <DropdownMenuItem className="cursor-pointer" onClick={logout}>
           <LogOutIcon className="mr-2 h-4 w-4" />
           Log out
         </DropdownMenuItem>

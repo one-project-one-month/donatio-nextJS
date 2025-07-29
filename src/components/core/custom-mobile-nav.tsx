@@ -70,12 +70,12 @@ export function CustomMobileNav() {
         {/* Covers the 'bounce' overflow, preventing layout shifts */}
         <div className="absolute top-0 right-[-4rem] h-full w-[4rem] bg-background" />
 
-        <nav className="relative z-10 flex h-full w-full flex-col items-start justify-center px-12">
-          <ul className="text-left">
+        <nav className="relative z-10 flex h-full w-full flex-col items-end justify-center px-12">
+          <ul className="text-right">
             {NAV_LINKS.map((link, index) => (
               <li
                 key={link.name}
-                className="transform text-neutral-800 transition-all duration-500 dark:text-neutral-200"
+                className="mb-8 transform text-neutral-800 transition-all duration-500 dark:text-neutral-200"
                 style={{
                   transitionDelay: `${150 + index * 50}ms`,
                   transform: isOpen ? "translateY(0)" : "translateY(100px)",
