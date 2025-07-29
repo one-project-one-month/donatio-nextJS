@@ -1,25 +1,20 @@
-import React from 'react'
-
-import HeroSection from './HeroSection'
-import EventsSection from './EventSection'
-import DonationSection from './DonationSection'
-import CarouselLogoSection from './CarouselLogoSection'
-import SloganSection from './SloganSection'
-import BuildingTrustSection from './BuildingTrustSection'
-import ChangeMakersSection from './ChangeMakersSection'
+import BuildingTrustSection from "./BuildingTrustSection";
+import CarouselLogoSection from "./CarouselLogoSection";
+import ChangeMakersSection from "./ChangeMakersSection";
+import DonationSection from "./DonationSection";
+import HeroSection from "./HeroSection";
+import SloganSection from "./SloganSection";
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col items-center gap-10">
-
+    <main className="flex flex-col pt-16">
       <HeroSection />
       <CarouselLogoSection />
       <SloganSection />
       <BuildingTrustSection />
       <ChangeMakersSection />
-      <EventsSection />
+      {/* <EventsSection /> */}
       <DonationSection />
-
-    </div>
-  )
+    </main>
+  );
 }

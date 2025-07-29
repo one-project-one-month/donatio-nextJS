@@ -1,5 +1,6 @@
+import Cookies from "js-cookie";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 type AuthStore = {
   accessToken: string | null;
@@ -20,9 +21,16 @@ const useAuthStore = create<AuthStore>()(
         accessToken: AuthStore["accessToken"],
         refreshToken?: AuthStore["refreshToken"]
       ) => {
+        if (accessToken) {
+          Cookies.set("accessToken", accessToken, {
+            expires: 7, // 7 days
+            // secure: process.env.NODE_ENV === "production",
+          });
+        }
         set({ accessToken, refreshToken });
       },
       logout: () => {
+        Cookies.remove("accessToken");
         set({ accessToken: null, refreshToken: null });
       },
     }),

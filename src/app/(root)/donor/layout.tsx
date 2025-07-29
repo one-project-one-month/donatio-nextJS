@@ -1,40 +1,31 @@
 "use client";
 
 import Footer from "@/components/core/Footer";
-import UserNavbar from "@/components/core/user-navbar";
-import DonationBanner from "@/features/user/components/banner/donation-banner";
+import AppNavbar from "@/components/core/app-navbar";
 import SearchSection from "@/features/user/components/search/search-section";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
-import useAuth from "@/hooks/use-auth";
+
+const SHOW_SEARCH_ON_PATHS = [
+  "/donor/events",
+  "/donor/activities",
+  "/donor/organizations",
+];
 
 function UserLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
-  
-  const hideExtras =
-    (pathname.includes("/events/") && pathname !== "/events") ||
-    (pathname.includes("/chat") && pathname !== "/chat") ||
-    (pathname.includes("/profile") && pathname !== "/profile") ||
-    (pathname.includes("/activities/") && pathname !== "/activities") ||
-    (pathname.includes("/organizations") && pathname !== "/organizations");
-
-  const isProfile = pathname.includes("/profile") && pathname !== "/profile";
-
-  useAuth();
+  const showSearchSection = SHOW_SEARCH_ON_PATHS.includes(pathname);
 
   return (
-    <>
-      <div className="max-w-7xl mx-auto pt-20 md:px-8 py-5">
-        {/* w-dvw : asked later */}
-        <UserNavbar isProfile={isProfile} />
-        {!hideExtras && <SearchSection />}
+    <div className="min-h-screen">
+      <div className="mx-auto max-w-screen-2xl px-5 py-5 pt-20 md:px-8 lg:px-12">
+        <AppNavbar />
+        {showSearchSection && <SearchSection />}
         {children}
-        {!hideExtras && <DonationBanner />}
       </div>
-
       <Footer />
-    </>
+    </div>
   );
 }
 
