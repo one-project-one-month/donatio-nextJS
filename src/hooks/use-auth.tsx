@@ -1,34 +1,30 @@
 "use client";
 
 import { useGetUser } from "@/features/user/hooks/donor-user-queries";
-import { getAccessToken } from "@/store/useAuthStore";
-import useUserStore, { getCurrentOrg } from "@/store/userStore";
+import useAuthStore from "@/store/useAuthStore";
+import useUserStore from "@/store/userStore";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
-function useAuth() {
+export function useAuth() {
+  const { data: user, isLoading, isError, isSuccess } = useGetUser();
+  const { logout: clearAuthStore } = useAuthStore();
+  const { clearUserStore } = useUserStore();
+  const queryClient = useQueryClient();
   const router = useRouter();
-  const { setUser, clearUserStore } = useUserStore();
-  const { data: user, isError, isLoading } = useGetUser();
 
-  useEffect(() => {
-    const token = getAccessToken();
+  const logout = () => {
+    clearAuthStore();
+    clearUserStore();
+    queryClient.invalidateQueries({ queryKey: ["user"] });
+    router.push("/");
+  };
 
-    if (user && user.is_superuser) {
-      router.push("/admin/dashboard");
-      return;
-    }
-
-    if (!token) {
-      clearUserStore();
-      router.push("/login");
-      return;
-    }
-
-    if (!isError && !isLoading && user?.id) {
-      setUser(user.id);
-    }
-  }, [user, isError, isLoading, router, setUser, clearUserStore]);
+  return {
+    user,
+    isAuthenticated: isSuccess && !!user,
+    isLoading,
+    isError,
+    logout,
+  };
 }
-
-export default useAuth;
