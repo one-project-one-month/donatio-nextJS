@@ -37,7 +37,10 @@ const AvatarDropdown = () => {
         <div className="flex justify-center items-center space-x-3">
           <Avatar>
             <AvatarImage
-              src={user?.profile || "https://github.com/shadcn.png"}
+              src={
+                user?.profile?.profile_picture ||
+                "https://github.com/shadcn.png"
+              }
               alt="@avatar"
             />
             <AvatarFallback>
