@@ -23,7 +23,6 @@ function ChatInput({ sendMessage, type }: ChatInputProps) {
 
   const handleSendMessage = () => {
 
-    console.log(currentUser);
 
     if (input.trim()) {
       const data: MessageInput = {
