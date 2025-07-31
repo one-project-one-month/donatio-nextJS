@@ -6,11 +6,11 @@ import { ActivityResponse } from "@/types/Activity"
 import { showToast } from "@/lib/toast"
 
 
-export const useGetOrganizations = (page: number, pageSize?: number) => {
+export const useGetOrganizations = (page: number, pageSize?: number, search?: string) => {
 
     return useQuery<GetAllOrganizationsResponse>({
-        queryKey: ['organizations', page],
-        queryFn: () => getOrganizations(page, pageSize)
+        queryKey: ['organizations', page, search],
+        queryFn: () => getOrganizations(page, pageSize, search)
     })
 }
 
