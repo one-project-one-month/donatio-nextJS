@@ -48,8 +48,8 @@ API.interceptors.response.use(
         const newAccessToken = response.data.access;
         setAccessToken(newAccessToken, refreshToken);
 
-        API.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        API.defaults.headers.Authorization = `JWT ${newAccessToken}`;
+        originalRequest.headers.Authorization = `JWT ${newAccessToken}`;
         return API(originalRequest);
       } catch (err) {
         logout();
