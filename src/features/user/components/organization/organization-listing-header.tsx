@@ -9,27 +9,18 @@ import {
 import { Separator } from "@/components/ui/separator";
 import OrganizationSearchBox from "./organization-search-box";
 
-function OrganizationListingHeader() {
+
+type OrganizationListingHeaderProps = {
+  searchValue: string;
+  onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+function OrganizationListingHeader({ searchValue, onSearchChange }: OrganizationListingHeaderProps) {
   return (
     <div className="pb-8 ">
       <div className="my-6 text-center flex space-y-3 justify-between items-center">
         <h2 className="text-4xl font-extrabold text-primary">Organizations</h2>
-        <div className="my-3 flex space-x-2 items-center justify-center w-1/2">
-          <OrganizationSearchBox />
-          <Select>
-            <SelectTrigger className="w-[180px] py-5 border-primary">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="non-profit">Non Profit</SelectItem>
-                <SelectItem value="ngo">NGO</SelectItem>
-                <SelectItem value="charity">Charity</SelectItem>
-                <SelectItem value="foundation">Foundation</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+          <OrganizationSearchBox value={searchValue} onChange={onSearchChange} />
       </div>
 
       <p className="mt-2 text-neutral-400 max-w-3xl mb-3">
