@@ -2,6 +2,7 @@
 
 import Footer from "@/components/core/Footer";
 import AppNavbar from "@/components/core/app-navbar";
+import ChatBotWindow from "@/features/user/components/chat-bot/chat-bot-window";
 import SearchSection from "@/features/user/components/search/search-section";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -18,13 +19,14 @@ function UserLayout({ children }: { children: ReactNode }) {
   const showSearchSection = SHOW_SEARCH_ON_PATHS.includes(pathname);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       <div className="mx-auto max-w-screen-2xl px-5 py-5 pt-20 md:px-8 lg:px-12">
         <AppNavbar />
         {showSearchSection && <SearchSection />}
         {children}
       </div>
       <Footer />
+      <ChatBotWindow />
     </div>
   );
 }
