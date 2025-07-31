@@ -148,7 +148,7 @@ const page = () => {
   return (
     <div className="px-4 pt-10">
       <BreadCrumbUI
-        links={[{ name: "Donor", path: "/donor" }]}
+        links={[{ name: "Donor", path: "/donor/events" }]}
         currentPageTitle={"Settings"}
       />
 
