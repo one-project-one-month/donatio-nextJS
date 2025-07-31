@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
+import AppConfig from "@/lib/appConfig";
 import useUserStore from "@/store/userStore";
 import {
   Building2Icon,
@@ -38,8 +39,9 @@ const AvatarDropdown = () => {
           <Avatar>
             <AvatarImage
               src={
-                user?.profile?.profile_picture ||
-                "https://github.com/shadcn.png"
+                user?.profile?.profile_picture
+                  ? `${AppConfig.BASE_ORIGIN}${user.profile.profile_picture}`
+                  : "https://github.com/shadcn.png"
               }
               alt="@avatar"
             />
