@@ -44,3 +44,15 @@ export const getOrganizationActivities = async (pageParam: number = 1, pageSize:
     throw err;
   }
 };
+
+
+export const requestOrganizationAdmin = async(formData: FormData) => {
+    try {
+        const response = await API.post("/organization-requests/", formData,);
+
+        return response.data;
+      
+    } catch (err) {
+        throw err;
+    }
+}

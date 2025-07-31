@@ -1,8 +1,9 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { getOrganizationActivities, getOrganizationById, getOrganizationEvents, getOrganizations } from "@/features/user/services/donor-organization-services"
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { getOrganizationActivities, getOrganizationById, getOrganizationEvents, getOrganizations, requestOrganizationAdmin } from "@/features/user/services/donor-organization-services"
 import { GetAllOrganizationsResponse, Organization } from "@/types/Organization"
 import { EventsResponse } from "@/types/Event"
 import { ActivityResponse } from "@/types/Activity"
+import { showToast } from "@/lib/toast"
 
 
 export const useGetOrganizations = (page: number, pageSize?: number) => {
@@ -46,4 +47,24 @@ export const useGetOrganizationActivities = (id: string | null) => {
     enabled: !!id,
   });
 };
+
+
+export const useRequestOrganization = () => {
+
+  const queryClient = useQueryClient();
+
+
+    const { mutateAsync: requestOrganization} = useMutation({
+      mutationFn: (data: FormData) => requestOrganizationAdmin(data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ['organizations'], exact: false});
+        showToast.success("Wait Son. We gonna review you request and make sure you are legit.")
+      },
+      onError: () => {
+        showToast.error("Failed to submit application. Please try again.")
+      }
+    });
+
+    return { requestOrganization }
+}
 

@@ -21,6 +21,7 @@ import {
 import API from "@/lib/api/axios";
 import profile from "@/assets/icons/profile.svg";
 import { showToast } from "@/lib/toast";
+import OrgAdminRequestFormPopUp from "@/features/user/components/form/org-admin-request-form-popup";
 
 interface AdminFormState {
   organization_name: string;
@@ -45,6 +46,7 @@ export const BecomeAdminDialog = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [ isVisible, setIsVisible] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,15 +99,17 @@ export const BecomeAdminDialog = () => {
     form.organization_name && form.type && form.uploaded_attachments;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button className="rounded-full py-6 cursor-pointer">
+    <>
+    <OrgAdminRequestFormPopUp isVisible={isVisible} setIsVisible={setIsVisible} />
+    {/* <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild> */}
+        <Button onClick={() => setIsVisible(true)} className="rounded-full py-6 cursor-pointer">
           <img src={profile.src} alt="Profile icon" />
           <div className="text-lg font-normal">Become an admin</div>
         </Button>
-      </DialogTrigger>
+      {/* </DialogTrigger> */}
 
-      <DialogContent>
+      {/* <DialogContent>
         <DialogHeader>
           <DialogTitle>Become an Admin</DialogTitle>
           <DialogDescription>
@@ -194,6 +198,7 @@ export const BecomeAdminDialog = () => {
           </DialogFooter>
         </form>
       </DialogContent>
-    </Dialog>
+    </Dialog> */}
+    </>
   );
 };
