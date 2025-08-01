@@ -84,7 +84,7 @@ const Page: React.FC = () => {
 
   const handleSuccess = async (credentialResponse: any) => {
     try {
-      const response = await API.post("/auth/google/", {
+      const response = await API.post("/auth/google", {
         id_token: credentialResponse.credential,
       });
       const { access, refresh } = response.data;

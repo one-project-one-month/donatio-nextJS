@@ -12,7 +12,7 @@ function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, isLoading } = useGetEvents(page, 5)
   return (
-    <div>
+    <div className="p-5">
       <EventHeader totalEvents={data?.count ?? 0} />
       <EventTable data={data?.results ?? null} isLoading={isLoading} />
       <div className="mt-5">
