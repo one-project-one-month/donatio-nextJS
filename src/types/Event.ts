@@ -9,15 +9,6 @@ export type EventTableData = {
 };
 
 
-export type CreateEventPayload = {
-  title: string;
-  description: string;
-  target_amount: string;
-  attachments: File[];
-  start_date: string;
-  end_date: string;
-};
-
 export type Event = {
   id: string;
   organization: {
@@ -41,5 +32,11 @@ export type Event = {
   end_date: string;
 };
 
+export type GetAllEventsResponse = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Event[];
+};
 
 export type EventsResponse = PaginationProps<Event>;

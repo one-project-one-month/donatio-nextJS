@@ -24,19 +24,24 @@ type EventTableProps = {
 function EventTable({ data, isLoading }: EventTableProps) {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event>();
-
+  const [isView, setIsView] = useState<boolean>(false);
   const { closeEvent } = useCloseEvent();
 
   const handleEdit = useCallback((event: Event) => {
-    console.log("Editing event:", event);
+    setIsView(false);
     setSelectedEvent(event);
     setIsEditFormOpen(true);
   }, []);
 
   const handleDelete = useCallback((id: string) => {
-    console.log("Closing event with ID:", id);
     closeEvent(id);
   }, [closeEvent]);
+
+  const handleView = useCallback((data: Event) => {
+    setSelectedEvent(data);
+    setIsView(true);
+    setIsEditFormOpen(true)
+  }, []);
 
   return (
     <section className="overflow-x-auto max-w-full rounded-2xl border mt-8 relative">
@@ -70,6 +75,7 @@ function EventTable({ data, isLoading }: EventTableProps) {
                 data={event}
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
+                handleView={handleView}
                 key={idx}
               />
             ))
@@ -89,8 +95,8 @@ function EventTable({ data, isLoading }: EventTableProps) {
         onOpenChange={setIsEditFormOpen}
       >
         <DrawerContent className="max-w-xl min-w-[600px]">
-          <DrawerTitle>Edit Event</DrawerTitle>
-          <EventEditForm initialData={selectedEvent ?? null} />
+          <DrawerTitle className="hidden">Edit Event</DrawerTitle>
+          <EventEditForm initialData={selectedEvent ?? null} setOpenEdit={setIsEditFormOpen} isView={isView} />
         </DrawerContent>
       </Drawer>
     </section>

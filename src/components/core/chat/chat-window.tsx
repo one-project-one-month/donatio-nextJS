@@ -8,16 +8,17 @@ type ChatWindowProps = {
   type: 'organization' | 'donor'
   sendMessage: (data: MessageInput) => void;
   history: ChatHistory[] |  null;
+  navData: { name: string, logo: string}
 }
 
 
-function ChatWindow({ type, sendMessage, history }: ChatWindowProps) {
+function ChatWindow({ type, sendMessage, history, navData }: ChatWindowProps) {
 
 
 
   return (
     <div className='h-full border rounded-2xl flex flex-col justify-between'>
-        <ChatNav />
+        <ChatNav data={navData} />
         <ChatMessageBox type={type} history={history} />
         <ChatInput sendMessage={sendMessage} type={type} />
     </div>

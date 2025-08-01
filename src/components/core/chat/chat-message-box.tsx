@@ -1,6 +1,7 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { scrollToBottom } from "@/lib/common";
 import { ISODateFormat, ISOTimeFormat } from "@/lib/dateFormat";
 import { getMessages } from "@/store/chatStore";
 import { ChatHistory } from "@/types/Chat";
@@ -74,6 +75,7 @@ type ChatMessageBoxProps = {
 function ChatMessageBox({ type, history }: ChatMessageBoxProps) {
   const messages = getMessages();
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const scrollContentRef = useRef<HTMLDivElement | null>(null);
 
   const historyDates = Array.from(
     new Set((history ?? []).map((hs) => ISODateFormat(hs.timestamp)))
@@ -84,12 +86,12 @@ function ChatMessageBox({ type, history }: ChatMessageBoxProps) {
     ISODateFormat(new Date()) !== Array.from(historyDates).pop(); // check the last date is today or not to avoid overlap
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollToBottom(scrollContentRef.current, true)
   }, [messages, history]);
 
   return (
-    <ScrollArea className="h-[33rem]">
-      <div className="md:px-8 px-4 py-5 flex flex-col justify-end">
+    <ScrollArea  className="h-[33rem]">
+      <div ref={scrollContentRef} className="md:px-8 px-4 py-5 flex flex-col justify-end">
         {/* UI for message history */}
         {historyDates &&
           Array.from(historyDates).map((dte) => {

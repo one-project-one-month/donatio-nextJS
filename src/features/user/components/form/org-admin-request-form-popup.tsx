@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { FilePlus2 } from "lucide-react";
+import { useRequestOrganization } from "../../hooks/donor-organization-queries";
 
 const requestFormSchema = z.object({
   name: z
@@ -19,10 +20,7 @@ const requestFormSchema = z.object({
     .min(2, "Organization type must be at least 2 characters")
     .nonempty("This field shouldn't be empty"),
   attachment: z
-    .instanceof(File)
-    .refine((file) => file.type === "image/jpeg" || file.type === "image/png", {
-      message: "File must be a JPG or PNG image",
-    }),
+      .any(),
 });
 
 type requestFormValues = z.infer<typeof requestFormSchema>;
@@ -45,15 +43,24 @@ function OrgAdminRequestFormPopUp({
     },
   });
 
-  const handleRequestSubmit = (data: requestFormValues) => {
+  const { requestOrganization } = useRequestOrganization();
+
+  const handleRequestSubmit = async(data: requestFormValues) => {
 
     const formData = new FormData();
     formData.append('organization_name', data.name);
-    formData.append('upload_documents', data.attachment);
+    for(const file of data.attachment) {
+      formData.append('uploaded_attachments', file);
+    }
     formData.append('type', data.type);
 
     console.log([...formData.entries()]);
 
+    const result = await requestOrganization(formData);
+
+    if(!result) return;
+
+    setIsVisible(false);
     form.reset();
   };
 

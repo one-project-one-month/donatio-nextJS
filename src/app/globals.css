@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -52,6 +63,7 @@
   --color-dodger-blue-800: #0f62be;
   --color-dodger-blue-900: #135495;
   --color-dodger-blue-950: #11335a;
+  --color-border-gray: #eee;
 }
 
 :root {

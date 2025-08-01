@@ -1,40 +1,33 @@
-import donationImage from "@/assets/image/donation.png"; // Adjust the path as necessary
-import { ArrowRight } from "lucide-react";
+import donationImage from "@/assets/image/donation.png";
 import Image from "next/image";
+import PageSection from "../common/page-section";
 
-export default function SupportHeaderSection() {
+export default function DonationSection() {
   return (
-    <section className="relative flex w-full max-w-screen-xl mx-auto px-4 py-16 border border-blue-300 rounded-3xl overflow-hidden">
-      <div className="px-20 py-6 flex items-center justify-between w-full">
-        {/* Left Text (3/4) */}
-        <div className="w-3/4 pr-6 z-10">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Organizations on our platform undertake ongoing activities <br />
-            that require continuous support.
+    <PageSection>
+      <div className="relative flex items-center rounded-3xl overflow-hidden border border-primary p-8 md:p-12 min-h-[300px] md:min-h-[400px]">
+        {/* Text Content */}
+        <div className="relative z-10 w-full md:w-3/4 md:px-20">
+          <h2 className="text-lg md:text-2xl lg:text-3xl font-semibold text-gray-800 leading-tight mb-4">
+            Organizations on our platform undertake ongoing activities that
+            require continuous support.
           </h2>
-          <p className="text-gray-600 text-lg">
+          <p className="text-muted-foreground text-xs md:text-base lg:text-xl">
             Check out these amazing activities and donate now.
           </p>
         </div>
 
-        {/* Right Arrow (1/4) */}
-        <div className="w-1/4 flex justify-end items-end z-10">
-          <button className="bg-blue-500 text-white rounded-full p-3 hover:bg-blue-600 transition">
-            <ArrowRight size={24} />
-          </button>
+        {/* Image */}
+        <div className="absolute -bottom-4 right-30 opacity-50 md:opacity-100 pointer-events-none">
+          <Image
+            src={donationImage}
+            alt="A person putting items in a donation box"
+            width={200}
+            height={200}
+            className="object-contain"
+          />
         </div>
       </div>
-
-      {/* Bottom-right Image (hitting the border) */}
-      <div className="absolute bottom-0 right-40">
-        <Image
-          src={donationImage}
-          alt="Decorative Figure"
-          width={180}
-          height={180}
-          className="object-contain"
-        />
-      </div>
-    </section>
+    </PageSection>
   );
 }

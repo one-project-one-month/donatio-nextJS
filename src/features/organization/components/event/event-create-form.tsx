@@ -14,6 +14,7 @@ import FormTextAreaInput from "@/components/common/form-inputs/form-textarea-inp
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateEvent } from "../../hooks/organization-event-queries";
 
+// schema for event form validation
 const eventFormSchema = z.object({
   title: z.string().nonempty("Title shouldn't be empty"),
   startDate: z.date(),
@@ -33,11 +34,10 @@ const eventFormSchema = z.object({
     .any(),
   content: z.string().min(1, "Content is required"),
 });
-
 type EventFormValues = z.infer<typeof eventFormSchema>;
 
 function EventCreateForm() {
-const { createEvent } = useCreateEvent();
+  const { createEvent } = useCreateEvent();
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
@@ -53,81 +53,77 @@ const { createEvent } = useCreateEvent();
   const onSubmit = (data: EventFormValues) => {
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("content", data.content);
-    formData.append("startDate", data.startDate.toISOString());
-    formData.append("endDate", data.endDate.toISOString());
-    formData.append("goalAmount", data.goalAmount);
+    formData.append("description", data.content);
+    formData.append("start_date", data.startDate.toISOString());
+    formData.append("end_date", data.endDate.toISOString());
+    formData.append("target_amount", data.goalAmount);
     if (data.image) {
-      formData.append("image", data.image);
+      console.log("The image: ", data.image);
+      for (const file of data.image) {
+        formData.append("uploaded_attachments", file);
+      }
     }
-    // createEvent(formData);
-    const formattedData = {
-      title: data.title,
-      start_date: data.startDate.toISOString(),
-      end_date: data.endDate.toISOString(),
-      target_amount: data.goalAmount,
-      description: data.content,
-      attachments: data.image ? [data.image] : [],
-    };
-    createEvent(formattedData);
+
+    createEvent(formData);
+    form.reset();
   };
 
   return (
     <ScrollArea className="h-dvh">
-        <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-8">
-        <h1 className="text-3xl font-semibold text-primary mb-8">Create New Event</h1>
-        <FormInput
-          form={form}
-          name="title"
-          label="Title"
-          labelClass="md:text-lg font-semibold mb-1"
-          wrapperClass="mb-5 mb:mb-3"
-          className="h-12"
-          placeholder="Enter event title"
-          required
-        />
-        <FormDateInput
-          form={form}
-          name="startDate"
-          label="Start Date"
-          type="date"
-          labelClass="md:text-lg font-semibold mb-1"
-          wrapperClass="mb-5 mb:mb-3"
-          className="h-12"
-          placeholder="Enter start date"
-          required
-        />
-        <FormDateInput
-          form={form}
-          name="endDate"
-          type="date"
-          label="End Date"
-          labelClass="md:text-lg font-semibold mb-1"
-          wrapperClass="mb-5 mb:mb-3"
-          className="h-12"
-          placeholder="Enter end date"
-          required
-        />
-        <FormInput
-          form={form}
-          type="number"
-          name="goalAmount"
-          label="Goal Amount"
-          labelClass="md:text-lg font-semibold mb-1"
-          wrapperClass="mb-5 mb:mb-3"
-          className="h-12"
-          placeholder="Enter target amount"
-          required
-        />
-        <FormFileDropZone
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-8">
+          <h1 className="text-3xl font-semibold text-primary mb-8">Create New Event</h1>
+          <FormInput
+            form={form}
+            name="title"
+            label="Title"
+            labelClass="md:text-lg font-semibold mb-1"
+            wrapperClass="mb-5 mb:mb-3"
+            className="h-12"
+            placeholder="Enter event title"
+            required
+          />
+          <FormDateInput
+            form={form}
+            name="startDate"
+            label="Start Date"
+            type="date"
+            labelClass="md:text-lg font-semibold mb-1"
+            wrapperClass="mb-5 mb:mb-3"
+            className="h-12"
+            placeholder="Enter start date"
+            required
+          />
+          <FormDateInput
+            form={form}
+            name="endDate"
+            type="date"
+            label="End Date"
+            labelClass="md:text-lg font-semibold mb-1"
+            wrapperClass="mb-5 mb:mb-3"
+            className="h-12"
+            placeholder="Enter end date"
+            required
+          />
+          <FormInput
+            form={form}
+            type="number"
+            name="goalAmount"
+            label="Goal Amount"
+            labelClass="md:text-lg font-semibold mb-1"
+            wrapperClass="mb-5 mb:mb-3"
+            className="h-12"
+            placeholder="Enter target amount"
+            required
+          />
+          <FormFileDropZone
             name="image"
             type="file"
             form={form}
             label={
               <span className="flex items-center gap-2">
                 <FilePlus2 className="w-5 h-5 text-primary" />
-                Upload Receipt Screenshot
+                Upload Attachments
               </span>
             }
             labelClass="mb-1 font-semibold text-base"
@@ -135,20 +131,20 @@ const { createEvent } = useCreateEvent();
             required
           />
           <FormTextAreaInput
-          form={form}
-          name="content"
-          label="Content"
-          labelClass="md:text-lg font-semibold mb-1"
-          wrapperClass="mb-5 mb:mb-3"
-          placeholder="Enter detail content"
-          className="h-12"
-          required
-        />
-        <Button className="w-full rounded-full text-lg py-6 md:py-8 md:mt-5">
+            form={form}
+            name="content"
+            label="Content"
+            labelClass="md:text-lg font-semibold mb-1"
+            wrapperClass="mb-5 mb:mb-3"
+            placeholder="Enter detail content"
+            className="h-12"
+            required
+          />
+          <Button className="w-full rounded-full text-lg py-6 md:py-8 md:mt-5">
             Create
           </Button>
-      </form>
-    </Form>
+        </form>
+      </Form>
     </ScrollArea>
   );
 }

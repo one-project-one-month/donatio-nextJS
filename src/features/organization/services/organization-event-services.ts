@@ -1,4 +1,6 @@
 import API from "@/lib/api/axios";
+import { getCurrentOrg } from "@/store/userStore";
+import { CreateEventPayload } from "@/types/Event";
 
 type CreateServiceProps = {
   data: FormData;
@@ -19,7 +21,7 @@ type DeleteServiceProps = {
   id: string;
 };
 
-const ORGANIZATION_ID = "5009905f-4eed-4350-9afe-be87deb2c505"; // remove when implment
+const ORGANIZATION_ID = getCurrentOrg();
 
 export const createEventService = async ({ data }: CreateServiceProps) => {
   try {
@@ -62,10 +64,8 @@ export const updateEventService = async ({ id, data }: UpdateServiceProps) => {
 // confirm later
 export const closeEventService = async ({ id }: DeleteServiceProps) => {
   try {
-    const response = await API.patch(
+    const response = await API.delete(
       `/organizations/${ORGANIZATION_ID}/events/${id}/`,
-        { status: "closed" },
-
     );
     return response.data;
   } catch (error) {

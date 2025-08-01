@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getRandomImg } from "@/lib/common";
 import useChatStore from "@/store/chatStore";
 import type { ChatList } from "@/types/Chat";
 import { Image } from "lucide-react";
@@ -14,17 +15,13 @@ type ChatListProps = {
 };
 
 function ChatList({ data, isDonor }: ChatListProps) {
-
-  const [ openIdx, setOpenIdx ] = useState<number | null>(null);
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
   const { setMessage } = useChatStore();
-
 
   const handleCurrentChat = async (idx: number, id: string) => {
     setOpenIdx(idx);
     setMessage([]);
-  }
-
-
+  };
 
   return (
     <ScrollArea className="h-[33rem]">
@@ -39,7 +36,22 @@ function ChatList({ data, isDonor }: ChatListProps) {
             }`}
           >
             <div className="p-3">
-              <Image className="text-gray-400" />
+              {list.logo.length !== 0 ? (
+                <img
+                  src={`${list.logo}`}
+                  alt={list.name}
+                  className="w-8 h-8 object-cover"
+                />
+              ) : (
+                <img
+                  src={
+                    getRandomImg("event") ??
+                    "https://i.pinimg.com/736x/dd/cb/36/ddcb361a6f93e2518268638305e528ba.jpg"
+                  }
+                  alt={list.name}
+                  className="w-8 h-8 object-cover rounded-full border"
+                />
+              )}
             </div>
             <div className="p-3">
               <h2 className="font-semibold">{list.name}</h2>

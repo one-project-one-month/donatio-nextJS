@@ -8,9 +8,10 @@ import NodataBlock from "@/components/common/no-data-block";
 type OrganizationListingProps = {
   data: GetAllOrganizationsResponse | null;
   page: number;
+  setPage: (page: number) => void;
 };
 
-function OrganizationListing({ data, page }: OrganizationListingProps) {
+function OrganizationListing({ data, page, setPage }: OrganizationListingProps) {
   return (
     <section>
       {data && data.results.length > 0 ? (
@@ -25,7 +26,8 @@ function OrganizationListing({ data, page }: OrganizationListingProps) {
               isNext={data?.next ? true : false}
               isPrevious={data?.previous ? true : false}
               page={page}
-              limit={7}
+              setPage={setPage}
+              limit={12}
               totalCount={data?.count ?? 0}
             />
           </div>

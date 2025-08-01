@@ -6,23 +6,35 @@ import EventListingSkeleton from "@/features/user/components/event/event-listing
 import { useGetEvents } from "@/features/user/hooks/donor-event-queries";
 import usePagination from "@/hooks/use-pagination";
 import { showToast } from "@/lib/toast";
-import React, { useEffect } from "react";
+import { useState } from "react";
+import { useDebounce } from "use-debounce";
 
-function page() {
+const PAGE_SIZE = 6;
+
+function Page() {
   const { page, setPage } = usePagination();
-  const { data: events, isLoading, isError } = useGetEvents(page, 6);
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue] = useDebounce(searchValue, 500);
 
-  useEffect(() => {
-    if (isError) {
-      showToast.error("Error getting events");
-    }
-  }, [isError]);
+  const {
+    data: events,
+    isError,
+    isPending,
+  } = useGetEvents(page, PAGE_SIZE, debouncedSearchValue);
+
+  if (isError) {
+    showToast.error("Error loading event details.");
+    return <div>Error loading event details.</div>;
+  }
 
   return (
-    <div className="max-w-7xl md:mx-auto md:px-5 py-5">
-      <EventListingHeader />
-      {isLoading ? (
-        <EventListingSkeleton />
+    <div className="w-full p-4">
+      <EventListingHeader
+        searchValue={searchValue}
+        onSearchChange={(e) => setSearchValue(e.target.value)}
+      />
+      {isPending ? (
+        <EventListingSkeleton count={PAGE_SIZE} />
       ) : (
         <EventListing data={events} page={page} setPage={setPage} />
       )}
@@ -30,4 +42,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

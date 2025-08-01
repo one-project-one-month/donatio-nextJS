@@ -1,55 +1,72 @@
+import { Facebook, Instagram, Linkedin, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import LogoName from "../common/logo-name";
-import { Facebook, Instagram, Linkedin } from "lucide-react";
+
+const FOOTER_LINKS = [
+  { name: "Organizations", href: "/donor/organizations" },
+  { name: "Events", href: "/donor/events" },
+  { name: "Activities", href: "/donor/activities" },
+  { name: "Chat", href: "/donor/chat" },
+];
+
+const SOCIAL_LINKS: { href: string; icon: LucideIcon }[] = [
+  { href: "/", icon: Facebook },
+  { href: "/", icon: Linkedin },
+  { href: "/", icon: Instagram },
+];
+
+const FooterContactInfo = () => (
+  <div className="flex flex-col items-start space-y-5">
+    <LogoName />
+    <div className="text-neutral-700 dark:text-neutral-300">
+      <p className="mb-5">
+        No. 25, Kaba Aye Pagoda Road,
+        <br /> Bahan Township, Yangon, Myanmar
+      </p>
+      <p className="mb-5">09 765 432 198</p>
+      <p>donatio@gmail.com</p>
+    </div>
+  </div>
+);
+
+const FooterNav = () => (
+  <div className="flex flex-col items-center justify-between space-y-8 pt-2 md:col-span-2 md:space-y-20">
+    <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-neutral-700 dark:text-neutral-300 md:gap-y-4">
+      {FOOTER_LINKS.map((link) => (
+        <Link key={link.name} href={link.href} className="hover:text-primary">
+          {link.name}
+        </Link>
+      ))}
+    </div>
+    <p className="text-center text-base">
+      © {new Date().getFullYear()} Donatio. All rights reserved.
+    </p>
+  </div>
+);
+
+const FooterSocials = () => (
+  <div className="flex items-start justify-center space-x-4 md:justify-end">
+    {SOCIAL_LINKS.map((social, index) => (
+      <Link
+        key={index}
+        href={social.href}
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white transition-transform hover:scale-110"
+      >
+        <social.icon size={20} />
+        <span className="sr-only">{social.icon.displayName}</span>
+      </Link>
+    ))}
+  </div>
+);
 
 function Footer() {
   return (
-    <footer className="py-8 text-sm bg-dodget-blue-25 dark:bg-neutral-950 border-t">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-5 md:px-12 py-8">
-        <div className="flex flex-col space-y-5 items-start">
-          <LogoName />
-          <div className="text-neutral-700">
-            <p className="mb-5">
-              No. 25, Kaba Aye Pagoda Road,
-              <br /> Bahan Township, Yangon, Myanmar
-            </p>
-            <p className="mb-5">09 765 432 198</p>
-            <p>donatio@gmail.com</p>
-          </div>
-        </div>
+    <footer className="border-t bg-dodget-blue-25 py-8 text-sm dark:bg-neutral-950">
+      <div className="mx-auto grid w-full max-w-screen-2xl grid-cols-1 gap-8 px-5 py-8 md:grid-cols-4 md:px-8 lg:px-12">
+        <FooterContactInfo />
         <hr className="md:hidden" />
-        <div className="md:col-span-2 flex flex-col items-center md:items-center justify-between space-y-8 md:space-y-20 pt-2">
-          <div className="flex flex-wrap justify-center gap-4 md:flex md:space-x-0 md:space-y-2 text-neutral-700">
-            <Link href="/">Home</Link>
-            <Link href="/">About Us</Link>
-            <Link href="/">Organizations</Link>
-            <Link href="/">Events</Link>
-            <Link href="/">Activites</Link>
-          </div>
-          <p className="text-base text-center md:text-left">
-            © {new Date().getFullYear()} Donatio. All rights reserved.
-          </p>
-        </div>
-        <div className="flex justify-center md:justify-end items-start space-x-5">
-          <Link
-            href="/"
-            className="rounded-full bg-primary text-white h-10 w-10 flex justify-center items-center"
-          >
-            <Facebook size={20} />
-          </Link>
-          <Link
-            href="/"
-            className="rounded-full bg-primary text-white h-10 w-10 flex justify-center items-center"
-          >
-            <Linkedin size={20} />
-          </Link>
-          <Link
-            href="/"
-            className="rounded-full bg-primary text-white h-10 w-10 flex justify-center items-center"
-          >
-            <Instagram size={20} />
-          </Link>
-        </div>
+        <FooterNav />
+        <FooterSocials />
       </div>
     </footer>
   );

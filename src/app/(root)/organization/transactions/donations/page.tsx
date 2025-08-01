@@ -11,7 +11,7 @@ function page() {
   const { data, isLoading } = useGetTransactionData("donation", page, 5);
 
   return (
-    <div>
+    <div className="p-5">
       <TransactionDonationHeader data={{totalDonations: data?.results.length}} />
       <TransactionTable data={data?.results} isLoading={isLoading} />
       {!isLoading && data !== undefined && (

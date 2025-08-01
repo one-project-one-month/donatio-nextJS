@@ -1,15 +1,16 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { getOrganizationActivities, getOrganizationById, getOrganizationEvents, getOrganizations } from "@/features/user/services/donor-organization-services"
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { getOrganizationActivities, getOrganizationById, getOrganizationEvents, getOrganizations, requestOrganizationAdmin } from "@/features/user/services/donor-organization-services"
 import { GetAllOrganizationsResponse, Organization } from "@/types/Organization"
-import { GetAllEventsResponse } from "@/types/Event"
+import { EventsResponse } from "@/types/Event"
 import { ActivityResponse } from "@/types/Activity"
+import { showToast } from "@/lib/toast"
 
 
-export const useGetOrganizations = (page: number) => {
+export const useGetOrganizations = (page: number, pageSize?: number, search?: string) => {
 
     return useQuery<GetAllOrganizationsResponse>({
-        queryKey: ['organizations', page],
-        queryFn: () => getOrganizations(page)
+        queryKey: ['organizations', page, search],
+        queryFn: () => getOrganizations(page, pageSize, search)
     })
 }
 
@@ -25,7 +26,7 @@ export const useGetOrganizationById = (id: string) => {
 
 export const useGetOrganizationEvents  = (id: string) => {
 
-    return useQuery<GetAllEventsResponse>({
+    return useQuery<EventsResponse>({
         queryKey: ['organizations', id, 'events'],
         queryFn: () => getOrganizationEvents(id),
     })
@@ -33,7 +34,7 @@ export const useGetOrganizationEvents  = (id: string) => {
 
 export const useGetOrganizationActivities = (id: string | null) => {
   return useInfiniteQuery<ActivityResponse>({
-    queryKey: ['activities'],
+    queryKey: ['organizations', id, 'activities'],
     queryFn: ({ pageParam = 1 }) => getOrganizationActivities(pageParam as number, 10, id??""),
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.next) {
@@ -46,4 +47,24 @@ export const useGetOrganizationActivities = (id: string | null) => {
     enabled: !!id,
   });
 };
+
+
+export const useRequestOrganization = () => {
+
+  const queryClient = useQueryClient();
+
+
+    const { mutateAsync: requestOrganization} = useMutation({
+      mutationFn: (data: FormData) => requestOrganizationAdmin(data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: ['organizations'], exact: false});
+        showToast.success("Wait Son. We gonna review you request and make sure you are legit.")
+      },
+      onError: () => {
+        showToast.error("Failed to submit application. Please try again.")
+      }
+    });
+
+    return { requestOrganization }
+}
 
