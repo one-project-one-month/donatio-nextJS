@@ -44,6 +44,7 @@ const AvatarDropdown = () => {
                   : "https://github.com/shadcn.png"
               }
               alt="@avatar"
+              className="object-cover"
             />
             <AvatarFallback>
               {user?.username?.charAt(0)?.toUpperCase()}
