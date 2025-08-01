@@ -81,7 +81,7 @@ function ChatInput({ sendMessage }: { sendMessage: (msg: string) => void }) {
   return (
     <div className="p-5 flex space-x-5 justify-center items-center">
       <Input
-        className="rounded-full px-4 h-15 py-6 shadow-md bg-white border border-primary text-base focus:ring-2 focus:ring-dodger-blue-50"
+        className="rounded-full px-5 h-12 py-6 shadow-md bg-white border border-primary text-base focus:ring-2 focus:ring-dodger-blue-50"
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -93,7 +93,7 @@ function ChatInput({ sendMessage }: { sendMessage: (msg: string) => void }) {
         }}
         placeholder="Enter texts"
       />
-      <Button onClick={handleSend} className="rounded-full h-15 w-15">
+      <Button onClick={handleSend} className="rounded-full h-12 w-12">
         <Send />
       </Button>
     </div>

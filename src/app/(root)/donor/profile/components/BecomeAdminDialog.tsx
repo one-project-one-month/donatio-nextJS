@@ -71,7 +71,7 @@ export const BecomeAdminDialog = () => {
       console.log(response.data);
       if (response) {
         showToast.success(
-          "Wait Son. We gonna review you request and make sure you are legit."
+          "Your application has been submitted. We will review your request and notify you of the outcome."
         );
 
         // Reset form and close dialog
