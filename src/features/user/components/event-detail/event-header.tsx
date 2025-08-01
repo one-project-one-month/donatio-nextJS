@@ -3,10 +3,12 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDate } from "@/utils/formatDate";
 import { CalendarDays } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface EventHeaderProps {
   title: string;
   organization: {
+    id: string;
     name: string;
     attachments: { file: string }[];
   };
@@ -32,7 +34,10 @@ const EventHeader = ({
     <div className="mt-6 flex flex-col md:flex-row justify-between gap-4">
       <div>
         <h2 className="text-3xl font-semibold text-gray-800">{title}</h2>
-        <div className="flex items-center gap-3 mt-4 text-gray-500 text-sm">
+        <Link
+          href={`/donor/organizations/${organization.id}`}
+          className="flex items-center gap-3 mt-4 text-gray-500 text-sm"
+        >
           <Image
             src={orgLogoUrl}
             alt={organization.name}
@@ -40,8 +45,8 @@ const EventHeader = ({
             height={40}
             className="w-10 h-10 object-cover rounded-full"
           />
-          <span>by {organization.name}</span>
-        </div>
+          <span>{organization.name}</span>
+        </Link>
       </div>
       <div className="flex flex-col md:items-end gap-2">
         {Number(target_amount) > 0 && (

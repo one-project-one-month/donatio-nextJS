@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, FormEvent } from "react";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, Loader2Icon } from "lucide-react";
 import API from "@/lib/api/axios";
 import { useRouter } from "next/navigation";
 
@@ -31,6 +31,7 @@ interface ErrorState {
   password1: string;
   password2: string;
   non_field_errors: string;
+  detail?: string;
 }
 
 const Page: React.FC = () => {
@@ -42,7 +43,6 @@ const Page: React.FC = () => {
   });
 
   const [isShowPassword, setIsShowPassword] = useState(false);
-  // const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState<ErrorState>({
     username: "",
@@ -62,36 +62,40 @@ const Page: React.FC = () => {
 
   const handleForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true);
-      const response = await API.post("/auth/registration/", form);
-
-      setIsSubmitting(false);
+      await API.post("/auth/registration/", form);
       showToast.info("Check your email for confirmation");
-      setTimeout(() => {
-        router.push("/login");
-      }, 5000);
+      router.push("/login");
     } catch (error: any) {
       const errorData = error.response?.data || {};
       setIsError(errorData);
-      console.error(errorData);
+      const message =
+        errorData.detail ||
+        (Array.isArray(errorData.non_field_errors)
+          ? errorData.non_field_errors.join(" ")
+          : errorData.non_field_errors) ||
+        "Registration failed.";
+      showToast.error(message);
+    } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleSuccess = async (credentialResponse: any) => {
-    const credential = credentialResponse;
-
-    const response = await API.post("/auth/google", {
-      id_token: credential.credential,
-    });
-
-    const { access, refresh } = response.data;
-
-    useAuthStore.getState().setAccessToken(access, refresh);
-
-    router.push("/");
+    try {
+      const response = await API.post("/auth/google/", {
+        id_token: credentialResponse.credential,
+      });
+      const { access, refresh } = response.data;
+      useAuthStore.getState().setAccessToken(access, refresh);
+      showToast.success("Regestration Successful!");
+      router.push("/");
+    } catch (error: any) {
+      const message =
+        error.response?.data?.detail || "Google login failed. Please try again.";
+      showToast.error(message);
+    }
   };
 
   return (
@@ -151,7 +155,7 @@ const Page: React.FC = () => {
           <div className="relative">
             <Input
               type={isShowPassword ? "text" : "password"}
-              placeholder="Create a password"
+              placeholder="Enter your password"
               value={form.password1}
               autoComplete="new-password"
               onChange={(e) =>
@@ -183,9 +187,17 @@ const Page: React.FC = () => {
           <div className="h-36 flex flex-col justify-between relative mt-8">
             <Button
               type="submit"
+              disabled={isSubmitting}
               className="w-full cursor-pointer rounded-full py-6 bg-primary hover:bg-[#1797FF] active:bg-[#078CF9]"
             >
-              {isSubmitting ? "Creating..." : "Sign Up"}
+              {isSubmitting ? (
+                <>
+                  <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                  Signing Up...
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
 
             <div className="bg-white w-fit absolute px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-gray-400">
@@ -195,10 +207,15 @@ const Page: React.FC = () => {
             <hr />
 
             {isClient && (
-              <GoogleOAuthProvider clientId="854666513086-ho6370cfgsg4b9045o9ml80e00kdb4qp.apps.googleusercontent.com">
+              <GoogleOAuthProvider
+                clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+              >
                 <GoogleLogin
                   onSuccess={handleSuccess}
-                  onError={() => console.log("Login Failed")}
+                  onError={() =>
+                    showToast.error("Google login failed. Please try again.")
+                  }
+                  shape="pill"
                   useOneTap
                 />
               </GoogleOAuthProvider>
