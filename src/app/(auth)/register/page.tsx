@@ -89,7 +89,7 @@ const Page: React.FC = () => {
       });
       const { access, refresh } = response.data;
       useAuthStore.getState().setAccessToken(access, refresh);
-      showToast.success("Welcome!");
+      showToast.success("Regestration Successful!");
       router.push("/");
     } catch (error: any) {
       const message =
@@ -155,7 +155,7 @@ const Page: React.FC = () => {
           <div className="relative">
             <Input
               type={isShowPassword ? "text" : "password"}
-              placeholder="Create a password"
+              placeholder="Enter your password"
               value={form.password1}
               autoComplete="new-password"
               onChange={(e) =>

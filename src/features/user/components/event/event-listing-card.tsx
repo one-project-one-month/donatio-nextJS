@@ -19,13 +19,7 @@ const placeholderImages = [
   EventPlaceholder3,
 ];
 
-function EventListingCard({
-  data,
-  openForm,
-}: {
-  data: Event;
-  openForm: () => void;
-}) {
+function EventListingCard({ data }: { data: Event }) {
   const imageUrl =
     data.attachments.length > 0
       ? `${AppConfig.BASE_URL}/${data.attachments[0]}`
@@ -36,15 +30,17 @@ function EventListingCard({
 
   return (
     <div className="flex flex-col justify-between">
-      <Link href={`/donor/events/${data.id}`} className="flex flex-col h-full">
-        <div className="relative h-64 w-full rounded-lg overflow-hidden">
-          <Image
-            src={imageUrl}
-            alt={data.title}
-            fill
-            className="object-cover"
-          />
-        </div>
+      <div className="flex flex-col h-full">
+        <Link href={`/donor/events/${data.id}`}>
+          <div className="relative h-64 w-full rounded-lg overflow-hidden">
+            <Image
+              src={imageUrl}
+              alt={data.title}
+              fill
+              className="object-cover"
+            />
+          </div>
+        </Link>
 
         <div className="flex justify-between text-sm my-3">
           <div className="text-neutral-500">{data?.organization.name}</div>
@@ -54,7 +50,9 @@ function EventListingCard({
         </div>
 
         <div className="flex-grow">
-          <h3 className="font-medium text-xl md:text-2xl">{data?.title}</h3>
+          <Link href={`/donor/events/${data.id}`}>
+            <h3 className="font-medium text-xl md:text-2xl">{data?.title}</h3>
+          </Link>
           <p className="my-3 text-neutral-600 text-justify text-sm md:text-base">
             {isLongDescription ? (
               <>
@@ -62,25 +60,25 @@ function EventListingCard({
                   0,
                   DESCRIPTION_TRUNCATE_LENGTH
                 )}... `}
-                <span className="text-blue-500 hover:underline font-semibold">
+                <Link
+                  href={`/donor/events/${data.id}`}
+                  className="text-blue-500 hover:underline font-semibold"
+                >
                   see more
-                </span>
+                </Link>
               </>
             ) : (
               data.description
             )}
           </p>
         </div>
-      </Link>
+      </div>
 
       <Button
-        onClick={(e) => {
-          e.stopPropagation();
-          openForm();
-        }}
+        asChild
         className="mt-auto w-full cursor-pointer p-4 text-base md:p-6 md:text-lg"
       >
-        Donate Now
+        <Link href={`/donor/events/${data.id}`}>View Details</Link>
       </Button>
     </div>
   );

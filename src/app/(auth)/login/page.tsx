@@ -54,7 +54,7 @@ const Page: React.FC = () => {
       const response = await API.post("/auth/login/", form);
       const { access, refresh } = response.data;
       useAuthStore.getState().setAccessToken(access, refresh);
-      showToast.success("Welcome back!");
+      showToast.success("Login Successful!");
       router.push("/donor/events");
     } catch (error: any) {
       const errorData = error.response?.data;
@@ -104,7 +104,7 @@ const Page: React.FC = () => {
           <div className="relative">
             <Input
               type="text"
-              placeholder="Please enter your email address"
+              placeholder="Please enter your username"
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
