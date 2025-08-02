@@ -1,7 +1,4 @@
-import React, { FormEvent, useState } from "react";
-import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogClose,
@@ -12,9 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import API from "@/lib/api/axios";
-import { User } from "@/types/User";
 import { showToast } from "@/lib/toast";
+import { User } from "@/types/User";
+import axios from "axios";
+import { Pencil } from "lucide-react";
+import React, { FormEvent, useState } from "react";
 
 interface EditProfileDialogProps {
   user?: User;
@@ -66,13 +67,22 @@ export const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         }, 1000);
       }
     } catch (error) {
-      console.error(error);
-      // TODO: Add error toast notification
-      showToast.error(
-        error instanceof Error
-          ? error.message
-          : "An error occurred while updating your profile."
-      );
+      if (axios.isAxiosError(error) && error.response?.data) {
+        const errorData = error.response.data;
+        Object.values(errorData).forEach((messages) => {
+          if (Array.isArray(messages)) {
+            messages.forEach((message: string) => {
+              showToast.error(message);
+            });
+          }
+        });
+      } else {
+        showToast.error(
+          error instanceof Error
+            ? error.message
+            : "An error occurred while updating your profile."
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }

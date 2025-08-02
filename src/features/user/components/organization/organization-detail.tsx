@@ -1,23 +1,24 @@
 "use client";
 
+import logo from "@/assets/icons/profile.svg";
+import banner from "@/assets/image/userCoverPhoto.png";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import usePagination from "@/hooks/use-pagination";
+import AppConfig from "@/lib/appConfig";
+import { showToast } from "@/lib/toast";
 import { Organization } from "@/types/Organization";
-import { Image as ImageIcon, LucideMessageCircleMore } from "lucide-react";
+import { LucideMessageCircleMore } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useStartChat } from "../../hooks/donor-chat-queries";
 import {
   useGetOrganizationActivities,
   useGetOrganizationEvents,
 } from "../../hooks/donor-organization-queries";
+import ActivityListingSkeleton from "../activity/acitivity-listing-skeleton";
 import ActivityListing from "../activity/activity-listing";
 import EventListing from "../event/event-listing";
-import usePagination from "@/hooks/use-pagination";
-import { showToast } from "@/lib/toast";
-import ActivityListingSkeleton from "../activity/acitivity-listing-skeleton";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useStartChat } from "../../hooks/donor-chat-queries";
-import { getRandomImg } from "@/lib/common";
-import coverImg from "@/assets/image/donateImg2.jpg";
-import Image from "next/image";
 
 type OrganizationDetailProps = {
   data: Organization | null;
@@ -73,42 +74,34 @@ function OrganizationDetail({ data }: OrganizationDetailProps) {
     };
   }, [loaderRef, handleObserver]);
 
+  const logoUrl =
+    data?.attachments?.length && data.attachments[0]?.file
+      ? `${AppConfig.BASE_ORIGIN}${data.attachments[0].file}`
+      : logo;
+  const coverImageUrl =
+    data?.attachments?.length && data.attachments[1]?.file
+      ? `${AppConfig.BASE_ORIGIN}${data.attachments[1].file}`
+      : banner;
+
   return (
     <section>
-      <div className="flex flex-col text-neutral-400 justify-center items-center bg-neutral-100 dark:bg-neutral-900 w-full h-96 rounded-xl mt-5">
-        {data && data.attachments.length > 0 ? (
-          <Image
-            src={data.attachments[1].url}
-            alt={data?.name ?? ""}
-            className="w-full rounded-xl h-96 object-cover"
-          />
-        ) : (
-          <Image
-            src={coverImg}
-            alt={data?.name ?? ""}
-            className="w-full h-96 rounded-xl object-cover"
-          />
-        )}
+      <div className="relative w-full h-96 rounded-xl mt-5">
+        <Image
+          src={coverImageUrl}
+          alt={data?.name ?? "Organization cover image"}
+          fill
+          className="object-cover rounded-xl"
+        />
       </div>
       <div className="mt-4 flex flex-col items-center md:flex-row justify-between gap-4">
         <div className="flex items-center gap-3 mt-2">
-          <div className="w-20 h-20  rounded-full flex items-center border justify-center overflow-hidden relative">
-            {data && data.attachments.length > 0 ? (
-              <img
-                src={data.attachments[0].url}
-                alt={data.name}
-                className="w-full object-cover"
-              />
-            ) : (
-              <img
-                src={
-                  getRandomImg("event") ??
-                  "https://i.pinimg.com/736x/dd/cb/36/ddcb361a6f93e2518268638305e528ba.jpg"
-                }
-                alt={data?.name}
-                className="w-full object-cover"
-              />
-            )}
+          <div className="w-20 h-20 rounded-full relative overflow-hidden border">
+            <Image
+              src={logoUrl}
+              alt={data?.name ?? "Organization logo"}
+              fill
+              className="object-cover"
+            />
           </div>
           <div className="flex flex-col gap-2">
             <span className="text-3xl font-bold">{data?.name}</span>

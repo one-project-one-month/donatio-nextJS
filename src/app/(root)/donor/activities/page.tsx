@@ -57,7 +57,7 @@ function page() {
   }, [loaderRef, handleObserver]);
 
   return (
-    <div className="max-w-7xl md:mx-auto px-5 py-5">
+    <div className="p-4">
       <ActivityListingHeader
         searchValue={searchValue}
         onSearchChange={(e) => setSearchValue(e.target.value)}
@@ -66,7 +66,7 @@ function page() {
         <ActivityListingSkeleton />
       ) : (
         <ScrollArea className="h-dvh">
-          <div className="space-y-4 px-4 py-2">
+          <div className="space-y-4 py-2">
             {data?.pages.map((page, idx) => (
               <ActivityListing key={idx} data={page.results ?? null} />
             ))}
