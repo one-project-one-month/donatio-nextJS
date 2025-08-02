@@ -28,6 +28,7 @@ function DonateFormPopUp({ data, setData }: DonateFormPopUpProps) {
 
   useEffect(() => {
     document.body.style.overflow = isVisible ? "hidden" : "auto";
+    console.log(data)
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -65,7 +66,7 @@ function DonateFormPopUp({ data, setData }: DonateFormPopUpProps) {
               />
             )}
             {formIndex === 2 && (
-              <DonateForm2 setFormData={setData} setFormIndex={setFormIndex} />
+              <DonateForm2 setFormData={setData} setFormIndex={setFormIndex} orgId={data.orgId} />
             )}
             {formIndex === 3 && <DonateForm3 formData={data} />}
           </div>
