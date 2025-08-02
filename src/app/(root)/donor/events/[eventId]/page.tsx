@@ -30,6 +30,7 @@ export default function EventDetails() {
     organization,
     start_date,
     end_date,
+    current_amount
   } = event;
 
   const bannerUrl = attachments.length > 0 ? attachments[0].file : null;
@@ -46,6 +47,7 @@ export default function EventDetails() {
           title={title}
           organization={organization}
           target_amount={target_amount}
+          current_amount={current_amount}
           start_date={start_date}
           end_date={end_date}
         />

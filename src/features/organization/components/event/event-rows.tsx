@@ -13,8 +13,8 @@ type EventRowsProps = {
 
 function EventRows({ data, handleEdit, handleDelete, handleView }: EventRowsProps) {
   return (
-    <TableRow className="h-24 hover:bg-white">
-      <TableCell className="sticky min-w-[200px] text-start bg-white left-0 z-10 p-5">{data.title}</TableCell>
+    <TableRow className="h-24 hover:bg-white dark:bg-neutral-950 ">
+      <TableCell className="sticky min-w-[200px] text-start dark:bg-neutral-950 dark:hover:bg-neutral-900 bg-white left-0 z-10 p-5">{data.title}</TableCell>
       <TableCell className="min-w-[200px] text-center">{ISODateFormat(data.start_date)}</TableCell>
       <TableCell className="min-w-[200px] text-center">{ISODateFormat(data.end_date)}</TableCell>
       <TableCell className="min-w-[200px] text-center">{data.target_amount} MMK</TableCell>
@@ -23,7 +23,7 @@ function EventRows({ data, handleEdit, handleDelete, handleView }: EventRowsProp
           <TableImageHolder data={data.attachments} />
         </div>
       </TableCell>
-      <TableCell className="sticky min-w-[200px] text-center bg-white right-0 z-10">
+      <TableCell className="sticky min-w-[200px] text-center dark:bg-neutral-950 dark:hover:bg-neutral-900 bg-white right-0 z-10">
         <div className="flex items-center justify-center gap-2">
           <Button variant="ghost" size="icon" title="View" onClick={() => handleView(data)}>
             <Eye className="w-5 h-5 text-blue-500 hover:text-blue-700" />

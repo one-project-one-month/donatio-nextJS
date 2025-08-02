@@ -13,6 +13,7 @@ interface EventHeaderProps {
     attachments: { file: string }[];
   };
   target_amount: string;
+  current_amount: number;
   start_date: string;
   end_date: string;
 }
@@ -23,6 +24,7 @@ const EventHeader = ({
   target_amount,
   start_date,
   end_date,
+  current_amount
 }: EventHeaderProps) => {
   const orgLogoUrl =
     organization.attachments.length > 0
@@ -53,7 +55,7 @@ const EventHeader = ({
           <div className="w-full max-w-sm">
             <div className="flex justify-between mb-2">
               <span className="text-md font-medium text-gray-700">
-                {formatCurrency(0)} MMK
+                {current_amount} MMK
               </span>
               <span className="text-md font-medium text-gray-500">
                 of {formatCurrency(Number(target_amount))} MMK
@@ -63,7 +65,7 @@ const EventHeader = ({
               <div
                 className="bg-primary/80 h-3 rounded-full transition-all"
                 style={{
-                  width: `${Math.min((0 / Number(target_amount)) * 100, 100)}%`,
+                  width: `${Math.min((current_amount / Number(target_amount)) * 100, 100)}%`,
                 }}
               />
             </div>
