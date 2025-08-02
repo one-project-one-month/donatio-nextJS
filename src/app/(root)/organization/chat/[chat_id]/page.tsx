@@ -25,7 +25,7 @@ function ChatPage() {
     if (isSuccess) {
       setMessage([]);
     }
-  }, [history]);
+  }, [history, isSuccess]);
 
   return (
     <div className="h-full w-full">

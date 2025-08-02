@@ -28,7 +28,7 @@ function ChatPage() {
         setMessage([]);
       }
 
-    },[history])
+    },[history, isSuccess])
 
 
 
