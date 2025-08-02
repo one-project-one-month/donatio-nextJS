@@ -15,6 +15,7 @@ export const useCreateEvent = () => {
     mutationFn: (data: any) => createEventService({ data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events", "all"] });
+      showToast.success("Event Successfully created..")
     },
     onError: () => {
       showToast.error("Failed to create event. Please try again.");

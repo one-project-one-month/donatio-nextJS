@@ -19,7 +19,7 @@ function ChatPage() {
 
   
     const { send } = useChatSocket(id);
-    const { data: history, isLoading, isSuccess } = useGetChatHistory(id);
+    const { data: history, isSuccess } = useGetChatHistory(id);
 
 
     useEffect(() => {
@@ -34,7 +34,7 @@ function ChatPage() {
 
   return (
     <div className='h-full w-full'>
-        <ChatWindow type='donor' sendMessage={send} history={history??null} navData={{name: user?.username??"", logo: ""}} />
+        <ChatWindow type='donor' sendMessage={send} history={history??null} navData={{name: user?.username??"", logo: user?.profile?.profile_picture??""}} />
     </div>
   )
 }

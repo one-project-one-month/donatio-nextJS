@@ -65,7 +65,6 @@ function page() {
       {isLoading ? (
         <ActivityListingSkeleton />
       ) : (
-        <ScrollArea className="h-dvh">
           <div className="space-y-4 py-2">
             {data?.pages.map((page, idx) => (
               <ActivityListing key={idx} data={page.results ?? null} />
@@ -77,7 +76,6 @@ function page() {
               {isFetchingNextPage && <p>Loading more...</p>}
             </div>
           </div>
-        </ScrollArea>
       )}
     </div>
   );

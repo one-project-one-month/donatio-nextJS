@@ -6,8 +6,7 @@ import AppConfig from "@/lib/appConfig";
 import { getRandomImg } from "@/lib/common";
 import useChatStore from "@/store/chatStore";
 import type { ChatList } from "@/types/Chat";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { Image } from "lucide-react";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -28,6 +27,9 @@ function ChatList({ data, isDonor }: ChatListProps) {
   return (
     <ScrollArea className="h-[33rem]">
       {data?.map((list, i) => {
+
+        const imageUrl = list.logo;
+
         return (
           <Link
             href={`${isDonor ? "/donor" : "/organization"}/chat/${list.id}`}
@@ -43,12 +45,11 @@ function ChatList({ data, isDonor }: ChatListProps) {
                   <AvatarImage
                     src={
                       list?.logo
-                        ? `${AppConfig.BASE_ORIGIN}${list.logo}`
-                        : "https://github.com/shadcn.png"
+                        ? AppConfig.BASE_ORIGIN + imageUrl
+                        : "https://github.com/shadcn.png" 
                     }
-                    className="object-cover w-8 h-8 rounded-full"
+                    className="object-cover w-8 h-8 border rounded-full"
                   />
-                  <AvatarFallback>X</AvatarFallback>
                 </Avatar>
               ) : (
                 <img

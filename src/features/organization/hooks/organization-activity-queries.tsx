@@ -12,6 +12,7 @@ export const useCreateActivity = () => {
         mutationFn: (data: FormData) => createOrganizationActivityService({ data }),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['activities', 'all']});
+            showToast.success("Created activity successfully..")
         },
         onError: () => {
             showToast.error("Failed to create activity data. Please try again..")
