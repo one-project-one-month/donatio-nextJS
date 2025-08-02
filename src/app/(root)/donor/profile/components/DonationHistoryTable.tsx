@@ -102,7 +102,7 @@ export const DonationHistoryTable: React.FC<DonationHistoryTableProps> = ({
                     {donation.organization?.name || "Unknown Organization"}
                   </TableCell>
                   <TableCell className="py-6">
-                    ${parseFloat(donation.amount).toFixed(2)}
+                    {parseFloat(donation.amount).toFixed(0)} Ks
                   </TableCell>
                   <TableCell className="py-6">
                     <StatusBadge status={donation.status} />

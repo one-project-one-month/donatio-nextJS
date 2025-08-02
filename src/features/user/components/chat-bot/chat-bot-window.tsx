@@ -6,6 +6,7 @@ import { ISODateFormat, ISOTimeFormat } from "@/lib/dateFormat";
 import { Bot, Image, Mail, Send, UserCircle2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import { useGenerate } from "../../hooks/donor-chat-bot-queries";
 
 type BoxProps = {
   text: string;
@@ -131,46 +132,36 @@ function ChatNav({ data }: ChatNavProps) {
   );
 }
 
-const data: ChatBotMessage[] = [
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-]
-
 function ChatBotWindow() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatBotMessage[]>([]);
   const scrollContentRef = useRef(null);
 
+  const { generate, isPending } = useGenerate(setMessages);
+
   const sendMessage = (msg: string) => {
-    const userMsg: ChatBotMessage = {
-      type: "user",
+
+    const payLoad = {
+      type: 'user',
       message: msg,
-      time: new Date(),
-    };
+      time: new Date()
+    }
 
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev: any) => {
+      const newMsg = [...prev, payLoad]
 
-    // ✅ Replace this with your actual API call later
-    setTimeout(() => {
-      const botReply: ChatBotMessage = {
-        type: "bot",
-        message: "I'm a bot. You said: " + msg,
-        time: new Date(),
-      };
-      setMessages((prev) => [...prev, botReply]);
-    }, 600);
+      return newMsg;
+    });
+
+    generate(msg);
+    
+
   };
 
 
   useEffect(() => {
       scrollToBottom(scrollContentRef.current, true)
-    }, [messages, history]);
+    }, [messages]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -207,6 +198,7 @@ function ChatBotWindow() {
                     )
                   )}
                 </div>
+                { isPending && (<span>Wait Bro</span>)}
               </div>
             </ScrollArea>
             <ChatInput sendMessage={sendMessage} />

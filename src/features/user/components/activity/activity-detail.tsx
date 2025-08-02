@@ -47,7 +47,7 @@ function ActivityInfo({ data }: ActivityDetailProps) {
         </div>
         <div className="flex items-center text-sm text-muted-foreground font-medium mt-2 md:mt-0">
           <Calendar className="me-2 size-4" />
-          <span>{data?.created_at}</span>
+          <span>{ISODateFormat(data?.created_at??new Date())}</span>
         </div>
       </div>
 

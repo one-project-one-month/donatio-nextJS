@@ -2,9 +2,11 @@
 
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import AppConfig from "@/lib/appConfig";
 import { getRandomImg } from "@/lib/common";
 import useChatStore from "@/store/chatStore";
 import type { ChatList } from "@/types/Chat";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Image } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -37,11 +39,17 @@ function ChatList({ data, isDonor }: ChatListProps) {
           >
             <div className="p-3">
               {list.logo.length !== 0 ? (
-                <img
-                  src={`${list.logo}`}
-                  alt={list.name}
-                  className="w-8 h-8 object-cover"
-                />
+                <Avatar className="w-16 h-16">
+                  <AvatarImage
+                    src={
+                      list?.logo
+                        ? `${AppConfig.BASE_ORIGIN}${list.logo}`
+                        : "https://github.com/shadcn.png"
+                    }
+                    className="object-cover w-8 h-8 rounded-full"
+                  />
+                  <AvatarFallback>X</AvatarFallback>
+                </Avatar>
               ) : (
                 <img
                   src={

@@ -21,8 +21,8 @@ const placeholderImages = [
 
 function EventListingCard({ data }: { data: Event }) {
   const imageUrl =
-    data.attachments.length > 0
-      ? `${AppConfig.BASE_URL}/${data.attachments[0]}`
+    data.attachments?.length > 0
+      ? data.attachments[0]?.file
       : getRandomPlaceholder(placeholderImages);
 
   const isLongDescription =
