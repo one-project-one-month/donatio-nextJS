@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: ECR_DONATIO
+    environment: AWS_DONATIO
 
     steps:
       - name: Checkout Code
