@@ -1,20 +1,20 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState, FormEvent, useEffect } from "react";
-import { Eye, EyeClosed, Mail } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import API from "@/lib/api/axios";
+import { Eye, EyeClosed, Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
 
 import image from "@/assets/image/authImage.png";
-import googleLog from "@/assets/icons/google icon.svg";
 import LogoName from "@/components/common/logo-name";
 import { Label } from "@/components/ui/label";
 
+import { showToast } from "@/lib/toast";
 import useAuthStore from "@/store/useAuthStore";
 
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
 interface FormState {
   username: string;
@@ -24,6 +24,7 @@ interface FormState {
 interface ErrorState {
   username: string;
   password: string;
+  detail?: string;
 }
 
 const Page: React.FC = () => {
@@ -48,37 +49,39 @@ const Page: React.FC = () => {
 
   const handleForm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true);
-
       const response = await API.post("/auth/login/", form);
-
       const { access, refresh } = response.data;
-
       useAuthStore.getState().setAccessToken(access, refresh);
-
-      setIsSubmitting(false);
+      showToast.success("Login Successful!");
       router.push("/donor/events");
     } catch (error: any) {
       const errorData = error.response?.data;
       setIsError(errorData);
+      const message =
+        errorData?.detail || "Invalid credentials. Please try again.";
+      showToast.error(message);
+    } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleSuccess = async (credentialResponse: any) => {
-    const credential = credentialResponse;
-
-    const response = await API.post("/auth/google", {
-      id_token: credential.credential,
-    });
-
-    const { access, refresh } = response.data;
-
-    useAuthStore.getState().setAccessToken(access, refresh);
-
-    router.push("/");
+    try {
+      const response = await API.post("/auth/google", {
+        id_token: credentialResponse.credential,
+      });
+      const { access, refresh } = response.data;
+      useAuthStore.getState().setAccessToken(access, refresh);
+      showToast.success("Login Successful!");
+      router.push("/donor/events");
+    } catch (error: any) {
+      const message =
+        error.response?.data?.detail ||
+        "Google login failed. Please try again.";
+      showToast.error(message);
+    }
   };
 
   return (
@@ -101,7 +104,7 @@ const Page: React.FC = () => {
           <div className="relative">
             <Input
               type="text"
-              placeholder="Please enter your email address"
+              placeholder="Please enter your username"
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               className="border-[##E0E0E0] placeholder:text-[##E0E0E0] placeholder:text-xs md:placeholder:text-sm focus-visible:ring-blue-200"
@@ -139,9 +142,17 @@ const Page: React.FC = () => {
           <div className="h-36 flex flex-col justify-between relative mt-8">
             <Button
               type="submit"
+              disabled={isSubmitting}
               className="w-full cursor-pointer rounded-full py-6 bg-primary hover:bg-[#1797FF] active:bg-[#078CF9]"
             >
-              {isSubmitting ? "Wait Bro" : "Login"}
+              {isSubmitting ? (
+                <>
+                  <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                  Logging In...
+                </>
+              ) : (
+                "Login"
+              )}
             </Button>
             <div className="bg-white w-fit absolute px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-gray-400">
               or
@@ -149,10 +160,15 @@ const Page: React.FC = () => {
 
             <hr />
             {isClient && (
-              <GoogleOAuthProvider clientId="854666513086-ho6370cfgsg4b9045o9ml80e00kdb4qp.apps.googleusercontent.com">
+              <GoogleOAuthProvider
+                clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+              >
                 <GoogleLogin
                   onSuccess={handleSuccess}
-                  onError={() => console.log("Login Failed")}
+                  onError={() =>
+                    showToast.error("Google login failed. Please try again.")
+                  }
+                  shape="pill"
                   useOneTap
                 />
               </GoogleOAuthProvider>
@@ -161,7 +177,7 @@ const Page: React.FC = () => {
         </form>
 
         <div className="text-center mt-6">
-          <span className="font-light">Don't have an account?</span>
+          <span className="font-light">Don&apos;t have an account?</span>
           <a href="/register" className="text-primary ms-2 cursor-pointer">
             Sign Up
           </a>

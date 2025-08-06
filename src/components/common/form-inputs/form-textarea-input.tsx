@@ -5,6 +5,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { ComponentProps, ReactNode } from "react";
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
@@ -40,7 +41,7 @@ function FormTextAreaInput<T extends FieldValues>({
           </FormLabel>
           <FormControl>
             <div className="relative">
-              <textarea
+              <Textarea
                 {...field}
                 {...props}
                 className={cn(

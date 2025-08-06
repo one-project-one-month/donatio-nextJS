@@ -47,8 +47,8 @@ function EventTable({ data, isLoading }: EventTableProps) {
     <section className="overflow-x-auto max-w-full rounded-2xl border mt-8 relative">
       <Table>
         <TableHeader>
-          <TableRow className="h-20 bg-dodger-blue-50 hover:bg-dodger-blue-50">
-            <TableHead className="sticky min-w-[200px] text-base p-5 font-bold bg-dodger-blue-50 text-start left-0 z-10">
+          <TableRow className="h-20 bg-dodger-blue-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 hover:bg-dodger-blue-50">
+            <TableHead className="sticky min-w-[200px] dark:bg-neutral-950 text-base p-5 font-bold bg-dodger-blue-50 text-start left-0 z-10">
               Title
             </TableHead>
             <TableHead className="min-w-[200px] text-base font-bold text-center">
@@ -63,7 +63,7 @@ function EventTable({ data, isLoading }: EventTableProps) {
             <TableHead className="min-w-[200px] text-base font-bold text-start">
               Image
             </TableHead>
-            <TableHead className="sticky max-w-[200px] text-base font-bold text-center bg-dodger-blue-50 right-0 z-10">
+            <TableHead className="sticky max-w-[200px] dark:bg-neutral-950 text-base font-bold text-center bg-dodger-blue-50 right-0 z-10">
               Actions
             </TableHead>
           </TableRow>

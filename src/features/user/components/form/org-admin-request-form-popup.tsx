@@ -77,7 +77,7 @@ function OrgAdminRequestFormPopUp({
           >
             <Form {...form}>
               <form onSubmit={form.handleSubmit(handleRequestSubmit)}>
-                <h2 className="md:text-3xl text-xl font-extrabold tracking-tight text-center mb-8">
+                <h2 className="md:text-3xl text-xl font-bold tracking-tight text-center mb-8">
                   Organization Request Form
                 </h2>
                 <FormInput
@@ -114,7 +114,7 @@ function OrgAdminRequestFormPopUp({
                   wrapperClass="mb-3"
                   required
                 />
-                <Button className="w-full rounded-full py-6 md:py-8 md:mt-5">
+                <Button className="w-full rounded-full text-base py-6 md:py-7 md:mt-5">
                   Submit Request
                 </Button>
               </form>

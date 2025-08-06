@@ -29,6 +29,7 @@ export type Event = {
   target_amount: string;
   attachments: any[];
   start_date: string;
+  current_amount: number;
   end_date: string;
 };
 

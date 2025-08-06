@@ -22,6 +22,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ user }) => {
                 ? `${AppConfig.BASE_ORIGIN}${user.profile.profile_picture}`
                 : "https://github.com/shadcn.png"
             }
+            className="object-cover"
           />
           <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
         </Avatar>

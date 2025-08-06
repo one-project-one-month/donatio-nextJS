@@ -1,27 +1,9 @@
-import React, { FormEvent, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import API from "@/lib/api/axios";
 import profile from "@/assets/icons/profile.svg";
-import { showToast } from "@/lib/toast";
+import { Button } from "@/components/ui/button";
 import OrgAdminRequestFormPopUp from "@/features/user/components/form/org-admin-request-form-popup";
+import API from "@/lib/api/axios";
+import { showToast } from "@/lib/toast";
+import React, { FormEvent, useState } from "react";
 
 interface AdminFormState {
   organization_name: string;
@@ -46,7 +28,7 @@ export const BecomeAdminDialog = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [ isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +53,7 @@ export const BecomeAdminDialog = () => {
       console.log(response.data);
       if (response) {
         showToast.success(
-          "Wait Son. We gonna review you request and make sure you are legit."
+          "Your application has been submitted."
         );
 
         // Reset form and close dialog
@@ -100,13 +82,19 @@ export const BecomeAdminDialog = () => {
 
   return (
     <>
-    <OrgAdminRequestFormPopUp isVisible={isVisible} setIsVisible={setIsVisible} />
-    {/* <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <OrgAdminRequestFormPopUp
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+      />
+      {/* <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild> */}
-        <Button onClick={() => setIsVisible(true)} className="rounded-full py-6 cursor-pointer">
-          <img src={profile.src} alt="Profile icon" />
-          <div className="text-lg font-normal">Become an admin</div>
-        </Button>
+      <Button
+        onClick={() => setIsVisible(true)}
+        className="rounded-full py-6 cursor-pointer"
+      >
+        <img src={profile.src} alt="Profile icon" />
+        <div className="text-lg font-normal">Become an admin</div>
+      </Button>
       {/* </DialogTrigger> */}
 
       {/* <DialogContent>

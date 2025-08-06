@@ -13,6 +13,8 @@ export const useCreateTransaction = () => {
         mutationFn: ({ data, id}: TransactionCreateProps) => createTransaction({ data, id }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['transactions']});
+            queryClient.invalidateQueries({queryKey: ['events'], exact: false});
+            showToast.success("Donation complete..");
             setDonateForm(null);
         },
         onError: () => {

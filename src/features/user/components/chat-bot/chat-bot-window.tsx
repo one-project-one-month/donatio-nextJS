@@ -6,6 +6,7 @@ import { ISODateFormat, ISOTimeFormat } from "@/lib/dateFormat";
 import { Bot, Image, Mail, Send, UserCircle2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import { useGenerate } from "../../hooks/donor-chat-bot-queries";
 
 type BoxProps = {
   text: string;
@@ -18,9 +19,7 @@ function RecieveBox({ text, time }: BoxProps) {
       <div className="space-x-3 w-1/2 grid grid-cols-6  my-3">
         <div className="border border-primary p-3 col-span-5 w-fit max-w-full rounded-lg rounded-l-none rounded-b-lg">
           <div className="flex items-end gap-2 flex-wrap">
-            <p className="text-primary text-sm md:text-base break-words">
-              {text}
-            </p>
+            <p className="text-primary text-sm break-words">{text}</p>
             <span className="text-xs text-gray-500 whitespace-nowrap">
               {time}
             </span>
@@ -37,9 +36,7 @@ function SenderBox({ text, time }: BoxProps) {
       <div className="space-x-3 w-1/2 flex justify-end col-start-2 my-3">
         <div className="border bg-primary border-primary p-3 w-fit max-w-full rounded-lg rounded-r-none rounded-b-lg">
           <div className="flex items-end gap-2 flex-wrap">
-            <p className="text-white text-sm md:text-base break-words">
-              {text}
-            </p>
+            <p className="text-white text-sm break-words">{text}</p>
             <span className="text-xs text-white/80 whitespace-nowrap">
               {time}
             </span>
@@ -66,7 +63,6 @@ type ChatBotMessage = {
   time: Date;
 };
 
-
 function ChatInput({ sendMessage }: { sendMessage: (msg: string) => void }) {
   const [input, setInput] = useState("");
 
@@ -81,7 +77,7 @@ function ChatInput({ sendMessage }: { sendMessage: (msg: string) => void }) {
   return (
     <div className="p-5 flex space-x-5 justify-center items-center">
       <Input
-        className="rounded-full px-4 h-15 py-6 shadow-md bg-white border border-primary text-base focus:ring-2 focus:ring-dodger-blue-50"
+        className="rounded-full px-5 h-12 py-6 shadow-md bg-white border border-primary text-base focus:ring-2 focus:ring-dodger-blue-50"
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -93,7 +89,7 @@ function ChatInput({ sendMessage }: { sendMessage: (msg: string) => void }) {
         }}
         placeholder="Enter texts"
       />
-      <Button onClick={handleSend} className="rounded-full h-15 w-15">
+      <Button onClick={handleSend} className="rounded-full h-12 w-12">
         <Send />
       </Button>
     </div>
@@ -131,46 +127,32 @@ function ChatNav({ data }: ChatNavProps) {
   );
 }
 
-const data: ChatBotMessage[] = [
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-    {type: 'bot', message: 'hello', time: new Date()},
-]
-
 function ChatBotWindow() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatBotMessage[]>([]);
   const scrollContentRef = useRef(null);
 
+  const { generate, isPending } = useGenerate(setMessages);
+
   const sendMessage = (msg: string) => {
-    const userMsg: ChatBotMessage = {
+    const payLoad = {
       type: "user",
       message: msg,
       time: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev: any) => {
+      const newMsg = [...prev, payLoad];
 
-    // ✅ Replace this with your actual API call later
-    setTimeout(() => {
-      const botReply: ChatBotMessage = {
-        type: "bot",
-        message: "I'm a bot. You said: " + msg,
-        time: new Date(),
-      };
-      setMessages((prev) => [...prev, botReply]);
-    }, 600);
+      return newMsg;
+    });
+
+    generate(msg);
   };
 
-
   useEffect(() => {
-      scrollToBottom(scrollContentRef.current, true)
-    }, [messages, history]);
+    scrollToBottom(scrollContentRef.current, true);
+  }, [messages]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -182,11 +164,14 @@ function ChatBotWindow() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 100 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="w-[90vw] sm:w-[24rem] bg-white shadow-xl rounded-lg border overflow-hidden flex flex-col"
+            className="w-[30vw]  bg-white shadow-xl rounded-lg border overflow-hidden flex flex-col"
           >
             <ChatNav data={{ name: "Donatio Bot", logo: "" }} />
             <ScrollArea className="h-[20rem]">
-              <div ref={scrollContentRef} className="px-4 py-5 flex flex-col justify-end">
+              <div
+                ref={scrollContentRef}
+                className="px-4 py-5 flex flex-col justify-end"
+              >
                 {messages.length > 0 && (
                   <DateDivider label={ISODateFormat(new Date())} />
                 )}
@@ -207,6 +192,31 @@ function ChatBotWindow() {
                     )
                   )}
                 </div>
+                {isPending && (
+                  <motion.div
+                    className="flex items-center gap-2 text-sm text-gray-700"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <motion.div
+                      className="w-4 h-4 rounded-full border-2 border-t-2 border-gray-400 border-t-transparent animate-spin"
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        repeat: Infinity,
+                        ease: "linear",
+                        duration: 1,
+                      }}
+                    />
+                    <motion.span
+                      initial={{ x: -5, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.1 }}
+                    >
+                      Hold on, bro...
+                    </motion.span>
+                  </motion.div>
+                )}
               </div>
             </ScrollArea>
             <ChatInput sendMessage={sendMessage} />

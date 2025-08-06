@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { FilePlus2 } from "lucide-react";
 import { getDonateFormData } from "@/store/donateStore";
+import { useGetOrganizationById } from "../../hooks/donor-organization-queries";
 
 const formTwoSchema = z.object({
   screenShot: z.any().refine((val) => {
@@ -19,15 +20,22 @@ type formTwoValue = z.infer<typeof formTwoSchema>;
 type DonateForm2Props = {
   setFormIndex: React.Dispatch<React.SetStateAction<number>>;
   setFormData: (data: any) => void;
+  orgId: string;
 };
 
-function DonateForm2({ setFormIndex, setFormData }: DonateForm2Props) {
+function DonateForm2({ setFormIndex, setFormData, orgId }: DonateForm2Props) {
   const form = useForm<formTwoValue>({
     resolver: zodResolver(formTwoSchema),
     defaultValues: {
       screenShot: undefined,
     },
   });
+
+
+  const { data: org, isLoading } = useGetOrganizationById(orgId);
+
+
+
 
   const handleContinue = (data: formTwoValue) => {
 
@@ -45,23 +53,23 @@ function DonateForm2({ setFormIndex, setFormData }: DonateForm2Props) {
   return (
     <div>
       <h1 className="mb-2 font-semibold">Scan here for Payment</h1>
-      <div className="flex border rounded-lg p-3 space-x-4 mb-3">
+      { isLoading? (<div>Loading..</div>): (<div className="flex border rounded-lg p-3 space-x-4 mb-3">
         <QRCodeSVG
-          value="hQZLQlpQYXlhQE8C8FACEFECMTFXFgmVUxl5TSUHEBAfnwgEAQGfJAEwF6197ca0f5f80"
+          value={org?.kpay_qr_url??""}
           size={100}
         ></QRCodeSVG>
         <div className="flex flex-col justify-between">
           <span>
-            <p className="text-sm">Alu Myanmar</p>
+            <p className="text-sm">{org?.name}</p>
             <p className="text-primary text-lg font-sans font-semibold">
-              09955319794
+              {org?.phone_number}
             </p>
           </span>
           <span className="text-xs text-neutral-500">
             Please use KBZ Pay scanner for your payment.
           </span>
         </div>
-      </div>
+      </div>)}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleContinue)}>
           <FormFileDropZone

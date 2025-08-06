@@ -58,7 +58,7 @@ export const useRequestOrganization = () => {
       mutationFn: (data: FormData) => requestOrganizationAdmin(data),
       onSuccess: () => {
         queryClient.invalidateQueries({queryKey: ['organizations'], exact: false});
-        showToast.success("Wait Son. We gonna review you request and make sure you are legit.")
+        showToast.success("Your application has been submitted.")
       },
       onError: () => {
         showToast.error("Failed to submit application. Please try again.")

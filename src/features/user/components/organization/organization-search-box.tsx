@@ -14,7 +14,7 @@ function OrganizationSearchBox({
     <div className="w-full md:w-1/3">
       <div className="relative w-full">
         <Input
-          className="rounded-lg pl-12 pr-4 py-5 shadow-md bg-white border border-primary text-base focus:ring-2 focus:ring-dodger-blue-50"
+          className="rounded-lg pl-12 pr-4 py-5 shadow-md bg-white border border-primary text-sm md:text-base focus:ring-2 focus:ring-dodger-blue-50"
           type="text"
           placeholder="Search for organizations"
           value={value}

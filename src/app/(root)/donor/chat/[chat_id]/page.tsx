@@ -4,6 +4,7 @@ import ChatWindow from '@/components/core/chat/chat-window'
 import { useGetChatHistory } from '@/features/organization/hooks/organization-chat-queries';
 import { useGetUser } from '@/features/user/hooks/donor-user-queries';
 import { useChatSocket } from '@/hooks/use-chat-socket';
+import useChatStore from '@/store/chatStore';
 import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react'
 
@@ -14,14 +15,26 @@ function ChatPage() {
 
 
     const { data: user } = useGetUser();
+    const { setMessage } = useChatStore();
 
   
     const { send } = useChatSocket(id);
-    const { data: history, isLoading } = useGetChatHistory(id);
+    const { data: history, isSuccess } = useGetChatHistory(id);
+
+
+    useEffect(() => {
+
+      if(isSuccess) {
+        setMessage([]);
+      }
+
+    },[history, isSuccess])
+
+
 
   return (
     <div className='h-full w-full'>
-        <ChatWindow type='donor' sendMessage={send} history={history??null} navData={{name: user?.username??"", logo: ""}} />
+        <ChatWindow type='donor' sendMessage={send} history={history??null} navData={{name: user?.username??"", logo: user?.profile?.profile_picture??""}} />
     </div>
   )
 }

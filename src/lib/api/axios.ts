@@ -19,6 +19,13 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+
+export const BOTAPI: AxiosInstance = axios.create({
+  baseURL: AppConfig.BASE_CHATBOT_URL,
+  timeout: 10000,
+  withCredentials: true
+})
+
 const { setAccessToken, logout } = useAuthStore.getState();
 
 API.interceptors.response.use(
