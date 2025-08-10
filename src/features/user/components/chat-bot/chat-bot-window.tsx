@@ -132,7 +132,7 @@ function ChatBotWindow() {
   const [messages, setMessages] = useState<ChatBotMessage[]>([]);
   const scrollContentRef = useRef(null);
 
-  const { generate, isPending } = useGenerate(setMessages);
+  const { generate, isPending, isError } = useGenerate(setMessages);
 
   const sendMessage = (msg: string) => {
     const payLoad = {
@@ -217,6 +217,7 @@ function ChatBotWindow() {
                     </motion.span>
                   </motion.div>
                 )}
+                {isError && (<div className="text-red-500">Error occur</div>)}
               </div>
             </ScrollArea>
             <ChatInput sendMessage={sendMessage} />

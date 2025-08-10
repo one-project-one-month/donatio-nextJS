@@ -9,8 +9,5 @@ export const useGetUser = () => {
     queryKey: ["user"],
     queryFn: getUserService,
     enabled: !!token,
-    retry: 1,
-    staleTime: 1000 * 60 * 60,
-    refetchOnWindowFocus: false,
   });
 };
