@@ -6,7 +6,7 @@ export const useGenerate = (setData: any) => {
 
 
 
-    const { mutate: generate, isPending } = useMutation({
+    const { mutate: generate, isPending, isError } = useMutation({
         mutationFn: (msg: string) => generateContent(msg),
         onSuccess: (data) => {
             const res = {
@@ -23,5 +23,5 @@ export const useGenerate = (setData: any) => {
     });
 
 
-    return { generate, isPending}
+    return { generate, isPending, isError}
 }
