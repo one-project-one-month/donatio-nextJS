@@ -1,10 +1,9 @@
-# 📘 Transparent Donation Platform
+# Donatio - A Transparent Donation Platform For Myanmar
 
----
+![Alt_Text](https://github.com/one-project-one-month/donatio-django/blob/main/donatioMain.png)
 
-## 📌 What is this project?
-
-The **Transparent Donation Platform** is a web-based system designed to promote **accountable giving** in Myanmar. It enables **verified organizations** to receive **digital donations**, and provides **donors with transparency, confidence, and communication tools**.
+A web platform designed to bring transparency and trust to charitable giving in Myanmar.
+It empowers organizations to showcase their work and donors to see exactly where their contributions go, fostering a stronger connection between communities and causes.
 
 ---
 
@@ -24,7 +23,7 @@ The **Transparent Donation Platform** is a web-based system designed to promote 
 
 **Database**
 
-- SQLite
+- SQLite / Postgresql
 
 **Authentication**
 
@@ -46,7 +45,6 @@ The **Transparent Donation Platform** is a web-based system designed to promote 
 - 📊 Tracks **donation usage** and **activity updates**
 - 💳 Provides a user-friendly interface for **digital donations**
 - 🗓️ Helps organizations manage **events** and **donor engagement**
-- 📈 Empowers admins with **reporting tools** and full **platform control**
 
 ---
 
@@ -81,7 +79,3 @@ The **Transparent Donation Platform** is a web-based system designed to promote 
 - 🌐 Multilingual support (Myanmar & English)
 - 📱 Mobile app for better accessibility
 - 🔗 Event tracking and activity linking
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
